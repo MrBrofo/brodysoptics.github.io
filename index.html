@@ -158,6 +158,13 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 .home-btn{display:inline-block;margin-top:32px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;background:var(--sunset,var(--accent));color:var(--on-accent);padding:14px 28px;transition:background-color .25s ease,color .25s ease,transform .25s ease}
 .home-btn:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
 .more h3{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(1.7rem,2.8vw,2.3rem);line-height:1;margin:0 0 20px;letter-spacing:.01em}
+.album button{position:relative}
+.album video,.tile video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease,transform .6s ease}
+.album video.loaded,.tile video.loaded{opacity:1}
+.play{position:absolute;top:50%;left:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);pointer-events:none;transition:opacity .25s ease}
+.play::after{content:"";position:absolute;left:21px;top:17px;border-style:solid;border-width:10px 0 10px 16px;border-color:transparent transparent transparent #fff}
+@media (hover:hover){ button:hover > .play{opacity:0} }
+.tiles.small .play{transform:scale(.75)}
 .album img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
 .album img.loaded{opacity:1}
 .notice{border:1px dashed var(--line);padding:28px;max-width:62ch;color:var(--muted)}
@@ -211,6 +218,8 @@ dialog{border:0;padding:0;max-width:100vw;max-height:100vh;width:100vw;height:10
 dialog::backdrop{background:rgba(10,12,13,.96)}
 .lb{position:relative;width:100%;height:100%;display:grid;place-items:center;padding:56px clamp(8px,6vw,80px)}
 .lb img{max-width:100%;max-height:100%;object-fit:contain;transition:opacity .3s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
+.lb video{max-width:100%;max-height:100%;background:#000}
+.lb img[hidden],.lb video[hidden]{display:none}
 .lb img.swap{opacity:0;transform:scale(.97)}
 dialog[open]{animation:fade .3s ease}
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -271,7 +280,7 @@ dialog[open]{animation:fade .3s ease}
         <div class="field"><label for="f-when">Date and time</label><input id="f-when" data-k="datetime" required placeholder="e.g. Sat Oct 12, 4pm"></div>
         <div class="field"><label for="f-orient">Photo orientation</label><select id="f-orient" data-k="orientation" required><option value="">Choose one</option><option>Vertical</option><option>Horizontal</option><option>Both</option><option value="Either or, I don't care">Either, I don't care</option></select></div>
         <div class="field"><label for="f-post">Okay if I post your photos?</label><select id="f-post" data-k="posting" required><option value="">Choose one</option><option>Yes!</option><option>No thanks</option></select></div>
-        <div class="field"><label for="f-cm">Best way to reach you</label><input id="f-cm" data-k="contactMethod" required placeholder="Instagram, phone, Snapchat"></div>
+        <div class="field"><label for="f-cm">Best way to reach you</label><input id="f-cm" data-k="contactMethod" required placeholder="Instagram, phone, Snapchat, etc."></div>
         <div class="field"><label for="f-c">Your handle or number there</label><input id="f-c" data-k="contact" required></div>
         <div class="field full"><label for="f-ref">Did anyone refer you?</label><input id="f-ref" data-k="referral" placeholder="Optional"></div>
         <div class="field full"><label for="f-msg">Anything else?</label><textarea id="f-msg" data-k="other" placeholder="Optional"></textarea></div>
@@ -289,6 +298,7 @@ dialog[open]{animation:fade .3s ease}
 <dialog id="lightbox" aria-label="Photo viewer">
   <div class="lb">
     <img id="lbImg" alt="">
+    <video id="lbVid" controls playsinline hidden></video>
     <button class="close" id="lbClose">Close</button>
     <button class="prev" id="lbPrev" aria-label="Previous photo">‹</button>
     <button class="next" id="lbNext" aria-label="Next photo">›</button>
@@ -298,7 +308,8 @@ dialog[open]{animation:fade .3s ease}
 
 <script>
 const $ = id => document.getElementById(id);
-const IMG = /\.(jpe?g|png|webp|avif)$/i;
+const IMG = /\.(jpe?g|png|webp|avif|mp4|webm|mov|m4v)$/i;
+const isVid = src => /\.(mp4|webm|mov|m4v)$/i.test(src);
 let albums = [], singles = [], tiles = [], viewing = [], idx = 0;
 
 /* text from SITE */
@@ -340,7 +351,7 @@ async function loadPhotos(){
     for (const path of files){
       const parts = path.split("/"), file = parts[parts.length-1];
       if (parts.length===2){
-        if (/^hero(?![a-z0-9])/i.test(file)) hero = path; else singles.push({src:url(path), name:file});
+        if (/^hero(?![a-z0-9])/i.test(file) && !isVid(file)) hero = path; else singles.push({src:url(path), name:file});
       } else {
         const key = parts[1];
         if (!map.has(key)) map.set(key,{title:nice(key), photos:[], cover:null});
@@ -349,9 +360,10 @@ async function loadPhotos(){
       }
     }
     albums = [...map.values()].filter(a=>a.photos.length || a.cover);
-    albums.forEach(a=>{ if(!a.cover) a.cover = a.photos[0]; if(!a.photos.length) a.photos=[a.cover]; });
+    albums.forEach(a=>{ if(!a.cover) a.cover = a.photos.find(p=>!isVid(p)) || a.photos[0]; if(!a.photos.length) a.photos=[a.cover]; });
     if (!albums.length && !singles.length) return emptyState("none");
-    setHero(hero ? url(hero) : (singles[0]?.src || albums[0].cover));
+    const stills = [...singles.map(x=>x.src), ...albums.map(a=>a.cover)].filter(x=>!isVid(x));
+    if (hero || stills.length) setHero(hero ? url(hero) : stills[0]);
     route();
   }catch(e){ emptyState("error"); }
 }
@@ -373,12 +385,20 @@ function emptyState(kind){
 
 /* the Work grid: albums first, then single photos */
 const slug = t => t.replace(/\s+/g,"-");
+function countLabel(list){
+  const v = list.filter(isVid).length, p = list.length - v, part = (n,w) => `${n} ${w}${n===1?"":"s"}`;
+  return [p && part(p,"photo"), v && part(v,"video")].filter(Boolean).join(" · ");
+}
+/* videos quietly preview when you hover them */
+function hv(el, on){ const v = el.querySelector("video"); if (!v) return; if (on) v.play().catch(()=>{}); else { v.pause(); } }
 function tileHTML(t, i){
   const n = `<span class="no">${String(i+1).padStart(2,"0")}</span>`;
-  const img = src => `<img src="${src}" alt="" loading="${i<8?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')">`;
+  const img = src => isVid(src)
+    ? `<video src="${src}#t=0.1" muted loop playsinline preload="metadata" onloadeddata="this.classList.add('loaded')"></video><span class="play" aria-hidden="true"></span>`
+    : `<img src="${src}" alt="" loading="${i<8?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')">`;
   return t.type==="album"
-    ? `<button class="tile rv" style="--d:${(i%4)*.07}s" data-album="${esc(slug(t.title))}" aria-label="Open album ${esc(t.title)}">${n}${img(t.cover)}<span class="cap"><strong>${esc(t.title)}</strong><span>${t.photos.length} photo${t.photos.length===1?"":"s"}</span></span></button>`
-    : `<button class="tile rv" style="--d:${(i%4)*.07}s" data-single="${esc(t.src)}" aria-label="View photo">${n}${img(t.src)}</button>`;
+    ? `<button class="tile rv" style="--d:${(i%4)*.07}s" data-album="${esc(slug(t.title))}" aria-label="Open album ${esc(t.title)}" onmouseenter="hv(this,1)" onmouseleave="hv(this,0)">${n}${img(t.cover)}<span class="cap"><strong>${esc(t.title)}</strong><span>${countLabel(t.photos)}</span></span></button>`
+    : `<button class="tile rv" style="--d:${(i%4)*.07}s" data-single="${esc(t.src)}" aria-label="View ${isVid(t.src)?"video":"photo"}" onmouseenter="hv(this,1)" onmouseleave="hv(this,0)">${n}${img(t.src)}</button>`;
 }
 
 /* pick a column count so the last row isn't a lonely single tile */
@@ -410,8 +430,8 @@ function showGrid(){
 let albumEl = null, albumBtns = [], relayout = 0;
 const ratios = {};
 function sized(img){
-  const r = img.naturalWidth / img.naturalHeight;
-  ratios[img.getAttribute("src")] = r;
+  const r = (img.videoWidth || img.naturalWidth) / (img.videoHeight || img.naturalHeight);
+  ratios[img.getAttribute("src").replace(/#.*$/,"")] = r;
   img.parentElement.dataset.r = r;
   img.classList.add("loaded");
   clearTimeout(relayout); relayout = setTimeout(layoutAlbum, 120);
@@ -453,16 +473,19 @@ function layoutAlbum(){
 
 function showAlbum(a){
   $("workTitle").textContent = a.title; $("back").hidden = false;
-  $("count").textContent = `${a.photos.length} photo${a.photos.length===1?"":"s"}`;
+  $("count").textContent = countLabel(a.photos);
   viewing = a.photos;
   const others = albums.filter(x => x !== a);
   $("gallery").innerHTML = `<div class="album"></div><div class="more">` + (others.length ? `<h3 class="rv">Check out my other work</h3><div class="tiles small" data-size="200">${others.map((o,i)=>tileHTML({type:"album",...o}, i)).join("")}</div>` : "") + `<a class="home-btn rv" href="#top">← Back to homepage</a></div>`;
   albumEl = $("gallery").querySelector(".album");
   albumBtns = a.photos.map((src,i) => {
     const b = document.createElement("button");
-    b.className = "rv"; b.dataset.p = i; b.setAttribute("aria-label", `Open photo ${i+1} of ${a.photos.length}`);
+    b.className = "rv"; b.dataset.p = i; b.setAttribute("aria-label", `Open ${isVid(src)?"video":"photo"} ${i+1} of ${a.photos.length}`);
     if (ratios[src]) b.dataset.r = ratios[src];
-    b.innerHTML = `<img src="${src}" alt="${esc(a.title)} photo ${i+1}" decoding="async" fetchpriority="${i<8?"high":"low"}" onload="sized(this)">`;
+    if (isVid(src)){
+      b.innerHTML = `<video src="${src}#t=0.1" muted loop playsinline preload="metadata" onloadedmetadata="sized(this)"></video><span class="play" aria-hidden="true"></span>`;
+      b.onmouseenter = () => hv(b,1); b.onmouseleave = () => hv(b,0);
+    } else b.innerHTML = `<img src="${src}" alt="${esc(a.title)} photo ${i+1}" decoding="async" fetchpriority="${i<8?"high":"low"}" onload="sized(this)">`;
     return b;
   });
   layoutAlbum();
@@ -499,8 +522,11 @@ $("gallery").addEventListener("click", e=>{
 
 /* lightbox */
 const lb = $("lightbox");
-function open(i){ idx=(i+viewing.length)%viewing.length; const im=$("lbImg"); im.classList.add("swap"); im.onload=im.onerror=()=>im.classList.remove("swap"); im.src=viewing[idx]; $("lbNum").textContent=`${idx+1} / ${viewing.length}`; if(!lb.open) lb.showModal(); }
+function open(i){ idx=(i+viewing.length)%viewing.length; const im=$("lbImg"), vd=$("lbVid"), src=viewing[idx];
+  if (isVid(src)){ im.hidden = true; vd.hidden = false; vd.src = src; vd.play().catch(()=>{}); }
+  else { vd.pause(); vd.removeAttribute("src"); vd.load(); vd.hidden = true; im.hidden = false; im.classList.add("swap"); im.onload=im.onerror=()=>im.classList.remove("swap"); im.src=src; } $("lbNum").textContent=`${idx+1} / ${viewing.length}`; if(!lb.open) lb.showModal(); }
 $("lbClose").onclick = ()=>lb.close();
+lb.addEventListener("close", ()=>{ $("lbVid").pause(); });
 $("lbPrev").onclick = ()=>open(idx-1);
 $("lbNext").onclick = ()=>open(idx+1);
 lb.addEventListener("click", e=>{ if(e.target.classList.contains("lb")) lb.close(); });
