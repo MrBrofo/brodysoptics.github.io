@@ -155,6 +155,8 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 .tiles.small .tile::after{inset:12px}
 @media (hover:hover){ .tiles.small .tile:hover::after{inset:8px} }
 .in-album #pricing,.in-album #book,.in-album .main-only{display:none}
+.home-btn{display:inline-block;margin-top:32px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;background:var(--sunset,var(--accent));color:var(--on-accent);padding:14px 28px;transition:background-color .25s ease,color .25s ease,transform .25s ease}
+.home-btn:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
 .more h3{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(1.7rem,2.8vw,2.3rem);line-height:1;margin:0 0 20px;letter-spacing:.01em}
 .album img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
 .album img.loaded{opacity:1}
@@ -454,7 +456,7 @@ function showAlbum(a){
   $("count").textContent = `${a.photos.length} photo${a.photos.length===1?"":"s"}`;
   viewing = a.photos;
   const others = albums.filter(x => x !== a);
-  $("gallery").innerHTML = `<div class="album"></div>` + (others.length ? `<div class="more"><h3 class="rv">Check out my other work</h3><div class="tiles small" data-size="200">${others.map((o,i)=>tileHTML({type:"album",...o}, i)).join("")}</div></div>` : "");
+  $("gallery").innerHTML = `<div class="album"></div><div class="more">` + (others.length ? `<h3 class="rv">Check out my other work</h3><div class="tiles small" data-size="200">${others.map((o,i)=>tileHTML({type:"album",...o}, i)).join("")}</div>` : "") + `<a class="home-btn rv" href="#top">← Back to homepage</a></div>`;
   albumEl = $("gallery").querySelector(".album");
   albumBtns = a.photos.map((src,i) => {
     const b = document.createElement("button");
@@ -480,7 +482,8 @@ function route(){
 }
 window.addEventListener("hashchange", ()=>{ const h = location.hash; route();
   if (h.startsWith("#album/") || h==="#work") $("work").scrollIntoView();
-  else if (h==="#pricing" || h==="#book") $(h.slice(1)).scrollIntoView(); });
+  else if (h==="#pricing" || h==="#book") $(h.slice(1)).scrollIntoView();
+  else if (h==="#top") scrollTo({top:0, behavior: still ? "auto" : "smooth"}); });
 $("back").onclick = ()=>{ location.hash = "work"; };
 
 $("gallery").addEventListener("click", e=>{
