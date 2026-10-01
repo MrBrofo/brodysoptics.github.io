@@ -322,7 +322,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",
 function nice(s){return s.replace(/[-_]+/g," ").trim()}
 function url(path){return path.split("/").map(encodeURIComponent).join("/")}
 const byName = (a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:"base"});
-const isCover = f => /^cover\./i.test(f);
+const isCover = f => /^cover(?![a-z0-9])/i.test(f);
 
 /* Find photos on GitHub.
    photos/hero.jpg          -> big top image
@@ -340,7 +340,7 @@ async function loadPhotos(){
     for (const path of files){
       const parts = path.split("/"), file = parts[parts.length-1];
       if (parts.length===2){
-        if (/^hero\./i.test(file)) hero = path; else singles.push({src:url(path), name:file});
+        if (/^hero(?![a-z0-9])/i.test(file)) hero = path; else singles.push({src:url(path), name:file});
       } else {
         const key = parts[1];
         if (!map.has(key)) map.set(key,{title:nice(key), photos:[], cover:null});
@@ -536,7 +536,12 @@ reveal();
 
 let heroless = false;
 const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-function navState(){ $("nav").classList.toggle("solid", heroless || scrollY > $("top").offsetHeight - 80); }
+function navState(){
+  /* go solid just before the menu bar reaches your name, so they never overlap */
+  const nav = $("nav"), name = $("heroName");
+  const nameTop = name.getBoundingClientRect().top + scrollY;
+  nav.classList.toggle("solid", heroless || scrollY > nameTop - nav.offsetHeight - 48);
+}
 addEventListener("scroll", ()=>{
   navState();
   const img = document.querySelector(".hero > img");
