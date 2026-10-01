@@ -142,13 +142,13 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
   .tile:hover img{transform:scale(1.03)}
 }
 /* inside an album: keep each photo's real shape */
-/* rows that fill the full width, every photo in a row the same height (like Adobe) */
-.album{display:flex;flex-wrap:wrap;gap:var(--gap);--row:clamp(220px,30vw,440px)}
-.album::after{content:"";flex-grow:999999}
-@media (max-width:600px){ .album{--row:190px} }
-.album button{all:unset;box-sizing:border-box;display:block;cursor:zoom-in;background:var(--frame);min-width:0;
-  --r:.667;flex-grow:var(--r);flex-basis:calc(var(--r) * var(--row));aspect-ratio:var(--r)}
+/* album rows: built by the script so every row is full width and photos keep their shape */
+.album{display:flex;flex-direction:column;gap:var(--gap)}
+.jrow{display:flex;gap:var(--gap)}
+.album button{all:unset;box-sizing:border-box;display:block;cursor:zoom-in;background:var(--frame);min-width:0;height:100%;overflow:hidden}
 .album button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.more{margin-top:clamp(64px,8vw,104px)}
+.more h3{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(1.7rem,2.8vw,2.3rem);line-height:1;margin:0 0 20px;letter-spacing:.01em}
 .album img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
 .album img.loaded{opacity:1}
 .notice{border:1px dashed var(--line);padding:28px;max-width:62ch;color:var(--muted)}
@@ -363,35 +363,111 @@ function emptyState(kind){
 }
 
 /* the Work grid: albums first, then single photos */
+const slug = t => t.replace(/\s+/g,"-");
+function tileHTML(t, i){
+  const n = `<span class="no">${String(i+1).padStart(2,"0")}</span>`;
+  const img = src => `<img src="${src}" alt="" loading="${i<8?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')">`;
+  return t.type==="album"
+    ? `<button class="tile rv" style="--d:${(i%4)*.07}s" data-album="${esc(slug(t.title))}" aria-label="Open album ${esc(t.title)}">${n}${img(t.cover)}<span class="cap"><strong>${esc(t.title)}</strong><span>${t.photos.length} photo${t.photos.length===1?"":"s"}</span></span></button>`
+    : `<button class="tile rv" style="--d:${(i%4)*.07}s" data-single="${esc(t.src)}" aria-label="View photo">${n}${img(t.src)}</button>`;
+}
+
+/* pick a column count so the last row isn't a lonely single tile */
+function fitCols(grid){
+  if (!grid || !grid.isConnected) return;
+  const n = grid.children.length, W = grid.clientWidth, g = parseFloat(getComputedStyle(grid).columnGap) || 10;
+  const ideal = Math.max(1, Math.floor((W+g)/(300+g))), most = Math.max(1, Math.floor((W+g)/(200+g)));
+  let cols = ideal;
+  if (n > ideal && ideal > 1){
+    let best = null;
+    for (let c = Math.max(2, ideal-1); c <= Math.min(most, ideal+1); c++){
+      const rem = n % c, gaps = rem ? c - rem : 0, lone = rem === 1 ? 1 : 0;
+      const score = lone*100 + gaps*10 + Math.abs(c-ideal) + (c < ideal ? .5 : 0);
+      if (!best || score < best.score) best = {c, score};
+    }
+    cols = best.c;
+  }
+  grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0,1fr))`;
+}
+
 function showGrid(){
   tiles = [...albums.map(a=>({type:"album",...a})), ...singles.map(s=>({type:"single",...s}))];
   $("workTitle").textContent = "My Work"; $("back").hidden = true; $("count").textContent = "";
-  $("gallery").innerHTML = `<div class="tiles">${tiles.map((t,i)=> t.type==="album"
-    ? `<button class="tile rv" style="--d:${(i%3)*.08}s" data-i="${i}" aria-label="Open album ${esc(t.title)}"><span class="no">${String(i+1).padStart(2,"0")}</span><img src="${t.cover}" alt="" loading="${i<6?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')"><span class="cap"><strong>${esc(t.title)}</strong><span>${t.photos.length} photo${t.photos.length===1?"":"s"}</span></span></button>`
-    : `<button class="tile rv" style="--d:${(i%3)*.08}s" data-i="${i}" aria-label="View photo"><span class="no">${String(i+1).padStart(2,"0")}</span><img src="${t.src}" alt="" loading="${i<6?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')"></button>`
-  ).join("")}</div>`;
+  $("gallery").innerHTML = `<div class="tiles">${tiles.map(tileHTML).join("")}</div>`;
+  fitCols($("gallery").querySelector(".tiles"));
 }
 
+/* album page */
+let albumEl = null, albumBtns = [], relayout = 0;
 const ratios = {};
 function sized(img){
-  const r = (img.naturalWidth / img.naturalHeight).toFixed(4);
+  const r = img.naturalWidth / img.naturalHeight;
   ratios[img.getAttribute("src")] = r;
-  img.parentElement.style.setProperty("--r", r);
+  img.parentElement.dataset.r = r;
   img.classList.add("loaded");
+  clearTimeout(relayout); relayout = setTimeout(layoutAlbum, 120);
 }
+
+/* split photos into rows of roughly equal total width (no tiny leftover rows) */
+function partition(r, k){
+  const n = r.length, pre = [0]; r.forEach(x => pre.push(pre[pre.length-1] + x));
+  const T = pre[n] / k, cost = (a,b) => (pre[b]-pre[a]-T) ** 2;
+  const D = Array.from({length:k+1}, () => Array(n+1).fill(Infinity)), P = Array.from({length:k+1}, () => Array(n+1).fill(0));
+  D[0][0] = 0;
+  for (let j=1; j<=k; j++) for (let i=j; i<=n; i++) for (let s=j-1; s<i; s++){
+    const v = D[j-1][s] + cost(s,i); if (v < D[j][i]){ D[j][i] = v; P[j][i] = s; }
+  }
+  const out = []; let i = n;
+  for (let j=k; j>0; j--){ const s = P[j][i]; out.unshift(i-s); i = s; }
+  return out;
+}
+
+function layoutAlbum(){
+  if (!albumEl || !albumEl.isConnected || !albumBtns.length) return;
+  const W = albumEl.clientWidth, g = parseFloat(getComputedStyle(albumEl).rowGap) || 10;
+  const H = innerWidth <= 600 ? 190 : Math.min(440, Math.max(220, innerWidth * .30));
+  const r = albumBtns.map(b => +b.dataset.r || .667);
+  const total = r.reduce((a,b)=>a+b, 0);
+  const k = Math.max(1, Math.min(r.length, Math.round(total * H / W)));
+  const rows = partition(r, k);
+  const frag = document.createDocumentFragment(); let i = 0;
+  for (const len of rows){
+    const row = document.createElement("div"); row.className = "jrow";
+    const rr = r.slice(i, i+len), sum = rr.reduce((a,b)=>a+b, 0);
+    let h = (W - g*(len-1)) / sum; const capped = h > H*1.5; if (capped) h = H*1.5;
+    row.style.height = h + "px";
+    albumBtns.slice(i, i+len).forEach((b,j) => { b.style.flex = capped ? `0 0 ${rr[j]*h}px` : `${rr[j]} 1 0`; row.append(b); });
+    frag.append(row); i += len;
+  }
+  albumEl.replaceChildren(frag);
+}
+
 function showAlbum(a){
   $("workTitle").textContent = a.title; $("back").hidden = false;
   $("count").textContent = `${a.photos.length} photo${a.photos.length===1?"":"s"}`;
   viewing = a.photos;
-  $("gallery").innerHTML = `<div class="album">${a.photos.map((src,i)=>
-    `<button class="rv" data-p="${i}" aria-label="Open photo ${i+1} of ${a.photos.length}"${ratios[src] ? ` style="--r:${ratios[src]}"` : ""}><img src="${src}" alt="${esc(a.title)} photo ${i+1}" decoding="async" fetchpriority="${i<8?"high":"low"}" onload="sized(this)"></button>`).join("")}</div>`;
+  const others = albums.filter(x => x !== a);
+  $("gallery").innerHTML = `<div class="album"></div>` + (others.length ? `<div class="more"><h3 class="rv">Check out my other work</h3><div class="tiles">${others.map((o,i)=>tileHTML({type:"album",...o}, i)).join("")}</div></div>` : "");
+  albumEl = $("gallery").querySelector(".album");
+  albumBtns = a.photos.map((src,i) => {
+    const b = document.createElement("button");
+    b.className = "rv"; b.dataset.p = i; b.setAttribute("aria-label", `Open photo ${i+1} of ${a.photos.length}`);
+    if (ratios[src]) b.dataset.r = ratios[src];
+    b.innerHTML = `<img src="${src}" alt="${esc(a.title)} photo ${i+1}" decoding="async" fetchpriority="${i<8?"high":"low"}" onload="sized(this)">`;
+    return b;
+  });
+  layoutAlbum();
+  fitCols($("gallery").querySelector(".more .tiles"));
 }
 
+let resizeT = 0;
+addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => { layoutAlbum(); $("gallery").querySelectorAll(".tiles").forEach(fitCols); }, 120); });
+
 /* each album gets its own link, like yoursite/#album/Mens-Lacrosse-2024, and the back button works */
-const slug = t => t.replace(/\s+/g,"-");
 function route(){
   const m = location.hash.match(/^#album\/(.+)$/);
   const a = m && albums.find(x => slug(x.title)===decodeURIComponent(m[1]));
+  albumEl = null; albumBtns = [];
   if (a) showAlbum(a); else showGrid();
 }
 window.addEventListener("hashchange", ()=>{ route(); if (location.hash.startsWith("#album/")||location.hash==="#work") $("work").scrollIntoView(); });
@@ -400,9 +476,8 @@ $("back").onclick = ()=>{ location.hash = "work"; };
 $("gallery").addEventListener("click", e=>{
   const t = e.target.closest(".tile");
   if (t){
-    const tile = tiles[+t.dataset.i];
-    if (tile.type==="album") location.hash = "album/" + encodeURIComponent(slug(tile.title));
-    else { viewing = singles.map(s=>s.src); open(singles.indexOf(singles.find(s=>s.src===tile.src))); }
+    if (t.dataset.album) location.hash = "album/" + encodeURIComponent(t.dataset.album);
+    else { viewing = singles.map(s=>s.src); open(Math.max(0, viewing.indexOf(t.dataset.single))); }
     return;
   }
   const p = e.target.closest("button[data-p]");
