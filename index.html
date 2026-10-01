@@ -17,13 +17,13 @@
 const SITE = {
   name: "Brody Disick",
   look: "darkroom",        // color style: "darkroom", "kodak" or "nightgame"
-  brand: "Brodysoptics",   // top-left of the page
+  brand: "Brodysoptics.",   // top-left of the page
   tagline: "",             // small line under your name; "" hides it
   instagram: "",          // e.g. "brodyshoots" (no @). Leave "" to hide.
 
   // Your GitHub info, so the gallery can find your photos folder
-  githubUser: "YOUR-GITHUB-USERNAME",
-  githubRepo: "YOUR-REPO-NAME",
+  githubUser: "MrBrofo",
+  githubRepo: "brodysoptics.github.io",
   githubBranch: "main",
 
   // Your Google Form. Inquiries from the site land in the same responses/Sheet.
@@ -142,11 +142,14 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
   .tile:hover img{transform:scale(1.03)}
 }
 /* inside an album: keep each photo's real shape */
-.album{columns:3 280px;column-gap:var(--gap)}
-@media (max-width:600px){ .album{columns:2} }
-.album button{all:unset;display:block;cursor:zoom-in;margin:0 0 var(--gap);break-inside:avoid;background:var(--frame);width:100%}
+/* rows that fill the full width, every photo in a row the same height (like Adobe) */
+.album{display:flex;flex-wrap:wrap;gap:var(--gap);--row:clamp(220px,30vw,440px)}
+.album::after{content:"";flex-grow:999999}
+@media (max-width:600px){ .album{--row:190px} }
+.album button{all:unset;box-sizing:border-box;display:block;cursor:zoom-in;background:var(--frame);min-width:0;
+  --r:.667;flex-grow:var(--r);flex-basis:calc(var(--r) * var(--row));aspect-ratio:var(--r)}
 .album button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.album img{width:100%;height:auto;opacity:0;transition:opacity .4s ease}
+.album img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
 .album img.loaded{opacity:1}
 .notice{border:1px dashed var(--line);padding:28px;max-width:62ch;color:var(--muted)}
 .notice code{font-size:.9em;background:var(--frame);padding:1px 5px;border-radius:3px;color:var(--ink)}
@@ -292,14 +295,14 @@ let albums = [], singles = [], tiles = [], viewing = [], idx = 0;
 /* text from SITE */
 $("navName").textContent = SITE.brand;
 document.documentElement.dataset.look = SITE.look || "darkroom";
-$("wordmark").innerHTML = esc(SITE.brand).replace(/optics$/i, m=>`<span>${m}</span>`);
+$("wordmark").innerHTML = esc(SITE.brand).replace(/optics\.?$/i, m=>`<span>${m}</span>`);
 function fitWordmark(){ const w=$("wordmark"); w.style.fontSize=""; const r=w.clientWidth/w.scrollWidth; if(r<1) w.style.fontSize=(parseFloat(getComputedStyle(w).fontSize)*r*0.98)+"px"; }
 fitWordmark(); addEventListener("resize", fitWordmark); document.fonts && document.fonts.ready.then(fitWordmark);
 $("heroName").innerHTML = SITE.name.split(" ").map((w,i)=>`<span class="w"><span style="--i:${i}">${esc(w)}</span></span>`).join(" ");
 $("heroName").setAttribute("aria-label", SITE.name);
 if (SITE.tagline) $("heroTag").textContent = SITE.tagline; else $("heroTag").remove();
 $("copy").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
-document.title = SITE.brand + " | " + SITE.name + " Photography";
+document.title = SITE.brand.replace(/\.$/,"") + " | " + SITE.name + " Photography";
 if (SITE.instagram) $("social").innerHTML = `<a href="https://instagram.com/${encodeURIComponent(SITE.instagram)}">Instagram @${esc(SITE.instagram)}</a>`;
 $("prices").innerHTML = SITE.pricing.map((p,i) =>
   `<li class="rv" style="--d:${i*.07}s"><button class="pick" data-pkg="${esc(p.form || p.name)}" aria-label="Book ${esc(p.name)}, ${esc(p.price)}"><strong>${esc(p.name)}${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}</strong><span class="amt">${esc(p.price)}</span><span class="d">${esc(p.details)}</span><span class="go" aria-hidden="true">Book this →</span></button></li>`).join("");
@@ -369,12 +372,19 @@ function showGrid(){
   ).join("")}</div>`;
 }
 
+const ratios = {};
+function sized(img){
+  const r = (img.naturalWidth / img.naturalHeight).toFixed(4);
+  ratios[img.getAttribute("src")] = r;
+  img.parentElement.style.setProperty("--r", r);
+  img.classList.add("loaded");
+}
 function showAlbum(a){
   $("workTitle").textContent = a.title; $("back").hidden = false;
   $("count").textContent = `${a.photos.length} photo${a.photos.length===1?"":"s"}`;
   viewing = a.photos;
   $("gallery").innerHTML = `<div class="album">${a.photos.map((src,i)=>
-    `<button class="rv" style="--d:${(i%3)*.07}s" data-p="${i}" aria-label="Open photo ${i+1} of ${a.photos.length}"><img src="${src}" alt="${esc(a.title)} photo ${i+1}" loading="${i<6?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')"></button>`).join("")}</div>`;
+    `<button class="rv" data-p="${i}" aria-label="Open photo ${i+1} of ${a.photos.length}"${ratios[src] ? ` style="--r:${ratios[src]}"` : ""}><img src="${src}" alt="${esc(a.title)} photo ${i+1}" decoding="async" fetchpriority="${i<8?"high":"low"}" onload="sized(this)"></button>`).join("")}</div>`;
 }
 
 /* each album gets its own link, like yoursite/#album/Mens-Lacrosse-2024, and the back button works */
