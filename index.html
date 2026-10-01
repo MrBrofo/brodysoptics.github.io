@@ -148,6 +148,13 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 .album button{all:unset;box-sizing:border-box;display:block;cursor:zoom-in;background:var(--frame);min-width:0;height:100%;overflow:hidden}
 .album button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .more{margin-top:clamp(64px,8vw,104px)}
+.tiles.small .cap{padding:28px 12px 10px}
+.tiles.small .cap strong{font-size:1.05rem}
+.tiles.small .cap span{font-size:.8rem}
+.tiles.small .no{top:9px;left:10px;font-size:.65rem}
+.tiles.small .tile::after{inset:12px}
+@media (hover:hover){ .tiles.small .tile:hover::after{inset:8px} }
+.in-album #pricing,.in-album #book,.in-album .main-only{display:none}
 .more h3{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(1.7rem,2.8vw,2.3rem);line-height:1;margin:0 0 20px;letter-spacing:.01em}
 .album img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
 .album img.loaded{opacity:1}
@@ -223,8 +230,8 @@ dialog[open]{animation:fade .3s ease}
   <a href="#top" id="navName"></a>
   <ul>
     <li><a href="#work">My Work</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#book">Book</a></li>
+    <li class="main-only"><a href="#pricing">Pricing</a></li>
+    <li class="main-only"><a href="#book">Book</a></li>
   </ul>
 </div></nav>
 
@@ -373,10 +380,10 @@ function tileHTML(t, i){
 }
 
 /* pick a column count so the last row isn't a lonely single tile */
-function fitCols(grid){
+function fitCols(grid, ideal_w = +grid?.dataset.size || 300){
   if (!grid || !grid.isConnected) return;
   const n = grid.children.length, W = grid.clientWidth, g = parseFloat(getComputedStyle(grid).columnGap) || 10;
-  const ideal = Math.max(1, Math.floor((W+g)/(300+g))), most = Math.max(1, Math.floor((W+g)/(200+g)));
+  const ideal = Math.max(1, Math.floor((W+g)/(ideal_w+g))), most = Math.max(1, Math.floor((W+g)/(ideal_w*.67+g)));
   let cols = ideal;
   if (n > ideal && ideal > 1){
     let best = null;
@@ -447,7 +454,7 @@ function showAlbum(a){
   $("count").textContent = `${a.photos.length} photo${a.photos.length===1?"":"s"}`;
   viewing = a.photos;
   const others = albums.filter(x => x !== a);
-  $("gallery").innerHTML = `<div class="album"></div>` + (others.length ? `<div class="more"><h3 class="rv">Check out my other work</h3><div class="tiles">${others.map((o,i)=>tileHTML({type:"album",...o}, i)).join("")}</div></div>` : "");
+  $("gallery").innerHTML = `<div class="album"></div>` + (others.length ? `<div class="more"><h3 class="rv">Check out my other work</h3><div class="tiles small" data-size="200">${others.map((o,i)=>tileHTML({type:"album",...o}, i)).join("")}</div></div>` : "");
   albumEl = $("gallery").querySelector(".album");
   albumBtns = a.photos.map((src,i) => {
     const b = document.createElement("button");
@@ -461,16 +468,19 @@ function showAlbum(a){
 }
 
 let resizeT = 0;
-addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => { layoutAlbum(); $("gallery").querySelectorAll(".tiles").forEach(fitCols); }, 120); });
+addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => { layoutAlbum(); $("gallery").querySelectorAll(".tiles").forEach(t => fitCols(t)); }, 120); });
 
 /* each album gets its own link, like yoursite/#album/Mens-Lacrosse-2024, and the back button works */
 function route(){
   const m = location.hash.match(/^#album\/(.+)$/);
   const a = m && albums.find(x => slug(x.title)===decodeURIComponent(m[1]));
   albumEl = null; albumBtns = [];
+  document.body.classList.toggle("in-album", !!a);
   if (a) showAlbum(a); else showGrid();
 }
-window.addEventListener("hashchange", ()=>{ route(); if (location.hash.startsWith("#album/")||location.hash==="#work") $("work").scrollIntoView(); });
+window.addEventListener("hashchange", ()=>{ const h = location.hash; route();
+  if (h.startsWith("#album/") || h==="#work") $("work").scrollIntoView();
+  else if (h==="#pricing" || h==="#book") $(h.slice(1)).scrollIntoView(); });
 $("back").onclick = ()=>{ location.hash = "work"; };
 
 $("gallery").addEventListener("click", e=>{
