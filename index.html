@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brodysoptics | Brody Disick Photography</title>
+<meta name="description" content="brodysoptics photography">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Herr+Von+Muellerhoff&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+
+<script>document.documentElement.classList.add("js")</script>
+<script>
+/* =====================================================================
+   EDIT THIS PART. Everything you'd ever want to change lives here.
+   ===================================================================== */
+const SITE = {
+  name: "Brody Disick",
+  look: "darkroom",        // color style: "darkroom", "kodak" or "nightgame"
+  brand: "Brodysoptics",   // top-left of the page
+  tagline: "",             // small line under your name; "" hides it
+  instagram: "",          // e.g. "brodyshoots" (no @). Leave "" to hide.
+
+  // Your GitHub info, so the gallery can find your photos folder
+  githubUser: "YOUR-GITHUB-USERNAME",
+  githubRepo: "YOUR-REPO-NAME",
+  githubBranch: "main",
+
+  // Your Google Form. Inquiries from the site land in the same responses/Sheet.
+  googleFormId: "1FAIpQLSeVEzIjqwg7Fcim7Z5hEXjT3fplNuXDySzg26LP9XgUlmt7zQ",
+  // Question IDs from the form's pre-filled link (Claude fills these in)
+  formEntries: {
+    name: "1690814314", package: "1485016801", subject: "49302972", location: "2146188724",
+    datetime: "1012313159", orientation: "1308545335", contactMethod: "1162604422",
+    contact: "729877922", posting: "1602938962", referral: "921430376", other: "1182973985"
+  },
+
+  // Your packages. "form" must match the Google Form option exactly.
+  // "tag" is optional and shows as a small label next to the name.
+  pricing: [
+    { name: "Basic", form: "Basic", price: "$25", details: "About 15 edited photos" },
+    { name: "Standard", form: "Standard", price: "$40", details: "About 30 edited photos" },
+    { name: "Full", tag: "Best value", form: "Full", price: "$45", details: "About 45 edited photos" },
+    { name: "Group / team", form: "Group/Team", price: "$20 per person", details: "3 or more people, at least 5 edited photos each" },
+    { name: "Video edit", form: "Video (Mixtape/edit)", price: "$50", details: "A 30 second to 1 minute highlight video cut to music" }
+  ]
+};
+</script>
+
+<style>
+:root{
+  --paper:#0E0D0C; --ink:#F2EEE8; --muted:#9A938A; --line:#2B2825; --accent:#F4895F; --on-accent:#1A0F0A; --sunset:linear-gradient(90deg,#F7B267 0%,#F4845F 55%,#E8687F 100%); --frame:#1A1816; --grain:.07;
+  --display:"Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --sig:"Herr Von Muellerhoff", "Brush Script MT", cursive;
+  --text:"Newsreader", Georgia, "Times New Roman", serif;
+  --gap: clamp(6px, 1vw, 12px);
+  --pad: clamp(18px, 4vw, 48px);
+  --wide: 1320px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+/* color styles: pick one with "look" in the settings */
+:root[data-look="kodak"]{ --paper:#FAF9F5; --ink:#121110; --muted:#6B675F; --line:#DEDAD1; --accent:#FFB400; --on-accent:#121110; --accent-text:#9C6B00; --sunset:linear-gradient(var(--accent),var(--accent)); --frame:#ECE9E1; --grain:.05; }
+:root[data-look="nightgame"]{ --paper:#0B1220; --ink:#EEF2F7; --muted:#8A97AB; --line:#1F2B3E; --accent:#FF7A1A; --on-accent:#0B1220; --sunset:linear-gradient(var(--accent),var(--accent)); --frame:#142036; --grain:.06; }
+:root{color-scheme:dark}
+:root[data-look="kodak"]{color-scheme:light}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+body::after{content:"";position:fixed;inset:0;z-index:6;pointer-events:none;opacity:var(--grain);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:var(--wide);margin:0 auto;padding:0 var(--pad)}
+
+/* nav */
+.nav{position:fixed;inset:0 0 auto 0;z-index:5;color:#fff;font-family:var(--display);font-size:.95rem;font-weight:500;padding-top:env(safe-area-inset-top,0px);transition:background-color .35s ease,color .35s ease,box-shadow .35s ease}
+.nav .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:12px;padding-bottom:12px;transition:padding .35s ease}
+.nav.solid{background:color-mix(in srgb,var(--paper) 86%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--ink);box-shadow:0 1px 0 var(--line)}
+.nav.solid .wrap{padding-top:6px;padding-bottom:6px}
+#navName{font-family:var(--sig);font-weight:400;font-size:clamp(2.5rem,4.2vw,3.3rem);line-height:1;letter-spacing:0;padding:0 .25em 0 .05em;margin-left:-.05em;text-shadow:0 1px 10px rgba(0,0,0,.35);display:inline-block;animation:sign 1.1s cubic-bezier(.5,0,.2,1) .2s both}
+.nav.solid #navName{text-shadow:none}
+#navName:hover{text-decoration:none}
+@keyframes sign{from{clip-path:inset(-20% 100% -20% 0)}to{clip-path:inset(-20% -10% -20% 0)}}
+.nav a{text-decoration:none}
+.nav ul{display:flex;gap:clamp(16px,3vw,32px);list-style:none;margin:0;padding:0}
+.nav a:hover{text-decoration:underline;text-underline-offset:4px}
+
+/* hero */
+.hero{position:relative;height:min(86svh,860px);min-height:420px;background:var(--frame);overflow:hidden}
+.hero > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:heroIn 2.2s cubic-bezier(.2,.7,.2,1) both;will-change:transform}
+@keyframes heroIn{from{opacity:0;transform:scale(1.12)}to{opacity:1;transform:scale(1)}}
+.hero h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em;margin-bottom:-.06em}
+.hero h1 .w > span{display:inline-block;animation:rise 1.1s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.3s + var(--i) * .12s)}
+@keyframes rise{from{transform:translateY(110%)}to{transform:none}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6),rgba(0,0,0,0) 50%),linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,0) 18%)}
+.hero .wrap{position:absolute;left:0;right:0;bottom:clamp(20px,4vw,48px);z-index:2;color:#fff}
+.hero h1{margin:0;font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.86;letter-spacing:-.01em;font-size:clamp(2.2rem,5vw,4rem)}
+.hero p{margin:.6em 0 0;font-size:clamp(1rem,1.6vw,1.25rem);opacity:.92}
+.hero.empty{height:auto;min-height:0;padding:96px 0 24px}
+.hero.empty::after{display:none}
+.hero.empty .wrap{position:static;color:var(--ink)}
+
+/* sections: heading on the left, content on the right */
+section{padding-top:clamp(64px,9vw,120px)}
+.split{display:grid;grid-template-columns:minmax(150px,1fr) minmax(0,3fr);gap:16px clamp(24px,5vw,72px)}
+.split > div{max-width:760px}
+h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2.4rem,4.4vw,3.4rem);line-height:.95;margin:0;letter-spacing:.005em;text-transform:uppercase}
+.lede{color:var(--muted);margin:0 0 28px}
+@media (max-width:760px){ .split{grid-template-columns:1fr} }
+
+/* work grid: albums and single photos as even tiles */
+.work-head{display:flex;align-items:baseline;gap:8px 16px;margin-bottom:24px;flex-wrap:wrap}
+.work-head .back{flex-basis:100%;order:-1}
+.back{all:unset;cursor:pointer;font-family:var(--display);font-weight:500;color:var(--muted)}
+.back:hover{color:var(--ink)}
+.back[hidden]{display:none}
+.back:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.count{font-family:var(--display);color:var(--muted);font-size:.95rem}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:var(--gap)}
+.tile{all:unset;position:relative;display:block;aspect-ratio:4/5;overflow:hidden;background:var(--frame);cursor:pointer}
+.tile img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease,transform .6s ease}
+.tile img.loaded{opacity:1}
+.tile:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tile .cap{position:absolute;inset:auto 0 0 0;padding:40px 16px 14px;color:#fff;background:linear-gradient(to top,rgba(0,0,0,.65),rgba(0,0,0,0));font-family:var(--display);line-height:1.25}
+.tile .cap strong{display:block;font-weight:800;font-size:1.3rem;text-transform:uppercase;font-stretch:70%;letter-spacing:.02em}
+.tile .no{position:absolute;top:12px;left:14px;z-index:2;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.72rem;letter-spacing:.08em;color:#fff;opacity:.85;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.tile::after{content:"";position:absolute;inset:18px;pointer-events:none;opacity:0;transition:opacity .3s ease,inset .3s ease;--c:#fff;
+  background:
+    linear-gradient(var(--c),var(--c)) top left/22px 2px no-repeat, linear-gradient(var(--c),var(--c)) top left/2px 22px no-repeat,
+    linear-gradient(var(--c),var(--c)) top right/22px 2px no-repeat, linear-gradient(var(--c),var(--c)) top right/2px 22px no-repeat,
+    linear-gradient(var(--c),var(--c)) bottom left/22px 2px no-repeat, linear-gradient(var(--c),var(--c)) bottom left/2px 22px no-repeat,
+    linear-gradient(var(--c),var(--c)) bottom right/22px 2px no-repeat, linear-gradient(var(--c),var(--c)) bottom right/2px 22px no-repeat}
+@media (hover:hover){ .tile:hover::after,.tile:focus-visible::after{opacity:1;inset:12px} }
+.tile .cap span{font-size:.9rem;opacity:.85}
+@media (hover:hover){
+  .tile .cap{opacity:0;transition:opacity .25s ease}
+  .tile:hover .cap,.tile:focus-visible .cap{opacity:1}
+  .tile:hover img{transform:scale(1.03)}
+}
+/* inside an album: keep each photo's real shape */
+.album{columns:3 280px;column-gap:var(--gap)}
+@media (max-width:600px){ .album{columns:2} }
+.album button{all:unset;display:block;cursor:zoom-in;margin:0 0 var(--gap);break-inside:avoid;background:var(--frame);width:100%}
+.album button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.album img{width:100%;height:auto;opacity:0;transition:opacity .4s ease}
+.album img.loaded{opacity:1}
+.notice{border:1px dashed var(--line);padding:28px;max-width:62ch;color:var(--muted)}
+.notice code{font-size:.9em;background:var(--frame);padding:1px 5px;border-radius:3px;color:var(--ink)}
+
+/* pricing list */
+.prices{margin:0;padding:0;list-style:none;border-top:2px solid var(--accent);border-image:var(--sunset) 1}
+.prices li{border-bottom:1px solid var(--line)}
+.pick{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 24px;padding:16px 0;transition:padding-left .3s ease}
+.pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.prices strong{font-family:var(--display);font-weight:700;font-size:1.25rem;text-transform:uppercase;font-stretch:80%;letter-spacing:.02em}
+.prices .tag{font-family:var(--display);font-size:.75rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-stretch:100%;color:var(--on-accent);background:var(--sunset);padding:2px 8px;border-radius:999px;margin-left:10px;vertical-align:3px}
+.prices .amt{font-family:var(--display);font-weight:700;font-size:1.25rem;color:var(--accent-text,var(--accent));text-align:right;font-variant-numeric:tabular-nums}
+.prices .d{color:var(--muted);font-size:1rem}
+.prices .go{font-family:var(--display);font-weight:700;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-text,var(--accent));text-align:right;align-self:center;transition:opacity .25s ease,transform .25s ease}
+@media (hover:hover){
+  .pick:hover,.pick:focus-visible{padding-left:10px}
+  .prices .go{opacity:0;transform:translateX(-8px)}
+  .pick:hover .go,.pick:focus-visible .go{opacity:1;transform:none}
+}
+/* the package box glows when it gets filled in from pricing */
+@keyframes glow{0%,60%{border-color:var(--accent);box-shadow:0 2px 0 0 var(--accent)}100%{border-color:var(--line);box-shadow:none}}
+select.flash{animation:glow 1.6s ease}
+
+/* form */
+form{display:grid;grid-template-columns:1fr 1fr;gap:22px 24px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field.full{grid-column:1/-1}
+label{font-family:var(--display);font-size:.95rem;font-weight:500}
+input,select,textarea{font:inherit;font-size:1rem;color:var(--ink);background:transparent;border:0;border-bottom:1.5px solid var(--line);padding:8px 0;border-radius:0;width:100%}
+input::placeholder,textarea::placeholder{color:var(--muted);opacity:.8}
+select{appearance:none;cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 12px) 55%,calc(100% - 7px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+select option{background:var(--paper);color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+textarea{resize:vertical;min-height:96px}
+.send{grid-column:1/-1;display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:6px}
+.send button{font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;background:var(--sunset,var(--accent));color:var(--on-accent);border:0;padding:14px 28px;cursor:pointer}
+.send button{transition:background-color .25s ease,transform .25s ease}
+.send button:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
+.send button:disabled{opacity:.5;cursor:wait;transform:none}
+#status{color:var(--muted);font-size:1rem}
+@media (max-width:600px){ form{grid-template-columns:1fr} }
+
+.wordmark{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.8;font-size:clamp(3rem,15.5vw,13rem);letter-spacing:-.01em;color:var(--ink);margin:clamp(72px,10vw,140px) 0 0;white-space:nowrap;overflow:hidden}
+.wordmark span{color:var(--accent);background:var(--sunset,none);-webkit-background-clip:text;background-clip:text}
+:root[data-look="darkroom"] .wordmark span{color:transparent}
+footer .wrap{padding-top:24px;padding-bottom:32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.95rem}
+
+/* lightbox */
+dialog{border:0;padding:0;max-width:100vw;max-height:100vh;width:100vw;height:100vh;height:100dvh;background:rgba(10,12,13,.96);color:#fff}
+dialog::backdrop{background:rgba(10,12,13,.96)}
+.lb{position:relative;width:100%;height:100%;display:grid;place-items:center;padding:56px clamp(8px,6vw,80px)}
+.lb img{max-width:100%;max-height:100%;object-fit:contain;transition:opacity .3s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
+.lb img.swap{opacity:0;transform:scale(.97)}
+dialog[open]{animation:fade .3s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.lb button{position:absolute;background:none;border:0;color:#fff;font-family:var(--display);font-size:1rem;cursor:pointer;padding:12px 14px}
+.lb .close{top:max(8px,env(safe-area-inset-top,0px));right:8px}
+.lb .prev{left:4px;top:50%;transform:translateY(-50%);font-size:2rem}
+.lb .next{right:4px;top:50%;transform:translateY(-50%);font-size:2rem}
+.lb .num{position:absolute;bottom:max(14px,env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-family:var(--display);font-size:.9rem;opacity:.7}
+
+/* things slide up into view as you scroll */
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){ .js .rv{opacity:1;transform:none} }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav"><div class="wrap">
+  <a href="#top" id="navName"></a>
+  <ul>
+    <li><a href="#work">My Work</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#book">Book</a></li>
+  </ul>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <h1 id="heroName"></h1>
+    <p id="heroTag"></p>
+  </div>
+</header>
+
+<main>
+  <section id="work"><div class="wrap">
+    <div class="work-head rv">
+      <h2 id="workTitle">My Work</h2>
+      <button class="back" id="back" hidden>‹ All work</button>
+      <span class="count" id="count"></span>
+    </div>
+    <div id="gallery" aria-live="polite"></div>
+  </div></section>
+
+  <section id="pricing"><div class="wrap split">
+    <h2 class="rv">Pricing</h2>
+    <div><ul class="prices" id="prices"></ul></div>
+  </div></section>
+
+  <section id="book"><div class="wrap split">
+    <h2 class="rv">Book a shoot</h2>
+    <div>
+      <p class="lede rv">Fill this out and I'll get back to you as soon as I can!</p>
+      <form id="form" class="rv" style="--d:.1s" novalidate>
+        <div class="field"><label for="f-name">First and last name</label><input id="f-name" data-k="name" required autocomplete="name"></div>
+        <div class="field"><label for="f-pkg">Package</label><select id="f-pkg" data-k="package" required></select></div>
+        <div class="field full"><label for="f-subj">What are we shooting?</label><input id="f-subj" data-k="subject" required placeholder="Sports (which sport?), portraits, something else"></div>
+        <div class="field"><label for="f-loc">Where</label><input id="f-loc" data-k="location" required></div>
+        <div class="field"><label for="f-when">Date and time</label><input id="f-when" data-k="datetime" required placeholder="e.g. Sat Oct 12, 4pm"></div>
+        <div class="field"><label for="f-orient">Photo orientation</label><select id="f-orient" data-k="orientation" required><option value="">Choose one</option><option>Vertical</option><option>Horizontal</option><option>Both</option><option value="Either or, I don't care">Either, I don't care</option></select></div>
+        <div class="field"><label for="f-post">Okay if I post your photos?</label><select id="f-post" data-k="posting" required><option value="">Choose one</option><option>Yes!</option><option>No thanks</option></select></div>
+        <div class="field"><label for="f-cm">Best way to reach you</label><input id="f-cm" data-k="contactMethod" required placeholder="Instagram, phone, Snapchat"></div>
+        <div class="field"><label for="f-c">Your handle or number there</label><input id="f-c" data-k="contact" required></div>
+        <div class="field full"><label for="f-ref">Did anyone refer you?</label><input id="f-ref" data-k="referral" placeholder="Optional"></div>
+        <div class="field full"><label for="f-msg">Anything else?</label><textarea id="f-msg" data-k="other" placeholder="Optional"></textarea></div>
+        <div class="send"><button type="submit" id="sendBtn">Send inquiry</button><span id="status" role="status"></span></div>
+      </form>
+    </div>
+  </div></section>
+</main>
+
+<footer><div class="wrap"><p class="wordmark rv" id="wordmark" aria-hidden="true"></p></div><div class="wrap">
+  <span id="copy"></span>
+  <span id="social"></span>
+</div></footer>
+
+<dialog id="lightbox" aria-label="Photo viewer">
+  <div class="lb">
+    <img id="lbImg" alt="">
+    <button class="close" id="lbClose">Close</button>
+    <button class="prev" id="lbPrev" aria-label="Previous photo">‹</button>
+    <button class="next" id="lbNext" aria-label="Next photo">›</button>
+    <div class="num" id="lbNum"></div>
+  </div>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const IMG = /\.(jpe?g|png|webp|avif)$/i;
+let albums = [], singles = [], tiles = [], viewing = [], idx = 0;
+
+/* text from SITE */
+$("navName").textContent = SITE.brand;
+document.documentElement.dataset.look = SITE.look || "darkroom";
+$("wordmark").innerHTML = esc(SITE.brand).replace(/optics$/i, m=>`<span>${m}</span>`);
+function fitWordmark(){ const w=$("wordmark"); w.style.fontSize=""; const r=w.clientWidth/w.scrollWidth; if(r<1) w.style.fontSize=(parseFloat(getComputedStyle(w).fontSize)*r*0.98)+"px"; }
+fitWordmark(); addEventListener("resize", fitWordmark); document.fonts && document.fonts.ready.then(fitWordmark);
+$("heroName").innerHTML = SITE.name.split(" ").map((w,i)=>`<span class="w"><span style="--i:${i}">${esc(w)}</span></span>`).join(" ");
+$("heroName").setAttribute("aria-label", SITE.name);
+if (SITE.tagline) $("heroTag").textContent = SITE.tagline; else $("heroTag").remove();
+$("copy").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
+document.title = SITE.brand + " | " + SITE.name + " Photography";
+if (SITE.instagram) $("social").innerHTML = `<a href="https://instagram.com/${encodeURIComponent(SITE.instagram)}">Instagram @${esc(SITE.instagram)}</a>`;
+$("prices").innerHTML = SITE.pricing.map((p,i) =>
+  `<li class="rv" style="--d:${i*.07}s"><button class="pick" data-pkg="${esc(p.form || p.name)}" aria-label="Book ${esc(p.name)}, ${esc(p.price)}"><strong>${esc(p.name)}${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}</strong><span class="amt">${esc(p.price)}</span><span class="d">${esc(p.details)}</span><span class="go" aria-hidden="true">Book this →</span></button></li>`).join("");
+$("f-pkg").innerHTML = '<option value="">Choose one</option>' + SITE.pricing.map(p =>
+  `<option value="${esc(p.form || p.name)}">${esc(p.name)} (${esc(p.price)})</option>`).join("");
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function nice(s){return s.replace(/[-_]+/g," ").trim()}
+function url(path){return path.split("/").map(encodeURIComponent).join("/")}
+const byName = (a,b)=>a.localeCompare(b,undefined,{numeric:true,sensitivity:"base"});
+const isCover = f => /^cover\./i.test(f);
+
+/* Find photos on GitHub.
+   photos/hero.jpg          -> big top image
+   photos/anything.jpg      -> single photo on the Work page
+   photos/Album Name/*.jpg  -> an album (cover.jpg inside picks its cover) */
+async function loadPhotos(){
+  if (SITE.githubUser.startsWith("YOUR")) return emptyState("setup");
+  try{
+    const r = await fetch(`https://api.github.com/repos/${SITE.githubUser}/${SITE.githubRepo}/git/trees/${SITE.githubBranch}?recursive=1`);
+    if (!r.ok) throw new Error(r.status);
+    const files = (await r.json()).tree
+      .filter(f => f.type==="blob" && f.path.startsWith("photos/") && IMG.test(f.path))
+      .map(f => f.path).sort(byName);
+    let hero = null; const map = new Map();
+    for (const path of files){
+      const parts = path.split("/"), file = parts[parts.length-1];
+      if (parts.length===2){
+        if (/^hero\./i.test(file)) hero = path; else singles.push({src:url(path), name:file});
+      } else {
+        const key = parts[1];
+        if (!map.has(key)) map.set(key,{title:nice(key), photos:[], cover:null});
+        const a = map.get(key);
+        if (isCover(file)) a.cover = url(path); else a.photos.push(url(path));
+      }
+    }
+    albums = [...map.values()].filter(a=>a.photos.length || a.cover);
+    albums.forEach(a=>{ if(!a.cover) a.cover = a.photos[0]; if(!a.photos.length) a.photos=[a.cover]; });
+    if (!albums.length && !singles.length) return emptyState("none");
+    setHero(hero ? url(hero) : (singles[0]?.src || albums[0].cover));
+    route();
+  }catch(e){ emptyState("error"); }
+}
+
+function setHero(src){
+  const img = new Image(); img.src = src; img.alt = ""; img.fetchPriority = "high";
+  $("top").prepend(img);
+}
+
+function emptyState(kind){
+  $("top").classList.add("empty"); heroless = true; navState();
+  const msg = {
+    setup: "Add your GitHub username and repo name at the top of <code>index.html</code>, then put photos in the <code>photos</code> folder. They'll show up here.",
+    none: "No photos yet. Make a folder inside <code>photos</code> for each album, like <code>photos/Mens Lacrosse 2024</code>, drag photos in, and refresh.",
+    error: "Couldn't reach GitHub to find your photos. Check that the username, repo name and branch at the top of <code>index.html</code> are right and the repo is public."
+  }[kind];
+  $("gallery").innerHTML = `<p class="notice">${msg}</p>`;
+}
+
+/* the Work grid: albums first, then single photos */
+function showGrid(){
+  tiles = [...albums.map(a=>({type:"album",...a})), ...singles.map(s=>({type:"single",...s}))];
+  $("workTitle").textContent = "My Work"; $("back").hidden = true; $("count").textContent = "";
+  $("gallery").innerHTML = `<div class="tiles">${tiles.map((t,i)=> t.type==="album"
+    ? `<button class="tile rv" style="--d:${(i%3)*.08}s" data-i="${i}" aria-label="Open album ${esc(t.title)}"><span class="no">${String(i+1).padStart(2,"0")}</span><img src="${t.cover}" alt="" loading="${i<6?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')"><span class="cap"><strong>${esc(t.title)}</strong><span>${t.photos.length} photo${t.photos.length===1?"":"s"}</span></span></button>`
+    : `<button class="tile rv" style="--d:${(i%3)*.08}s" data-i="${i}" aria-label="View photo"><span class="no">${String(i+1).padStart(2,"0")}</span><img src="${t.src}" alt="" loading="${i<6?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')"></button>`
+  ).join("")}</div>`;
+}
+
+function showAlbum(a){
+  $("workTitle").textContent = a.title; $("back").hidden = false;
+  $("count").textContent = `${a.photos.length} photo${a.photos.length===1?"":"s"}`;
+  viewing = a.photos;
+  $("gallery").innerHTML = `<div class="album">${a.photos.map((src,i)=>
+    `<button class="rv" style="--d:${(i%3)*.07}s" data-p="${i}" aria-label="Open photo ${i+1} of ${a.photos.length}"><img src="${src}" alt="${esc(a.title)} photo ${i+1}" loading="${i<6?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')"></button>`).join("")}</div>`;
+}
+
+/* each album gets its own link, like yoursite/#album/Mens-Lacrosse-2024, and the back button works */
+const slug = t => t.replace(/\s+/g,"-");
+function route(){
+  const m = location.hash.match(/^#album\/(.+)$/);
+  const a = m && albums.find(x => slug(x.title)===decodeURIComponent(m[1]));
+  if (a) showAlbum(a); else showGrid();
+}
+window.addEventListener("hashchange", ()=>{ route(); if (location.hash.startsWith("#album/")||location.hash==="#work") $("work").scrollIntoView(); });
+$("back").onclick = ()=>{ location.hash = "work"; };
+
+$("gallery").addEventListener("click", e=>{
+  const t = e.target.closest(".tile");
+  if (t){
+    const tile = tiles[+t.dataset.i];
+    if (tile.type==="album") location.hash = "album/" + encodeURIComponent(slug(tile.title));
+    else { viewing = singles.map(s=>s.src); open(singles.indexOf(singles.find(s=>s.src===tile.src))); }
+    return;
+  }
+  const p = e.target.closest("button[data-p]");
+  if (p) open(+p.dataset.p);
+});
+
+/* lightbox */
+const lb = $("lightbox");
+function open(i){ idx=(i+viewing.length)%viewing.length; const im=$("lbImg"); im.classList.add("swap"); im.onload=im.onerror=()=>im.classList.remove("swap"); im.src=viewing[idx]; $("lbNum").textContent=`${idx+1} / ${viewing.length}`; if(!lb.open) lb.showModal(); }
+$("lbClose").onclick = ()=>lb.close();
+$("lbPrev").onclick = ()=>open(idx-1);
+$("lbNext").onclick = ()=>open(idx+1);
+lb.addEventListener("click", e=>{ if(e.target.classList.contains("lb")) lb.close(); });
+document.addEventListener("keydown", e=>{ if(!lb.open) return; if(e.key==="ArrowLeft") open(idx-1); if(e.key==="ArrowRight") open(idx+1); });
+let tx=null;
+lb.addEventListener("touchstart", e=>tx=e.touches[0].clientX, {passive:true});
+lb.addEventListener("touchend", e=>{ if(tx===null) return; const d=e.changedTouches[0].clientX-tx; if(Math.abs(d)>50) open(idx+(d<0?1:-1)); tx=null; });
+
+/* inquiry form -> sends into the Google Form */
+const FORM_URL = `https://docs.google.com/forms/d/e/${SITE.googleFormId}`;
+$("form").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const st = $("status"), fields = [...e.target.querySelectorAll("[data-k]")];
+  const missing = fields.find(el => el.required && !el.value.trim());
+  if (missing){ st.textContent = "Fill in \"" + document.querySelector(`label[for="${missing.id}"]`).textContent + "\" first."; missing.focus(); return; }
+  const fd = new FormData();
+  fields.forEach(el => { const v = el.value.trim(); if (v) fd.append("entry." + SITE.formEntries[el.dataset.k], v); });
+  $("sendBtn").disabled = true; st.textContent = "Sending…";
+  try{
+    await fetch(FORM_URL + "/formResponse", {method:"POST", mode:"no-cors", body:fd});
+    e.target.reset(); st.textContent = "Inquiry sent. I'll get back to you soon.";
+  }catch(_){ st.innerHTML = `That didn't go through. <a href="${FORM_URL}/viewform" target="_blank">Use the form here instead.</a>`; }
+  $("sendBtn").disabled = false;
+});
+
+/* animations: reveal on scroll, solid nav, gentle hero parallax */
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es=>es.forEach(e=>{
+  if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
+}), {rootMargin:"0px 0px -8% 0px", threshold:.08}) : null;
+function reveal(){ document.querySelectorAll(".rv:not(.in)").forEach(el => io ? io.observe(el) : el.classList.add("in")); }
+new MutationObserver(reveal).observe($("gallery"), {childList:true});
+reveal();
+
+let heroless = false;
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function navState(){ $("nav").classList.toggle("solid", heroless || scrollY > $("top").offsetHeight - 80); }
+addEventListener("scroll", ()=>{
+  navState();
+  const img = document.querySelector(".hero > img");
+  if (img && !still && scrollY < innerHeight) img.style.translate = `0 ${scrollY * .3}px`;
+}, {passive:true});
+navState();
+
+/* click a package -> picks it in the form and jumps down there */
+$("prices").addEventListener("click", e=>{
+  const b = e.target.closest(".pick"); if (!b) return;
+  const sel = $("f-pkg"); sel.value = b.dataset.pkg;
+  sel.classList.remove("flash"); void sel.offsetWidth; sel.classList.add("flash");
+  $("book").scrollIntoView({behavior: still ? "auto" : "smooth"});
+  setTimeout(()=>$("f-name").focus({preventScroll:true}), still ? 0 : 700);
+});
+
+loadPhotos();
+</script>
+</body>
+</html>
