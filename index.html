@@ -107,11 +107,11 @@ a{color:inherit}
 .hero.empty{height:auto;min-height:0;padding:calc(96px + env(safe-area-inset-top,0px)) 0 24px}
 .hero.empty::after{display:none}
 .hero.empty .wrap{position:static;color:var(--ink)}
-/* the little down arrow that pulses at the bottom of the hero */
+/* the little down arrow that bounces and pulses at the bottom of the hero */
 .scroll-cue{position:absolute;z-index:2;left:50%;bottom:calc(clamp(20px,4vw,48px) + env(safe-area-inset-bottom,0px));translate:-50% 0;color:#fff;padding:8px;line-height:0;filter:drop-shadow(0 1px 6px rgba(0,0,0,.4));animation:cueIn .8s ease 1.6s both,cue 2.2s ease-in-out 2.4s infinite}
 .scroll-cue svg{display:block}
 @keyframes cueIn{from{opacity:0}to{opacity:.85}}
-@keyframes cue{0%,100%{opacity:.85}50%{opacity:.25}}
+@keyframes cue{0%,100%{opacity:.85;transform:translateY(0)}50%{opacity:.35;transform:translateY(10px)}}
 .hero.empty .scroll-cue{display:none}
 /* phones: tuck it to the right so it doesn't bump into the name */
 @media (max-width:600px){ .scroll-cue{left:auto;right:calc(var(--pad) - 8px);translate:none} }
