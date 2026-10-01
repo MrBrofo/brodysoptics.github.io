@@ -107,6 +107,14 @@ a{color:inherit}
 .hero.empty{height:auto;min-height:0;padding:calc(96px + env(safe-area-inset-top,0px)) 0 24px}
 .hero.empty::after{display:none}
 .hero.empty .wrap{position:static;color:var(--ink)}
+/* the little down arrow that pulses at the bottom of the hero */
+.scroll-cue{position:absolute;z-index:2;left:50%;bottom:calc(clamp(20px,4vw,48px) + env(safe-area-inset-bottom,0px));translate:-50% 0;color:#fff;padding:8px;line-height:0;filter:drop-shadow(0 1px 6px rgba(0,0,0,.4));animation:cueIn .8s ease 1.6s both,cue 2.2s ease-in-out 2.4s infinite}
+.scroll-cue svg{display:block}
+@keyframes cueIn{from{opacity:0}to{opacity:.85}}
+@keyframes cue{0%,100%{opacity:.85}50%{opacity:.25}}
+.hero.empty .scroll-cue{display:none}
+/* phones: tuck it to the right so it doesn't bump into the name */
+@media (max-width:600px){ .scroll-cue{left:auto;right:calc(var(--pad) - 8px);translate:none} }
 
 /* sections: heading on the left, content on the right */
 section{padding-top:clamp(64px,9vw,120px)}
@@ -265,6 +273,7 @@ dialog[open]{animation:fade .3s ease}
     <h1 id="heroName"></h1>
     <p id="heroTag"></p>
   </div>
+  <a class="scroll-cue" href="#work" aria-label="Scroll down to my work"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg></a>
 </header>
 
 <main>
