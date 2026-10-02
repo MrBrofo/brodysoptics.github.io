@@ -158,6 +158,7 @@ Placeholder copy (he chose these):
   - **Newsreader** serif for body text
   - **Herr Von Muellerhoff** for the signature logo (write-on clip-path animation)
 - Subtle film-grain overlay over the page (`body::after`).
+- Mouse field (`#field` canvas, `SITE.mouseField`): faint grid of "/" slashes behind the content; near the cursor they turn away, push out and glow in the accent color. Computers only, off for reduced motion. `main`, `footer` and `.hero` sit above it (z-index 1).
 - Animations: scroll reveal (`.rv` → `.in` via IntersectionObserver), hero zoom + word rise, parallax, frosted sticky nav, lightbox fades. All disabled under `prefers-reduced-motion`.
 - Rejected directions: the original gray/blue "corporate" palette felt boring/corporate. He wants it to feel personal, not like a company site.
 
