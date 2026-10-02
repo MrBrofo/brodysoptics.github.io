@@ -670,10 +670,15 @@ function navState(){
   const nav = $("nav");
   nav.classList.toggle("solid", heroless || $("work").getBoundingClientRect().top <= nav.offsetHeight);
 }
+/* the hero fades out as the page slides up over it (fully gone once it's covered) */
+function heroFade(){
+  const hero = $("top"); if (heroless){ hero.style.opacity = ""; return; }
+  hero.style.opacity = Math.max(0, 1 - scrollY / hero.offsetHeight).toFixed(3);
+}
 addEventListener("scroll", ()=>{
-  navState();
+  navState(); heroFade();
 }, {passive:true});
-navState();
+navState(); heroFade();
 
 /* click a package -> picks it in the form and jumps down there */
 $("prices").addEventListener("click", e=>{
@@ -700,15 +705,29 @@ $("prices").addEventListener("click", e=>{
     W = innerWidth; H = innerHeight;
     cv.width = W*dpr; cv.height = H*dpr; cv.style.width = W+"px"; cv.style.height = H+"px";
     ctx.setTransform(dpr,0,0,dpr,0,0); ctx.lineCap = "round";
-    pts = [];
-    for (let y = GAP/2; y < H; y += GAP) for (let x = GAP/2 + ((y/GAP|0)%2)*GAP/2; x < W; x += GAP) pts.push({x, y, a:BASE, dx:0, dy:0, o:0});
     kick();
+  }
+  /* the slashes are "printed" on the page, so they scroll with it. Each one is looked up by its
+     row/column on the page, so the ones near the mouse keep their state while you scroll */
+  const state = new Map();
+  function visible(){
+    const sy = scrollY, r0 = Math.floor((sy - GAP)/GAP), r1 = Math.ceil((sy + H)/GAP), out = [];
+    for (let r = r0; r <= r1; r++){
+      const y = GAP/2 + r*GAP - sy, off = (r & 1) * GAP/2;
+      for (let c = 0, x = GAP/2 + off; x < W; c++, x += GAP){
+        const k = r*1e4 + c; let p = state.get(k);
+        if (!p) p = {k, a:BASE, dx:0, dy:0, o:0};
+        p.x = x; p.y = y; out.push(p);
+      }
+    }
+    return out;
   }
   function line(p, len){ const c = Math.cos(p.a)*len/2, s = Math.sin(p.a)*len/2, x = p.x+p.dx, y = p.y+p.dy; ctx.moveTo(x-c, y-s); ctx.lineTo(x+c, y+s); }
   function frame(){
     ctx.clearRect(0,0,W,H);
     let moving = false; const lit = [];
     ctx.beginPath(); ctx.lineWidth = 1.4; ctx.strokeStyle = `rgba(${INK},.07)`;
+    pts = visible(); state.clear();
     for (const p of pts){
       const vx = p.x - mx, vy = p.y - my, d = Math.hypot(vx, vy);
       const t = d < R ? 1 - d/R : 0, e = t*t*(3-2*t);
@@ -717,6 +736,7 @@ $("prices").addEventListener("click", e=>{
       const da = turn(target, p.a);
       p.a += da*.16; p.dx += (tdx-p.dx)*.16; p.dy += (tdy-p.dy)*.16; p.o += (e-p.o)*.16;
       if (Math.abs(da) > .003 || Math.abs(tdx-p.dx) > .05 || Math.abs(tdy-p.dy) > .05 || Math.abs(e-p.o) > .004) moving = true;
+      if (p.o > .001 || Math.abs(p.dx) + Math.abs(p.dy) > .05 || Math.abs(p.a - BASE) > .003) state.set(p.k, p);  // only remember the ones that aren't at rest
       if (p.o > .02) lit.push(p); else line(p, LEN);
     }
     ctx.stroke();
@@ -741,7 +761,7 @@ $("prices").addEventListener("click", e=>{
   /* the hero sits underneath now, so only show slashes on the part of the screen the page has covered */
   const sheet = document.querySelector("main");
   function clip(){ const t = sheet.getBoundingClientRect().top; cv.style.clipPath = t > 0 ? `inset(${t}px 0 0 0)` : "none"; }
-  addEventListener("scroll", () => { clip(); if (cx > -1e4) aim(document.elementFromPoint(cx, cy)); }, {passive:true});
+  addEventListener("scroll", () => { clip(); if (cx > -1e4) aim(document.elementFromPoint(cx, cy)); else kick(); }, {passive:true});
   addEventListener("resize", clip); clip();
   document.addEventListener("mouseleave", () => { cx = cy = mx = my = -1e4; kick(); });
   let rt = 0; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(build, 150); });

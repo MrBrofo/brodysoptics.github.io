@@ -68,7 +68,7 @@ The site finds media automatically via the GitHub API (`/repos/MrBrofo/brodysopt
 ## Site sections (top to bottom)
 
 1. **Nav** (fixed): signature logo "Brodysoptics." left; links "My Work", "Pricing", "Book" + Instagram icon right (on phones ≤420px the logo/menu shrink slightly so it all fits on one line). He wants people to use the booking form, not DM, so don't add "DM me" prompts. Goes solid/frosted just before it would overlap the hero name.
-2. **Hero:** full-bleed hero photo with slow zoom-in. It's **pinned** (`position:sticky`, z-index -3) and the rest of the page slides up over it like a sheet (`main::before`/`footer::before` paint the page background at z -2; the `#field` slashes canvas is z -1 and clipped so it never draws on the hero). Nav goes solid when `#work` reaches it. The old scroll parallax was removed for this; "BRODY DISICK" in smaller uppercase (clamp(2.2rem,5vw,4rem)) at bottom left, words slide up on load. No tagline.
+2. **Hero:** full-bleed hero photo with slow zoom-in. It's **pinned** (`position:sticky`, z-index -3) and the rest of the page slides up over it like a sheet (`main::before`/`footer::before` paint the page background at z -2; the `#field` slashes canvas is z -1 and clipped so it never draws on the hero). Nav goes solid when `#work` reaches it. The hero fades out as you scroll (`heroFade()`: opacity 1 → 0 by the time it's covered). The old scroll parallax was removed for this; "BRODY DISICK" in smaller uppercase (clamp(2.2rem,5vw,4rem)) at bottom left, words slide up on load. No tagline.
 3. **My Work:** heading "MY WORK". Grid of album covers (4:5) then singles.
 4. **Pricing:** clickable price list.
 5. **Book a shoot:** inquiry form.
@@ -158,7 +158,7 @@ Placeholder copy (he chose these):
   - **Newsreader** serif for body text
   - **Herr Von Muellerhoff** for the signature logo (write-on clip-path animation)
 - Subtle film-grain overlay over the page (`body::after`).
-- Mouse field (`#field` canvas, `SITE.mouseField`): faint grid of "/" slashes behind the content; near the cursor they turn away, push out and glow in the accent color. Computers only, off for reduced motion. Layering is explained under Hero (it sits between the page background and the content). Stays calm over the hero, album photos, price list and form.
+- Mouse field (`#field` canvas, `SITE.mouseField`): faint grid of "/" slashes behind the content; near the cursor they turn away, push out and glow in the accent color. Computers only, off for reduced motion. The slashes scroll with the page (grid is in page coordinates, state kept per row/column). Layering is explained under Hero (it sits between the page background and the content). Stays calm over the hero, album photos, price list and form.
 - Animations: scroll reveal (`.rv` → `.in` via IntersectionObserver), hero zoom + word rise, parallax, frosted sticky nav, lightbox fades. All disabled under `prefers-reduced-motion`.
 - Rejected directions: the original gray/blue "corporate" palette felt boring/corporate. He wants it to feel personal, not like a company site.
 
