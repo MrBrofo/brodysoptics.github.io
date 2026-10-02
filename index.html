@@ -108,10 +108,15 @@ a{color:inherit}
 .hero.empty::after{display:none}
 .hero.empty .wrap{position:static;color:var(--ink)}
 /* the little down arrow that bounces and pulses at the bottom of the hero */
-.scroll-cue{position:absolute;z-index:2;left:50%;bottom:calc(clamp(20px,4vw,48px) + env(safe-area-inset-bottom,0px));translate:-50% 0;color:#fff;padding:8px;line-height:0;filter:drop-shadow(0 1px 6px rgba(0,0,0,.4));animation:cueIn .8s ease 1.6s both,cue 2.2s ease-in-out 2.4s infinite}
+.scroll-cue{position:absolute;z-index:2;left:50%;bottom:calc(clamp(20px,4vw,48px) + env(safe-area-inset-bottom,0px));translate:-50% 0;color:#fff;padding:8px;line-height:0;filter:drop-shadow(0 1px 6px rgba(0,0,0,.4));animation:cueIn .8s ease 1.6s both,cue 1.8s linear 2.4s infinite}
 .scroll-cue svg{display:block}
-@keyframes cueIn{from{opacity:0}to{opacity:.85}}
-@keyframes cue{0%,100%{opacity:.85;transform:translateY(0)}50%{opacity:.35;transform:translateY(10px)}}
+@keyframes cueIn{from{opacity:0}to{opacity:.6}}
+/* drops down (getting brighter), then floats back up (getting a bit dimmer). Never fully disappears */
+@keyframes cue{
+  0%{opacity:.6;transform:translateY(0);animation-timing-function:cubic-bezier(.5,0,.75,.4)}
+  40%{opacity:1;transform:translateY(12px);animation-timing-function:cubic-bezier(.25,.6,.4,1)}
+  100%{opacity:.6;transform:translateY(0)}
+}
 .hero.empty .scroll-cue{display:none}
 /* phones: tuck it to the right so it doesn't bump into the name */
 @media (max-width:600px){ .scroll-cue{left:auto;right:calc(var(--pad) - 8px);translate:none} }
