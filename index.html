@@ -32,7 +32,7 @@ const SITE = {
   look: "darkroom",        // color style: "darkroom", "kodak" or "nightgame"
   brand: "Brodysoptics.",   // top-left of the page
   tagline: "",             // small line under your name; "" hides it
-  instagram: "",          // e.g. "brodyshoots" (no @). Leave "" to hide.
+  instagram: "brodysoptics",        // e.g. "brodyshoots" (no @). Leave "" to hide.
 
   // Your GitHub info, so the gallery can find your photos folder
   githubUser: "MrBrofo",
@@ -98,7 +98,14 @@ a{color:inherit}
 #navName:hover{text-decoration:none}
 @keyframes sign{from{clip-path:inset(-20% 100% -20% 0)}to{clip-path:inset(-20% -10% -20% 0)}}
 .nav a{text-decoration:none}
-.nav ul{display:flex;gap:clamp(16px,3vw,32px);list-style:none;margin:0;padding:0}
+.nav ul{display:flex;align-items:center;gap:clamp(16px,3vw,32px);list-style:none;margin:0;padding:0}
+.nav-ig{display:block;line-height:0;padding:4px;margin:-4px;transition:opacity .2s ease}
+.nav-ig svg{filter:drop-shadow(0 1px 4px rgba(0,0,0,.3))}
+.nav.solid .nav-ig svg{filter:none}
+.nav-ig:hover{opacity:.7}
+.nav a{white-space:nowrap}
+/* small phones: shrink the logo and menu a touch so everything (incl. the Instagram icon) fits on one line */
+@media (max-width:420px){ .nav{font-size:.88rem} .nav ul{gap:12px} #navName{font-size:2.1rem} }
 .nav a:hover{text-decoration:underline;text-underline-offset:4px}
 
 /* hero */
@@ -138,6 +145,8 @@ section{padding-top:clamp(64px,9vw,120px)}
 .split > div{max-width:760px}
 h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2.4rem,4.4vw,3.4rem);line-height:.95;margin:0;letter-spacing:.005em;text-transform:uppercase}
 .lede{color:var(--muted);margin:0 0 28px}
+#social a{color:var(--accent-text,var(--accent));text-decoration:none}
+#social a:hover{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:760px){ .split{grid-template-columns:1fr} }
 
 /* work grid: albums and single photos as even tiles */
@@ -281,6 +290,7 @@ dialog[open]{animation:fade .3s ease}
     <li><a href="#work">My Work</a></li>
     <li class="main-only"><a href="#pricing">Pricing</a></li>
     <li class="main-only"><a href="#book">Book</a></li>
+    <li><a id="navIg" class="nav-ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a></li>
   </ul>
 </div></nav>
 
@@ -362,7 +372,11 @@ $("heroName").setAttribute("aria-label", SITE.name);
 if (SITE.tagline) $("heroTag").textContent = SITE.tagline; else $("heroTag").remove();
 $("copy").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
 document.title = SITE.brand.replace(/\.$/,"") + " | Photography";
-if (SITE.instagram) $("social").innerHTML = `<a href="https://instagram.com/${encodeURIComponent(SITE.instagram)}">Instagram @${esc(SITE.instagram)}</a>`;
+if (SITE.instagram){
+  const igUrl = `https://instagram.com/${encodeURIComponent(SITE.instagram)}`;
+  $("social").innerHTML = `Instagram <a href="${igUrl}" target="_blank" rel="noopener">@${esc(SITE.instagram)}</a>`;
+  $("navIg").href = igUrl;
+} else $("navIg").parentElement.remove();
 $("prices").innerHTML = SITE.pricing.map((p,i) =>
   `<li class="rv" style="--d:${i*.07}s"><button class="pick" data-pkg="${esc(p.form || p.name)}" aria-label="Book ${esc(p.name)}, ${esc(p.price)}"><strong>${esc(p.name)}${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}</strong><span class="amt">${esc(p.price)}</span><span class="d">${esc(p.details)}</span><span class="go" aria-hidden="true">Book this →</span></button></li>`).join("");
 $("f-pkg").innerHTML = '<option value="">Choose one</option>' + SITE.pricing.map(p =>

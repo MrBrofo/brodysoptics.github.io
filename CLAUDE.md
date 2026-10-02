@@ -67,7 +67,7 @@ The site finds media automatically via the GitHub API (`/repos/MrBrofo/brodysopt
 
 ## Site sections (top to bottom)
 
-1. **Nav** (fixed): signature logo "Brodysoptics." left; links "My Work", "Pricing", "Book" right. Goes solid/frosted just before it would overlap the hero name.
+1. **Nav** (fixed): signature logo "Brodysoptics." left; links "My Work", "Pricing", "Book" + Instagram icon right (on phones ≤420px the logo/menu shrink slightly so it all fits on one line). He wants people to use the booking form, not DM, so don't add "DM me" prompts. Goes solid/frosted just before it would overlap the hero name.
 2. **Hero:** full-bleed hero photo with slow zoom-in + parallax; "BRODY DISICK" in smaller uppercase (clamp(2.2rem,5vw,4rem)) at bottom left, words slide up on load. No tagline.
 3. **My Work:** heading "MY WORK". Grid of album covers (4:5) then singles.
 4. **Pricing:** clickable price list.
