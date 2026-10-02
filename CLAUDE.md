@@ -155,7 +155,7 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
 
 ## Design system
 
-- **Look "darkroom"** (current): background `#0E0D0C`, text `#F2EEE8`, muted `#9A938A`, lines `#2B2825`, accent `#F4895F` (soft sunset orange). Brody asked for "sunset, not harsh", so don't go back to a harsh red. **No gradients:** he asked for one solid color, so `--sunset` is now just the solid accent (it used to be a `#F7B267 → #F4845F → #E8687F` gradient); things that used it (wordmark "OPTICS.", buttons, badge, progress bar, price-list rule) are all solid accent.
+- **Look "darkroom"** (current): background `#0E0D0C`, text `#F2EEE8`, muted `#9A938A`, lines `#2B2825`, **black and white**: accent `#FFFFFF`, on-accent `#0E0D0C`, to match his black-and-white Instagram logo. History: sunset gradient → solid orange `#F4895F` → he said orange "isn't working", so now B&W. Things pop through contrast instead of color: prices / "BOOK THIS →" / links in pure white, details in muted gray, buttons + "BEST VALUE" badge + selected form answers + "Book me" are white pills with black text. **No gradients** (`--sunset` is just the solid accent). Footer wordmark: "BRODYS" solid, "OPTICS." as a white outline (`-webkit-text-stroke`). The favicon still has an orange dot (image file, not code).
 - Other looks exist (`kodak` = off-white + yellow, `nightgame` = navy + orange) via `:root[data-look=...]`.
 - Fonts (Google Fonts):
   - **Archivo** (condensed via `font-stretch`, heavy, UPPERCASE) for headings and UI

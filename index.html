@@ -65,7 +65,7 @@ const SITE = {
     { name: "Video edit", path: "Video", price: "$50", details: "A 30 second to 1 minute highlight video cut to music" },
     { group: "Portraits" },
     { name: "Portrait session", form: "Portrait session (1 hour)", other: true, price: "$40", details: "1 hour, ~12 edited photos", subject: "Portraits" },
-    { name: "Extended portrait session", form: "Extended portrait session (3 hours)", other: true, price: "$100", details: "3 hours, ~35 edited photos, time for outfit and location changes", subject: "Portraits" },
+    { name: "Extended portrait session", form: "Extended portrait session (3 hours)", other: true, price: "$100", details: "3 hours, ~35 edited photos (time for outfit and location changes)", subject: "Portraits" },
     { group: "Events" },
     { name: "Events", price: "From $25/hour", details: "Priced by the hour, ~15–20 edited photos per hour", subject: "Event" },
     { group: "Graphics" },
@@ -79,7 +79,7 @@ const SITE = {
 
 <style>
 :root{
-  --paper:#0E0D0C; --ink:#F2EEE8; --muted:#9A938A; --line:#2B2825; --accent:#F4895F; --on-accent:#1A0F0A; --sunset:linear-gradient(var(--accent),var(--accent));  /* was a sunset gradient; now one solid color everywhere */ --frame:#1A1816; --grain:.07;
+  --paper:#0E0D0C; --ink:#F2EEE8; --muted:#9A938A; --line:#2B2825; --accent:#FFFFFF; --on-accent:#0E0D0C; --sunset:linear-gradient(var(--accent),var(--accent));  /* black and white: the "accent" is pure white (buttons = white with black text) */ --frame:#1A1816; --grain:.07;
   --display:"Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --sig:"Herr Von Muellerhoff", "Brush Script MT", cursive;
   --text:"Newsreader", Georgia, "Times New Roman", serif;
@@ -316,7 +316,8 @@ form.wiz.flash{animation:wizGlow 1.6s ease}
 
 .wordmark{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.8;font-size:clamp(3rem,15.5vw,13rem);letter-spacing:-.01em;color:var(--ink);margin:clamp(72px,10vw,140px) 0 0;white-space:nowrap;overflow:hidden}
 .wordmark span{color:var(--accent);background:var(--sunset,none);-webkit-background-clip:text;background-clip:text}
-:root[data-look="darkroom"] .wordmark span{color:transparent}
+/* black and white: "OPTICS." is drawn as an outline so the wordmark still has two tones */
+:root[data-look="darkroom"] .wordmark span{color:transparent;background:none;-webkit-text-stroke:2px var(--ink)}
 footer .wrap{padding-top:24px;padding-bottom:32px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.95rem}
 footer .wrap:last-child{flex-direction:column;align-items:center;text-align:center;gap:4px}
 
