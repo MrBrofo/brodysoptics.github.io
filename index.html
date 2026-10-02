@@ -55,13 +55,17 @@ const SITE = {
   // { group: "..." } starts a new category heading.
   // "path" = which booking questions clicking the row starts: "Photo" (default), "Video" or "Graphic Design".
   // Photo rows without "form" pick customPackage, and "subject" pre-fills "What's it for?".
+  // other: true = this package isn't one of the Google Form's options, so it's sent through the form's "Other" choice.
   pricing: [
-    { group: "Sports / portraits" },
+    { group: "Sports" },
     { name: "Basic", form: "Basic", price: "$25", details: "~15 edited photos" },
     { name: "Standard", form: "Standard", price: "$40", details: "~30 edited photos" },
     { name: "Full", tag: "Best value", form: "Full", price: "$45", details: "~45 edited photos" },
     { name: "Group / team", form: "Group/Team", price: "$20 per person", details: "3 or more people, at least 5 edited photos each" },
     { name: "Video edit", path: "Video", price: "$50", details: "A 30 second to 1 minute highlight video cut to music" },
+    { group: "Portraits" },
+    { name: "Portrait session", form: "Portrait session (1 hour)", other: true, price: "$40", details: "1 hour, ~12 edited photos", subject: "Portraits" },
+    { name: "Extended portrait session", form: "Extended portrait session (3 hours)", other: true, price: "$100", details: "3 hours, ~35 edited photos, room for outfit and location changes", subject: "Portraits" },
     { group: "Events" },
     { name: "Events", price: "From $25/hour", details: "Priced by the hour, ~15–20 edited photos per hour", subject: "Event" },
     { group: "Graphics" },
@@ -705,7 +709,7 @@ const QUESTIONS = [
   {k:"other", q:"Anything else I should know?", ph:"Optional", long:true}
 ];
 /* answers that aren't one of the Google Form's options go through its "Other" choice */
-const VIA_OTHER = {package:[SITE.customPackage], graphicKind:["Something else"]};
+const VIA_OTHER = {package:[SITE.customPackage, ...SITE.pricing.filter(p => p.other).map(p => p.form)], graphicKind:["Something else"]};
 const wiz = {a:{}, i:0, dir:1};
 const steps = () => QUESTIONS.filter(s => !s.when || s.when(wiz.a.what ? wiz.a : {what:"Photo"}));
 const answered = s => s.pair ? s.pair.every(([k]) => (wiz.a[k]||"").trim()) : (wiz.a[s.k]||"").trim();
