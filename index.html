@@ -448,15 +448,30 @@ const isCover = f => /^cover(?![a-z0-9])/i.test(f);
 /* Find photos on GitHub.
    photos/hero.jpg          -> big top image
    photos/anything.jpg      -> single photo on the Work page
-   photos/Album Name/*.jpg  -> an album (cover.jpg inside picks its cover) */
+   photos/Album Name/*.jpg  -> an album (cover.jpg inside picks its cover)
+   Where the list of files comes from, in order:
+   1. photos.json, written automatically by GitHub every time you push (.github/workflows/deploy.yml). No limits.
+   2. the GitHub API (only 60 lookups per hour per internet connection, so it can run out)
+   3. the last list this browser saw */
+async function photoList(){
+  const keep = paths => { try{ localStorage.setItem("photoList", JSON.stringify(paths)); }catch(_){} return paths; };
+  try{
+    const r = await fetch("photos.json", {cache:"no-cache"});
+    if (r.ok){ const j = await r.json(); if (Array.isArray(j.paths)) return keep(j.paths); }
+  }catch(_){}
+  try{
+    const r = await fetch(`https://api.github.com/repos/${SITE.githubUser}/${SITE.githubRepo}/git/trees/${SITE.githubBranch}?recursive=1`);
+    if (r.ok) return keep((await r.json()).tree.filter(f => f.type==="blob").map(f => f.path));
+  }catch(_){}
+  try{ const saved = JSON.parse(localStorage.getItem("photoList")); if (Array.isArray(saved)) return saved; }catch(_){}
+  throw new Error("no photo list");
+}
 async function loadPhotos(){
   if (SITE.githubUser.startsWith("YOUR")) return emptyState("setup");
   try{
-    const r = await fetch(`https://api.github.com/repos/${SITE.githubUser}/${SITE.githubRepo}/git/trees/${SITE.githubBranch}?recursive=1`);
-    if (!r.ok) throw new Error(r.status);
-    const files = (await r.json()).tree
-      .filter(f => f.type==="blob" && f.path.startsWith("photos/") && IMG.test(f.path))
-      .map(f => f.path).sort(byName);
+    const files = (await photoList())
+      .filter(p => p.startsWith("photos/") && IMG.test(p))
+      .sort(byName);
     let hero = null; const map = new Map();
     for (const path of files){
       const parts = path.split("/"), file = parts[parts.length-1];
@@ -527,7 +542,7 @@ function emptyState(kind){
   const msg = {
     setup: "Add your GitHub username and repo name at the top of <code>index.html</code>, then put photos in the <code>photos</code> folder. They'll show up here.",
     none: "No photos yet. Make a folder inside <code>photos</code> for each album, like <code>photos/Mens Lacrosse 2024</code>, drag photos in, and refresh.",
-    error: "Couldn't reach GitHub to find your photos. Check that the username, repo name and branch at the top of <code>index.html</code> are right and the repo is public."
+    error: "The photos didn't load this time. Refresh the page in a minute and they should show up."
   }[kind];
   $("gallery").innerHTML = `<p class="notice">${msg}</p>`;
 }

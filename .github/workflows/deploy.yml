@@ -1,0 +1,49 @@
+# Publishes the site every time you push to main.
+# Before publishing it writes photos.json (a list of everything in the photos folder),
+# so the site doesn't have to ask GitHub's API for it on every visit (that API only allows 60 lookups an hour).
+# One-time setup: repo Settings → Pages → Build and deployment → Source: "GitHub Actions".
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Write photos.json
+        run: |
+          python3 - <<'EOF'
+          import json, os
+          paths = []
+          for root, dirs, files in os.walk("photos"):
+              for f in files:
+                  paths.append(os.path.join(root, f).replace(os.sep, "/"))
+          paths.sort()
+          with open("photos.json", "w") as out:
+              json.dump({"paths": paths}, out)
+          print(len(paths), "files listed")
+          EOF
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

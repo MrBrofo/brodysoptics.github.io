@@ -26,6 +26,7 @@ This is Brody Disick's photography portfolio and booking site. Read this whole f
 index.html     ← the entire site (HTML + CSS + JS, no build step, no frameworks)
 CNAME          ← keeps brodysoptics.com connected. NEVER delete or edit.
 CLAUDE.md      ← this file
+.github/workflows/deploy.yml ← builds photos.json + publishes the site on every push
 favicon.png    ← "B." tab icon + iPhone home-screen icon (180×180)
 preview.jpg    ← link-preview picture for texts/socials (1200×630, og:image). Keep it OUT of photos/ or it shows as a single photo.
 photos/        ← all images and videos (see rules below)
@@ -47,7 +48,12 @@ Everything Brody normally wants to change is in the `SITE` object at the top of 
 
 ## Photos and videos
 
-The site finds media automatically via the GitHub API (`/repos/MrBrofo/brodysoptics.github.io/git/trees/main?recursive=1`). No code changes are needed to add photos.
+The site finds media automatically. No code changes are needed to add photos. `photoList()` tries, in order:
+1. `photos.json`, written on every push by the GitHub Actions workflow `.github/workflows/deploy.yml` (lists everything in `photos/`, then deploys the site). Not committed to the repo; it only exists on the live site. Requires repo Settings → Pages → Source: **GitHub Actions**.
+2. The GitHub API (`/repos/MrBrofo/brodysoptics.github.io/git/trees/main?recursive=1`). Only 60 requests/hour per IP, which ran out during heavy testing and showed "couldn't reach GitHub" (that's why 1 and 3 exist).
+3. The last list saved in the visitor's browser (`localStorage.photoList`).
+
+jsDelivr can't be used as a source: the repo is over its 50 MB limit.
 
 - `photos/hero.jpg` = big top image. Matches any name starting with "hero" (e.g. `hero (Web).jpg`, `HERO.JPG`). Must be a photo, not a video.
 - `photos/<Album Name>/...` = one album per folder. Folder name = album title shown on the site.
@@ -170,7 +176,7 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
 
 ## Hosting / domain setup (already done)
 
-- GitHub Pages: Settings → Pages → Deploy from a branch → `main` / root. Custom domain `www.brodysoptics.com`. Enforce HTTPS once the certificate is issued.
+- GitHub Pages: Settings → Pages → Source: **GitHub Actions** (workflow `.github/workflows/deploy.yml`; previously "Deploy from a branch → main / root"). Custom domain `www.brodysoptics.com`. Enforce HTTPS once the certificate is issued.
 - Domain registered/DNS on **Cloudflare**. Records (all **DNS only / grey cloud**, TTL Auto; proxy must stay off or GitHub HTTPS breaks):
   - A `@` → 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153
   - CNAME `www` → `mrbrofo.github.io`
@@ -178,7 +184,7 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
 
 ## Deploying
 
-- Brody uses **GitHub Desktop**: edit files in the cloned folder → Summary → Commit to main → Push origin. Site updates in ~1–2 minutes (check the repo's Actions tab for "pages build and deployment").
+- Brody uses **GitHub Desktop**: edit files in the cloned folder → Summary → Commit to main → Push origin. Site updates in ~1–2 minutes (check the repo's Actions tab for the "Deploy site" run).
 - The GitHub website upload limit is 25 MB/file and 100 files per upload. GitHub Desktop avoids that (100 MB/file hard limit).
 
 ## Business notes (context, not code)
