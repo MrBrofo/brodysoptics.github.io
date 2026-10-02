@@ -728,8 +728,9 @@ $("prices").addEventListener("click", e=>{
     raf = moving ? requestAnimationFrame(frame) : 0;
   }
   function kick(){ if (!raf) raf = requestAnimationFrame(frame); }
-  /* stay calm over the price list and the booking form so it doesn't distract while clicking/typing */
-  const CALM = ".prices, #form";
+  /* stay calm over photos (hero, album covers, album photos), the price list and the booking form,
+     so it only reacts over the plain background */
+  const CALM = ".hero, .tiles, .album, .prices, #form";  // .tiles/.album include the thin gaps between photos
   let cx = -1e4, cy = -1e4;  // where the cursor really is, even while calm
   function aim(target){
     if (target && target.closest && target.closest(CALM)){ mx = my = -1e4; } else { mx = cx; my = cy; }
