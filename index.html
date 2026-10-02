@@ -65,7 +65,7 @@ const SITE = {
     { name: "Video edit", path: "Video", price: "$50", details: "A 30 second to 1 minute highlight video cut to music" },
     { group: "Portraits" },
     { name: "Portrait session", form: "Portrait session (1 hour)", other: true, price: "$40", details: "1 hour, ~12 edited photos", subject: "Portraits" },
-    { name: "Extended portrait session", form: "Extended portrait session (3 hours)", other: true, price: "$100", details: "3 hours, ~35 edited photos, room for outfit and location changes", subject: "Portraits" },
+    { name: "Extended portrait session", form: "Extended portrait session (3 hours)", other: true, price: "$100", details: "3 hours, ~35 edited photos, time for outfit and location changes", subject: "Portraits" },
     { group: "Events" },
     { name: "Events", price: "From $25/hour", details: "Priced by the hour, ~15–20 edited photos per hour", subject: "Event" },
     { group: "Graphics" },
@@ -79,7 +79,7 @@ const SITE = {
 
 <style>
 :root{
-  --paper:#0E0D0C; --ink:#F2EEE8; --muted:#9A938A; --line:#2B2825; --accent:#F4895F; --on-accent:#1A0F0A; --sunset:linear-gradient(90deg,#F7B267 0%,#F4845F 55%,#E8687F 100%); --frame:#1A1816; --grain:.07;
+  --paper:#0E0D0C; --ink:#F2EEE8; --muted:#9A938A; --line:#2B2825; --accent:#F4895F; --on-accent:#1A0F0A; --sunset:linear-gradient(var(--accent),var(--accent));  /* was a sunset gradient; now one solid color everywhere */ --frame:#1A1816; --grain:.07;
   --display:"Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --sig:"Herr Von Muellerhoff", "Brush Script MT", cursive;
   --text:"Newsreader", Georgia, "Times New Roman", serif;
@@ -125,9 +125,14 @@ a{color:inherit}
 .nav-ig svg{filter:drop-shadow(0 1px 4px rgba(0,0,0,.3))}
 .nav.solid .nav-ig svg{filter:none}
 .nav-ig:hover{opacity:.7}
+/* "Book me" as a white pill with black text */
+.nav a.nav-book{display:inline-block;background:#fff;color:#0E0D0C;font-weight:600;padding:7px 16px;border-radius:999px;margin:-7px 0;transition:background-color .2s ease,transform .2s ease}
+.nav a.nav-book:hover{text-decoration:none;background:#E9E5DF;transform:translateY(-1px)}
 .nav a{white-space:nowrap}
 /* small phones: shrink the logo and menu a touch so everything (incl. the Instagram icon) fits on one line */
-@media (max-width:420px){ .nav{font-size:.88rem} .nav ul{gap:12px} #navName{font-size:2.1rem} }
+@media (max-width:420px){ .nav{font-size:.84rem} .nav ul{gap:9px} #navName{font-size:1.9rem} .nav a.nav-book{padding:6px 10px;margin:-6px 0} }
+/* the very narrowest phones: no room for the Instagram icon (it's still in the footer) */
+@media (max-width:370px){ .nav li:has(.nav-ig){display:none} }
 .nav a:hover{text-decoration:underline;text-underline-offset:4px}
 
 /* hero */
@@ -343,9 +348,9 @@ dialog[open]{animation:fade .3s ease}
 <nav class="nav" id="nav"><div class="wrap">
   <a href="#top" id="navName"></a>
   <ul>
+    <li class="main-only"><a href="#book" class="nav-book">Book me</a></li>
     <li><a href="#work">My Work</a></li>
     <li class="main-only"><a href="#pricing">Pricing</a></li>
-    <li class="main-only"><a href="#book">Book</a></li>
     <li><a id="navIg" class="nav-ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a></li>
   </ul>
 </div></nav>
@@ -810,7 +815,7 @@ $("prices").addEventListener("click", e=>{
   const ctx = cv.getContext("2d");
   const css = getComputedStyle(document.documentElement);
   const rgb = v => { v = v.trim().replace("#",""); if (v.length===3) v=[...v].map(c=>c+c).join(""); const n=parseInt(v,16); return [n>>16&255, n>>8&255, n&255]; };
-  const INK = rgb(css.getPropertyValue("--ink")), ACC = rgb(css.getPropertyValue("--accent"));
+  const INK = rgb(css.getPropertyValue("--ink")), ACC = [255,255,255];  // slashes near the mouse glow white
   const GAP = 26, LEN = 7, R = 150, BASE = -Math.PI/4;
   const turn = (b,a) => ((b - a + 1.5*Math.PI) % Math.PI + Math.PI) % Math.PI - Math.PI/2;
   let W, H, pts = [], mx = -1e4, my = -1e4, raf = 0;
