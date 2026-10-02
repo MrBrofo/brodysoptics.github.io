@@ -26,6 +26,8 @@ This is Brody Disick's photography portfolio and booking site. Read this whole f
 index.html     ← the entire site (HTML + CSS + JS, no build step, no frameworks)
 CNAME          ← keeps brodysoptics.com connected. NEVER delete or edit.
 CLAUDE.md      ← this file
+favicon.png    ← "B." tab icon + iPhone home-screen icon (180×180)
+preview.jpg    ← link-preview picture for texts/socials (1200×630, og:image). Keep it OUT of photos/ or it shows as a single photo.
 photos/        ← all images and videos (see rules below)
 ```
 
