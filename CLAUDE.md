@@ -102,9 +102,7 @@ The site finds media automatically via the GitHub API (`/repos/MrBrofo/brodysopt
 | Group / team | Group / team | Group/Team | $20 per person | 3 or more people, at least 5 edited photos each |
 | Video edit | Video edit | Video (Mixtape/edit) | $50 | A 30 second to 1 minute highlight video cut to music |
 
-The list is split into categories with `{ group: "..." }` rows: **Sports / portraits** (the table above), **Events** (From $25/hour, ~15–20 edited photos per hour) and **Graphics** (Single post from $10, Season template set from $40). Rows without a `form` value pick `SITE.customPackage` ("Not sure / custom") in the form's Package box and pre-fill "What are we shooting?" from their `subject`. "Not sure / custom" must also exist as an option in the Google Form's package question (Brody is adding it).
-
-Planned (not built yet): a one-question-at-a-time booking form with paths for Photo / Video / Graphics, waiting on Brody's Google Form changes + new pre-filled link.
+The list is split into categories with `{ group: "..." }` rows: **Sports / portraits** (the table above), **Events** (From $25/hour, ~15–20 edited photos per hour) and **Graphics** (Single post from $10, Season template set from $40). Each row's optional `path` ("Photo" default, "Video", "Graphic Design") says which booking path clicking it starts. Photo rows without `form` use `SITE.customPackage` ("Not sure / custom"); `subject` pre-fills "What's it for?"; `graphic` pre-picks the graphic kind.
 
 Decisions behind this:
 - Standard is $40 on purpose (decoy pricing to nudge people to Full at $45).
@@ -115,7 +113,7 @@ Decisions behind this:
 - He decided **not** to offer unedited/raw photos with any package.
 - He's keeping prices low to build a clientele.
 
-Clicking a pricing row: selects that package in the form, makes the Package box glow, smooth-scrolls to the form, focuses the name field. "BOOK THIS →" shows on hover (always on touch).
+Clicking a pricing row: starts the booking form on that row's path with the package pre-picked, skips to "What's your name?", makes the form card glow, smooth-scrolls to it. "BOOK THIS →" shows on hover (always on touch).
 
 ---
 
@@ -124,32 +122,34 @@ Clicking a pricing row: selects that package in the form, makes the Package box 
 The site form posts directly into Brody's Google Form (responses land in his linked Google Sheet). It uses a `no-cors` POST to:
 `https://docs.google.com/forms/d/e/1FAIpQLSeVEzIjqwg7Fcim7Z5hEXjT3fplNuXDySzg26LP9XgUlmt7zQ/formResponse`
 
+The form is **one question at a time** (`QUESTIONS` array in the script, rendered into `form#form.wiz`): progress bar, "Question X of N", choices are pill buttons that auto-advance, Back/Next, Enter = Next. Question 1 "What are you after?" picks a path and only that path's questions are sent:
+- **Photo:** name, what's it for, package, where, date/time, orientation, posting, referral, contact (method + handle), anything else
+- **Video:** name, what's it for, kind of video, where, date/time, posting, referral, contact, anything else
+- **Graphic Design:** name, what's it for, kind of graphic, need-by date, posting, referral, contact, anything else
+
+No "mix" path (Brody decided against it). In the Google Form only name + "What do you want?" are Required; everything else must stay optional or responses from other paths get dropped.
+
 Entry IDs (`SITE.formEntries`):
-- name `1690814314`: First and last name
-- package `1485016801`: Which package would you like? (multiple choice)
-- subject `49302972`: What are we shooting?
-- location `2146188724`: Where
-- datetime `1012313159`: Date and time (short answer)
-- orientation `1308545335`: multiple choice
-- contactMethod `1162604422`: Best way to reach you
-- contact `729877922`: handle or number
-- posting `1602938962`: multiple choice
-- referral `921430376`: optional
-- other `1182973985`: optional
+- name `1690814314`, what `1249857742`
+- package `1485016801`, videoKind `2116150638`, graphicKind `183670750`
+- subject `49302972` (what's it for), location `2146188724`, datetime `1012313159`, needBy `1146888609`
+- orientation `1308545335`, contactMethod `1162604422`, contact `729877922`
+- posting `1602938962`, referral `921430376` (free text), other `1182973985`
 
 **Multiple-choice values must match the Google Form EXACTLY or Google silently drops the whole response:**
-- Package: `Basic`, `Standard`, `Full`, `Group/Team`, `Video (Mixtape/edit)` (from each pricing item's `form` field)
-- Orientation: `Vertical`, `Horizontal`, `Both`, `Either or, I don't care` (shown on site as "Either, I don't care")
-- Posting: `Yes!`, `No thanks`
+- What: `Photo`, `Video`, `Graphic Design` (shown as Photos / Video / highlight reel / Graphics)
+- Package: `Basic`, `Standard`, `Full`, `Group/Team`, `Video (Mixtape/edit)`, plus "Not sure / custom" sent through the form's **Other** option (`__other_option__` + `entry.ID.other_option_response`)
+- Video kind: `Season highlight reel`, `Single-game highlights`, `Hype video`, `Intro Video`, `Event Recap`, `Clips for social media (vertical)`
+- Graphic kind: `Gameday/Matchup`, `Commitment/Recruiting`, `Score/recap`, `Full season template set`, plus "Something else" through **Other**
+- Orientation: `Vertical`, `Horizontal`, `Both`, `Either or, I don't care` (shown as "Either, I don't care")
+- Posting: `Yes!`, `No thanks`, `I dont care` (no apostrophe in the Google Form; shown as "I don't care")
+- `VIA_OTHER` in the script lists which answers go through "Other".
 
 If Brody renames anything in the Google Form, update the site to match. To get new entry IDs: Google Form → ⋮ → Get pre-filled link → fill every question → Get link; the `entry.NNN` params are in question order.
 
 Because it's `no-cors`, the site always shows "Inquiry sent" even if Google rejects it. The real test is checking the Google Form's Responses tab / Sheet.
 
-Placeholder copy (he chose these):
-- Intro line: "Fill this out and I'll get back to you as soon as I can!"
-- Date and time: "e.g. Sat Oct 12, 4–6pm"
-- Best way to reach you: "Instagram, phone, Snapchat, etc."
+Intro line above the form: "Answer a few quick questions and I'll get back to you as soon as I can!"
 
 ---
 

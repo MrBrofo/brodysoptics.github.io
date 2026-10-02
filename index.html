@@ -44,29 +44,31 @@ const SITE = {
   googleFormId: "1FAIpQLSeVEzIjqwg7Fcim7Z5hEXjT3fplNuXDySzg26LP9XgUlmt7zQ",
   // Question IDs from the form's pre-filled link (Claude fills these in)
   formEntries: {
-    name: "1690814314", package: "1485016801", subject: "49302972", location: "2146188724",
-    datetime: "1012313159", orientation: "1308545335", contactMethod: "1162604422",
-    contact: "729877922", posting: "1602938962", referral: "921430376", other: "1182973985"
+    name: "1690814314", what: "1249857742", package: "1485016801", videoKind: "2116150638", graphicKind: "183670750",
+    subject: "49302972", location: "2146188724", datetime: "1012313159", needBy: "1146888609",
+    orientation: "1308545335", contactMethod: "1162604422", contact: "729877922",
+    posting: "1602938962", referral: "921430376", other: "1182973985"
   },
 
   // Your packages. "form" must match the Google Form option exactly.
   // "tag" is optional and shows as a small label next to the name.
   // { group: "..." } starts a new category heading.
-  // Rows without "form" pick customPackage in the form and fill in "What are we shooting?" with "subject".
+  // "path" = which booking questions clicking the row starts: "Photo" (default), "Video" or "Graphic Design".
+  // Photo rows without "form" pick customPackage, and "subject" pre-fills "What's it for?".
   pricing: [
     { group: "Sports / portraits" },
     { name: "Basic", form: "Basic", price: "$25", details: "~15 edited photos" },
     { name: "Standard", form: "Standard", price: "$40", details: "~30 edited photos" },
     { name: "Full", tag: "Best value", form: "Full", price: "$45", details: "~45 edited photos" },
     { name: "Group / team", form: "Group/Team", price: "$20 per person", details: "3 or more people, at least 5 edited photos each" },
-    { name: "Video edit", form: "Video (Mixtape/edit)", price: "$50", details: "A 30 second to 1 minute highlight video cut to music" },
+    { name: "Video edit", path: "Video", price: "$50", details: "A 30 second to 1 minute highlight video cut to music" },
     { group: "Events" },
     { name: "Events", price: "From $25/hour", details: "Priced by the hour, ~15–20 edited photos per hour", subject: "Event" },
     { group: "Graphics" },
-    { name: "Single post", price: "From $10", details: "Game day, matchup, score or commitment graphic", subject: "Graphic: single post" },
-    { name: "Season template set", price: "From $40", details: "A full set of graphics templates for your season", subject: "Graphic: season template set" }
+    { name: "Single post", path: "Graphic Design", price: "From $10", details: "Game day, matchup, score or commitment graphic" },
+    { name: "Season template set", path: "Graphic Design", graphic: "Full season template set", price: "From $40", details: "A full set of graphics templates for your season" }
   ],
-  // Package option for anything without a set package. Must ALSO exist in the Google Form's package question, spelled exactly the same.
+  // Package answer for anything without a set package. Sent through the Google Form's "Other" option.
   customPackage: "Not sure / custom"
 };
 </script>
@@ -273,6 +275,36 @@ textarea{resize:vertical;min-height:96px}
 #status{color:var(--muted);font-size:1rem}
 @media (max-width:600px){ form{grid-template-columns:1fr} }
 
+/* booking form: one question at a time */
+form.wiz{display:block;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--frame) 80%,transparent);padding:clamp(22px,4vw,40px);overflow:hidden}
+.wiz-bar{height:3px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:26px}
+.wiz-bar i{display:block;height:100%;width:0;background:var(--sunset);border-radius:3px;transition:width .45s cubic-bezier(.2,.7,.2,1)}
+.wiz-step{min-height:190px;animation:wizIn .4s cubic-bezier(.2,.7,.2,1) both}
+.wiz-step.back{animation-name:wizBack}
+@keyframes wizIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes wizBack{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+.wiz-count{margin:0;font-family:var(--display);font-size:.78rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.wiz-q{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(1.9rem,3.6vw,2.7rem);line-height:.95;letter-spacing:.005em;margin:.3em 0 .75em}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{all:unset;box-sizing:border-box;cursor:pointer;font-family:var(--display);font-weight:500;font-size:1rem;padding:12px 20px;border:1.5px solid var(--line);border-radius:999px;transition:border-color .2s ease,background-color .2s ease,color .2s ease,transform .2s ease}
+.chip:hover{border-color:var(--muted)}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.chip[aria-pressed="true"]{background:var(--sunset);color:var(--on-accent);border-color:transparent}
+.wiz-in{font-size:1.25rem;padding:10px 0;margin-bottom:14px}
+textarea.wiz-in{min-height:110px}
+.wiz-done{color:var(--muted);margin:-.4em 0 1.4em}
+.wiz-nav{display:flex;align-items:center;gap:14px;margin-top:22px}
+.wiz-nav #status{flex:1;text-align:right}
+.wiz-back{all:unset;cursor:pointer;font-family:var(--display);font-weight:500;color:var(--muted)}
+.wiz-back:hover{color:var(--ink)}
+.wiz-back:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wiz-next{font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;background:var(--sunset,var(--accent));color:var(--on-accent);border:0;border-radius:999px;padding:14px 30px;cursor:pointer;transition:background-color .25s ease,transform .25s ease}
+.wiz-next:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
+.wiz-next:disabled{opacity:.5;cursor:wait;transform:none}
+form.wiz.flash{animation:wizGlow 1.6s ease}
+@keyframes wizGlow{0%,60%{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}100%{border-color:var(--line);box-shadow:none}}
+@media (max-width:600px){ .chip{padding:11px 16px;font-size:.95rem} .wiz-next{padding:13px 24px} }
+
 .wordmark{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.8;font-size:clamp(3rem,15.5vw,13rem);letter-spacing:-.01em;color:var(--ink);margin:clamp(72px,10vw,140px) 0 0;white-space:nowrap;overflow:hidden}
 .wordmark span{color:var(--accent);background:var(--sunset,none);-webkit-background-clip:text;background-clip:text}
 :root[data-look="darkroom"] .wordmark span{color:transparent}
@@ -340,20 +372,16 @@ dialog[open]{animation:fade .3s ease}
   <section id="book"><div class="wrap split">
     <h2 class="rv">Book Me!</h2>
     <div>
-      <p class="lede rv">Fill this out and I'll get back to you as soon as I can!</p>
-      <form id="form" class="rv" style="--d:.1s" novalidate>
-        <div class="field"><label for="f-name">First and last name</label><input id="f-name" data-k="name" required autocomplete="name"></div>
-        <div class="field"><label for="f-pkg">Package</label><select id="f-pkg" data-k="package" required></select></div>
-        <div class="field full"><label for="f-subj">What are we shooting?</label><input id="f-subj" data-k="subject" required placeholder="Sports (which sport?), portraits, something else"></div>
-        <div class="field"><label for="f-loc">Where</label><input id="f-loc" data-k="location" required></div>
-        <div class="field"><label for="f-when">Date and time</label><input id="f-when" data-k="datetime" required placeholder="e.g. Sat Oct 12, 4–6pm"></div>
-        <div class="field"><label for="f-orient">Photo orientation</label><select id="f-orient" data-k="orientation" required><option value="">Choose one</option><option>Vertical</option><option>Horizontal</option><option>Both</option><option value="Either or, I don't care">Either, I don't care</option></select></div>
-        <div class="field"><label for="f-post">Okay if I post your photos?</label><select id="f-post" data-k="posting" required><option value="">Choose one</option><option>Yes!</option><option>No thanks</option></select></div>
-        <div class="field"><label for="f-cm">Best way to reach you</label><input id="f-cm" data-k="contactMethod" required placeholder="Instagram, phone, Snapchat, etc."></div>
-        <div class="field"><label for="f-c">Your handle or number there</label><input id="f-c" data-k="contact" required></div>
-        <div class="field full"><label for="f-ref">Did anyone refer you?</label><input id="f-ref" data-k="referral" placeholder="Optional"></div>
-        <div class="field full"><label for="f-msg">Anything else?</label><textarea id="f-msg" data-k="other" placeholder="Optional"></textarea></div>
-        <div class="send"><button type="submit" id="sendBtn">Send inquiry</button><span id="status" role="status"></span></div>
+      <p class="lede rv">Answer a few quick questions and I'll get back to you as soon as I can!</p>
+      <!-- one-question-at-a-time booking form, built by the script below -->
+      <form id="form" class="wiz rv" style="--d:.1s" novalidate>
+        <div class="wiz-bar" aria-hidden="true"><i id="wizBar"></i></div>
+        <div id="wizStep"></div>
+        <div class="wiz-nav">
+          <button type="button" class="wiz-back" id="wizBack">‹ Back</button>
+          <span id="status" role="status"></span>
+          <button type="submit" class="wiz-next" id="wizNext">Next</button>
+        </div>
       </form>
     </div>
   </div></section>
@@ -399,10 +427,7 @@ if (SITE.instagram){
 } else $("navIg").parentElement.remove();
 $("prices").innerHTML = SITE.pricing.map((p,i) => p.group
   ? `<li class="grp rv" style="--d:${i*.07}s">${esc(p.group)}</li>`
-  : `<li class="rv" style="--d:${i*.07}s"><button class="pick" data-pkg="${esc(p.form || SITE.customPackage)}" data-subj="${esc(p.subject || "")}" aria-label="Book ${esc(p.name)}, ${esc(p.price)}"><strong>${esc(p.name)}${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}</strong><span class="amt">${esc(p.price)}</span><span class="d">${esc(p.details)}</span><span class="go" aria-hidden="true">Book this →</span></button></li>`).join("");
-$("f-pkg").innerHTML = '<option value="">Choose one</option>' + SITE.pricing.filter(p => p.form).map(p =>
-  `<option value="${esc(p.form)}">${esc(p.name)} (${esc(p.price)})</option>`).join("")
-  + (SITE.customPackage ? `<option value="${esc(SITE.customPackage)}">${esc(SITE.customPackage)}</option>` : "");
+  : `<li class="rv" style="--d:${i*.07}s"><button class="pick" data-i="${i}" aria-label="Book ${esc(p.name)}, ${esc(p.price)}"><strong>${esc(p.name)}${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}</strong><span class="amt">${esc(p.price)}</span><span class="d">${esc(p.details)}</span><span class="go" aria-hidden="true">Book this →</span></button></li>`).join("");
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function nice(s){return s.replace(/[-_]+/g," ").trim()}
@@ -653,22 +678,87 @@ let tx=null;
 lb.addEventListener("touchstart", e=>tx=e.touches[0].clientX, {passive:true});
 lb.addEventListener("touchend", e=>{ if(tx===null) return; const d=e.changedTouches[0].clientX-tx; if(Math.abs(d)>50) open(idx+(d<0?1:-1)); tx=null; });
 
-/* inquiry form -> sends into the Google Form */
+/* booking form: one question at a time, different questions for Photo / Video / Graphics.
+   Everything goes into the same Google Form. Choice values must match the Google Form exactly
+   (the first item of each option pair); the second item is just what people see on the site. */
 const FORM_URL = `https://docs.google.com/forms/d/e/${SITE.googleFormId}`;
-$("form").addEventListener("submit", async e=>{
-  e.preventDefault();
-  const st = $("status"), fields = [...e.target.querySelectorAll("[data-k]")];
-  const missing = fields.find(el => el.required && !el.value.trim());
-  if (missing){ st.textContent = "Fill in \"" + document.querySelector(`label[for="${missing.id}"]`).textContent + "\" first."; missing.focus(); return; }
+const isPhoto = a => a.what === "Photo", isVideo = a => a.what === "Video", isGraphic = a => a.what === "Graphic Design";
+const QUESTIONS = [
+  {k:"what", q:"What are you after?", req:true, opts:[["Photo","Photos"],["Video","Video / highlight reel"],["Graphic Design","Graphics"]]},
+  {k:"name", q:"What's your name?", req:true, ph:"First and last name", ac:"name"},
+  {k:"subject", q:"What's it for?", req:true, ph:"A sport (which one?), portraits, an event…"},
+  {k:"package", q:"Which package?", req:true, when:isPhoto,
+    opts:[...SITE.pricing.filter(p => p.form).map(p => [p.form, `${p.name} · ${p.price}`]), [SITE.customPackage, SITE.customPackage]]},
+  {k:"videoKind", q:"What kind of video?", req:true, when:isVideo,
+    opts:["Season highlight reel","Single-game highlights","Hype video","Intro Video","Event Recap","Clips for social media (vertical)"].map(v => [v, v])},
+  {k:"graphicKind", q:"What kind of graphic?", req:true, when:isGraphic,
+    opts:[["Gameday/Matchup","Game day / matchup"],["Commitment/Recruiting","Commitment / recruiting"],["Score/recap","Score / recap"],["Full season template set","Full season template set"],["Something else","Something else"]]},
+  {k:"location", q:"Where is it?", req:true, when:a => !isGraphic(a), ph:"Field, gym, park, city…"},
+  {k:"datetime", q:"What date and time?", req:true, when:a => !isGraphic(a), ph:"e.g. Sat Oct 12, 4–6pm"},
+  {k:"needBy", q:"When do you need it by?", req:true, when:isGraphic, ph:"e.g. Fri Oct 18"},
+  {k:"orientation", q:"Vertical or horizontal photos?", req:true, when:isPhoto,
+    opts:[["Vertical","Vertical"],["Horizontal","Horizontal"],["Both","Both"],["Either or, I don't care","Either, I don't care"]]},
+  {k:"posting", q:a => isPhoto(a) ? "Okay if I post your photos?" : "Okay if I post it?", req:true,
+    opts:[["Yes!","Yes!"],["No thanks","No thanks"],["I dont care","I don't care"]]},
+  {k:"referral", q:"Did anyone refer you?", ph:"If yes, who? (optional)"},
+  {k:"contact", q:"How should I reach you?", req:true, pair:[["contactMethod","Instagram, phone, Snapchat…"],["contact","Your handle or number"]]},
+  {k:"other", q:"Anything else I should know?", ph:"Optional", long:true}
+];
+/* answers that aren't one of the Google Form's options go through its "Other" choice */
+const VIA_OTHER = {package:[SITE.customPackage], graphicKind:["Something else"]};
+const wiz = {a:{}, i:0, dir:1};
+const steps = () => QUESTIONS.filter(s => !s.when || s.when(wiz.a.what ? wiz.a : {what:"Photo"}));
+const answered = s => s.pair ? s.pair.every(([k]) => (wiz.a[k]||"").trim()) : (wiz.a[s.k]||"").trim();
+
+function renderStep(focus){
+  const list = steps(), s = list[wiz.i], n = list.length, title = typeof s.q === "function" ? s.q(wiz.a) : s.q;
+  $("wizBar").style.width = (wiz.i / n * 100) + "%";
+  let body;
+  if (s.opts) body = `<div class="chips">${s.opts.map(([v,label]) => `<button type="button" class="chip" data-v="${esc(v)}" aria-pressed="${wiz.a[s.k]===v}">${esc(label)}</button>`).join("")}</div>`;
+  else if (s.pair) body = s.pair.map(([k,ph]) => `<input class="wiz-in" data-k="${k}" placeholder="${esc(ph)}" value="${esc(wiz.a[k]||"")}">`).join("");
+  else if (s.long) body = `<textarea class="wiz-in" data-k="${s.k}" placeholder="${esc(s.ph||"")}">${esc(wiz.a[s.k]||"")}</textarea>`;
+  else body = `<input class="wiz-in" data-k="${s.k}" placeholder="${esc(s.ph||"")}" ${s.ac ? `autocomplete="${s.ac}"` : ""} value="${esc(wiz.a[s.k]||"")}">`;
+  $("wizStep").innerHTML = `<div class="wiz-step ${wiz.dir < 0 ? "back" : ""}"><p class="wiz-count">Question ${wiz.i+1} of ${n}</p><h3 class="wiz-q" id="wizQ">${esc(title)}</h3>${body}</div>`;
+  $("wizBack").style.visibility = wiz.i ? "visible" : "hidden";
+  $("wizNext").textContent = wiz.i === n-1 ? "Send inquiry" : "Next";
+  $("status").textContent = "";
+  if (focus){ const el = $("wizStep").querySelector(".wiz-in, .chip[aria-pressed=true], .chip"); el && el.focus({preventScroll:true}); }
+}
+function go(d){
+  const list = steps(), s = list[wiz.i];
+  if (d > 0 && s.req && !answered(s)){ $("status").textContent = s.opts ? "Pick one to keep going." : "Fill this in to keep going."; return; }
+  if (d > 0 && wiz.i === list.length - 1) return send();
+  wiz.dir = d; wiz.i = Math.max(0, Math.min(steps().length - 1, wiz.i + d)); renderStep(true);
+}
+$("wizStep").addEventListener("input", e => { const k = e.target.dataset.k; if (k) wiz.a[k] = e.target.value; });
+$("wizStep").addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if (!c) return;
+  const s = steps()[wiz.i]; wiz.a[s.k] = c.dataset.v;
+  $("wizStep").querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", b === c));
+  setTimeout(() => go(1), 220);  // picking an option moves on by itself
+});
+$("wizStep").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.tagName === "TEXTAREA" && !e.shiftKey){ e.preventDefault(); go(1); } });
+$("wizBack").onclick = () => go(-1);
+$("form").addEventListener("submit", e => { e.preventDefault(); go(1); });  // Enter or the Next button
+
+async function send(){
   const fd = new FormData();
-  fields.forEach(el => { const v = el.value.trim(); if (v) fd.append("entry." + SITE.formEntries[el.dataset.k], v); });
-  $("sendBtn").disabled = true; st.textContent = "Sending…";
+  for (const s of steps()) for (const k of (s.pair ? s.pair.map(p => p[0]) : [s.k])){
+    const v = (wiz.a[k]||"").trim(), id = SITE.formEntries[k]; if (!v || !id) continue;
+    if ((VIA_OTHER[k]||[]).includes(v)){ fd.append("entry." + id, "__other_option__"); fd.append(`entry.${id}.other_option_response`, v); }
+    else fd.append("entry." + id, v);
+  }
+  $("wizNext").disabled = true; $("status").textContent = "Sending…";
   try{
     await fetch(FORM_URL + "/formResponse", {method:"POST", mode:"no-cors", body:fd});
-    e.target.reset(); st.textContent = "Inquiry sent. I'll get back to you soon.";
-  }catch(_){ st.innerHTML = `That didn't go through. <a href="${FORM_URL}/viewform" target="_blank">Use the form here instead.</a>`; }
-  $("sendBtn").disabled = false;
-});
+    $("wizBar").style.width = "100%";
+    $("wizStep").innerHTML = `<div class="wiz-step"><p class="wiz-count">All done</p><h3 class="wiz-q">Inquiry sent.</h3><p class="wiz-done">Thanks${wiz.a.name ? ", " + esc(wiz.a.name.split(" ")[0]) : ""}! I'll get back to you soon.</p><button type="button" class="wiz-back" id="wizAgain">Send another</button></div>`;
+    $("wizBack").style.visibility = "hidden"; $("wizNext").style.display = "none"; $("status").textContent = "";
+    $("wizAgain").onclick = () => { wiz.a = {}; wiz.i = 0; wiz.dir = 1; $("wizNext").style.display = ""; renderStep(true); };
+  }catch(_){ $("status").innerHTML = `That didn't go through. <a href="${FORM_URL}/viewform" target="_blank">Use the form here instead.</a>`; }
+  $("wizNext").disabled = false;
+}
+renderStep(false);
 
 /* animations: reveal on scroll, solid nav, gentle hero parallax */
 const io = "IntersectionObserver" in window ? new IntersectionObserver(es=>es.forEach(e=>{
@@ -695,14 +785,18 @@ addEventListener("scroll", ()=>{
 }, {passive:true});
 navState(); heroFade();
 
-/* click a package -> picks it in the form and jumps down there */
+/* click a package -> starts the booking form on the right path (package already picked) and jumps down there */
 $("prices").addEventListener("click", e=>{
   const b = e.target.closest(".pick"); if (!b) return;
-  const sel = $("f-pkg"); sel.value = b.dataset.pkg;
-  if (b.dataset.subj && !$("f-subj").value.trim()) $("f-subj").value = b.dataset.subj;  // e.g. "Event", without overwriting what they typed
-  sel.classList.remove("flash"); void sel.offsetWidth; sel.classList.add("flash");
+  const p = SITE.pricing[+b.dataset.i], what = p.path || "Photo";
+  if (wiz.a.what !== what) wiz.a = {name: wiz.a.name, what};
+  if (what === "Photo") wiz.a.package = p.form || SITE.customPackage;
+  if (p.graphic) wiz.a.graphicKind = p.graphic;
+  if (p.subject && !(wiz.a.subject||"").trim()) wiz.a.subject = p.subject;  // e.g. "Event", without overwriting what they typed
+  wiz.i = 1; wiz.dir = 1; $("wizNext").style.display = ""; renderStep(false);  // straight to "What's your name?"
+  const f = $("form"); f.classList.remove("flash"); void f.offsetWidth; f.classList.add("flash");
   $("book").scrollIntoView({behavior: still ? "auto" : "smooth"});
-  setTimeout(()=>$("f-name").focus({preventScroll:true}), still ? 0 : 700);
+  setTimeout(()=>{ const el = $("wizStep").querySelector(".wiz-in"); el && el.focus({preventScroll:true}); }, still ? 0 : 700);
 });
 
 /* background slashes that move out of the way of your mouse (computers only) */
