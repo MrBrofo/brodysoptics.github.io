@@ -51,13 +51,23 @@ const SITE = {
 
   // Your packages. "form" must match the Google Form option exactly.
   // "tag" is optional and shows as a small label next to the name.
+  // { group: "..." } starts a new category heading.
+  // Rows without "form" pick customPackage in the form and fill in "What are we shooting?" with "subject".
   pricing: [
+    { group: "Sports / portraits" },
     { name: "Basic", form: "Basic", price: "$25", details: "~15 edited photos" },
     { name: "Standard", form: "Standard", price: "$40", details: "~30 edited photos" },
     { name: "Full", tag: "Best value", form: "Full", price: "$45", details: "~45 edited photos" },
     { name: "Group / team", form: "Group/Team", price: "$20 per person", details: "3 or more people, at least 5 edited photos each" },
-    { name: "Video edit", form: "Video (Mixtape/edit)", price: "$50", details: "A 30 second to 1 minute highlight video cut to music" }
-  ]
+    { name: "Video edit", form: "Video (Mixtape/edit)", price: "$50", details: "A 30 second to 1 minute highlight video cut to music" },
+    { group: "Events" },
+    { name: "Events", price: "From $25/hour", details: "Priced by the hour, ~15–20 edited photos per hour", subject: "Event" },
+    { group: "Graphics" },
+    { name: "Single post", price: "From $10", details: "Game day, matchup, score or commitment graphic", subject: "Graphic: single post" },
+    { name: "Season template set", price: "From $40", details: "A full set of graphics templates for your season", subject: "Graphic: season template set" }
+  ],
+  // Package option for anything without a set package. Must ALSO exist in the Google Form's package question, spelled exactly the same.
+  customPackage: "Not sure / custom"
 };
 </script>
 
@@ -225,6 +235,9 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 /* pricing list */
 .prices{margin:0;padding:0;list-style:none;border-top:2px solid var(--accent);border-image:var(--sunset) 1}
 .prices li{border-bottom:1px solid var(--line)}
+/* category headings inside the price list (Sports / portraits, Events, Graphics) */
+.prices li.grp{border-bottom:0;padding:36px 0 2px;font-family:var(--display);font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.prices li.grp:first-child{padding-top:18px}
 .pick{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 24px;padding:16px 0;transition:padding-left .3s ease}
 .pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .prices strong{font-family:var(--display);font-weight:700;font-size:1.25rem;text-transform:uppercase;font-stretch:80%;letter-spacing:.02em}
@@ -384,10 +397,12 @@ if (SITE.instagram){
   $("social").innerHTML = `Instagram <a href="${igUrl}" target="_blank" rel="noopener">@${esc(SITE.instagram)}</a>`;
   $("navIg").href = igUrl;
 } else $("navIg").parentElement.remove();
-$("prices").innerHTML = SITE.pricing.map((p,i) =>
-  `<li class="rv" style="--d:${i*.07}s"><button class="pick" data-pkg="${esc(p.form || p.name)}" aria-label="Book ${esc(p.name)}, ${esc(p.price)}"><strong>${esc(p.name)}${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}</strong><span class="amt">${esc(p.price)}</span><span class="d">${esc(p.details)}</span><span class="go" aria-hidden="true">Book this →</span></button></li>`).join("");
-$("f-pkg").innerHTML = '<option value="">Choose one</option>' + SITE.pricing.map(p =>
-  `<option value="${esc(p.form || p.name)}">${esc(p.name)} (${esc(p.price)})</option>`).join("");
+$("prices").innerHTML = SITE.pricing.map((p,i) => p.group
+  ? `<li class="grp rv" style="--d:${i*.07}s">${esc(p.group)}</li>`
+  : `<li class="rv" style="--d:${i*.07}s"><button class="pick" data-pkg="${esc(p.form || SITE.customPackage)}" data-subj="${esc(p.subject || "")}" aria-label="Book ${esc(p.name)}, ${esc(p.price)}"><strong>${esc(p.name)}${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}</strong><span class="amt">${esc(p.price)}</span><span class="d">${esc(p.details)}</span><span class="go" aria-hidden="true">Book this →</span></button></li>`).join("");
+$("f-pkg").innerHTML = '<option value="">Choose one</option>' + SITE.pricing.filter(p => p.form).map(p =>
+  `<option value="${esc(p.form)}">${esc(p.name)} (${esc(p.price)})</option>`).join("")
+  + (SITE.customPackage ? `<option value="${esc(SITE.customPackage)}">${esc(SITE.customPackage)}</option>` : "");
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function nice(s){return s.replace(/[-_]+/g," ").trim()}
@@ -684,6 +699,7 @@ navState(); heroFade();
 $("prices").addEventListener("click", e=>{
   const b = e.target.closest(".pick"); if (!b) return;
   const sel = $("f-pkg"); sel.value = b.dataset.pkg;
+  if (b.dataset.subj && !$("f-subj").value.trim()) $("f-subj").value = b.dataset.subj;  // e.g. "Event", without overwriting what they typed
   sel.classList.remove("flash"); void sel.offsetWidth; sel.classList.add("flash");
   $("book").scrollIntoView({behavior: still ? "auto" : "smooth"});
   setTimeout(()=>$("f-name").focus({preventScroll:true}), still ? 0 : 700);

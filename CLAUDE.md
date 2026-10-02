@@ -102,6 +102,10 @@ The site finds media automatically via the GitHub API (`/repos/MrBrofo/brodysopt
 | Group / team | Group / team | Group/Team | $20 per person | 3 or more people, at least 5 edited photos each |
 | Video edit | Video edit | Video (Mixtape/edit) | $50 | A 30 second to 1 minute highlight video cut to music |
 
+The list is split into categories with `{ group: "..." }` rows: **Sports / portraits** (the table above), **Events** (From $25/hour, ~15–20 edited photos per hour) and **Graphics** (Single post from $10, Season template set from $40). Rows without a `form` value pick `SITE.customPackage` ("Not sure / custom") in the form's Package box and pre-fill "What are we shooting?" from their `subject`. "Not sure / custom" must also exist as an option in the Google Form's package question (Brody is adding it).
+
+Planned (not built yet): a one-question-at-a-time booking form with paths for Photo / Video / Graphics, waiting on Brody's Google Form changes + new pre-filled link.
+
 Decisions behind this:
 - Standard is $40 on purpose (decoy pricing to nudge people to Full at $45).
 - Badge says **"Best value"**, not "Most popular".
