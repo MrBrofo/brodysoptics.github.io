@@ -38,8 +38,9 @@ Everything Brody normally wants to change is in the `SITE` object at the top of 
 - `look`: color style: `"darkroom"` (current), `"kodak"`, `"nightgame"`
 - `brand`: `"Brodysoptics."` (top-left signature logo + giant footer wordmark; browser tab strips the period)
 - `name`: `"Brody Disick"` (shown over the hero photo)
-- `tagline`: `""` (empty = hidden; he removed it on purpose)
-- `instagram`: `""` (empty = hidden)
+- Hero text: `services` (small line above, "Photography · Videography · Graphic design"), `headline` (big text, "Moments worth keeping"; he wanted a slogan that isn't sports-only), `tagline` (sentence under it), `location` ("Based in the Bay Area"). Empty = hidden.
+- `delivery`: line under the price list ("Edited photos in 3–5 business days, sent through Google Drive.")
+- `instagram`: `"brodysoptics"` (empty = hidden)
 - `githubUser`: `"MrBrofo"`, `githubRepo`: `"brodysoptics.github.io"`, `githubBranch`: `"main"`
 - `googleFormId` + `formEntries`: booking form wiring (see below)
 - `pricing`: array of packages (see below)
@@ -73,8 +74,8 @@ jsDelivr can't be used as a source: the repo is over its 50 MB limit.
 
 ## Site sections (top to bottom)
 
-1. **Nav** (fixed): signature logo "Brodysoptics." left; links right, in order: **"Book me"** (white pill, black text, `.nav-book`), "My Work", "Pricing", Instagram icon. On phones ≤480px the logo/menu/pill shrink so it all fits on one line; at ≤370px the Instagram icon is hidden (it's still in the footer). He wants people to use the booking form, not DM, so don't add "DM me" prompts. Goes solid/frosted just before it would overlap the hero name.
-2. **Hero:** full-bleed hero photo with slow zoom-in. It's **pinned** (`position:sticky`, z-index -3) and the rest of the page slides up over it like a sheet (`main::before`/`footer::before` paint the page background at z -2; the `#field` slashes canvas is z -1 and clipped so it never draws on the hero). Nav goes solid when `#work` reaches it. The hero fades out as you scroll (`heroFade()`: opacity 1 → 0 by the time it's covered). The old scroll parallax was removed for this; "BRODY DISICK" in smaller uppercase (clamp(2.2rem,5vw,4rem)) at bottom left, words slide up on load. No tagline.
+1. **Nav** (fixed): signature logo "Brodysoptics." left; links right, in order: **"Book me"** (white pill, black text, `.nav-book`), "My Work", "Pricing", Instagram icon. On phones (≤600px) all links go into a three-line **burger menu** (`#burger`, `.nav.open`) that drops down with big tap targets; tapping a link, outside, or Esc closes it. He wants people to use the booking form, not DM, so don't add "DM me" prompts. Goes solid/frosted just before it would overlap the hero name.
+2. **Hero:** full-bleed hero photo with slow zoom-in. It's **pinned** (`position:sticky`, z-index -3) and the rest of the page slides up over it like a sheet (`main::before`/`footer::before` paint the page background at z -2; the `#field` slashes canvas is z -1 and clipped so it never draws on the hero). Nav goes solid when `#work` reaches it. The hero fades out as you scroll (`heroFade()`: opacity 1 → 0 by the time it's covered). The old scroll parallax was removed for this; Bottom left, modeled on a sports-creative site he liked: small services line, big headline "MOMENTS WORTH KEEPING" (words slide up on load), tagline, pin icon + "Based in the Bay Area", then **Book a shoot** (white pill) and **See the work** (outline pill) buttons. A dark gradient on the left/bottom keeps the text readable. The old bouncing scroll arrow was removed (the See the work button replaced it). His name is no longer over the hero (it's in the logo and footer).
 3. **My Work:** heading "MY WORK". Grid of album covers (4:5) then singles.
 4. **Pricing:** clickable price list.
 5. **Book a shoot:** inquiry form.
@@ -119,7 +120,9 @@ Decisions behind this:
 - He decided **not** to offer unedited/raw photos with any package.
 - He's keeping prices low to build a clientele.
 
-Clicking a pricing row: starts the booking form on that row's path with the package pre-picked, skips to "What's your name?", makes the form card glow, smooth-scrolls to it. "BOOK THIS →" shows on hover (always on touch).
+Under the list: the `SITE.delivery` turnaround line.
+
+Clicking a pricing row: starts the booking form on that row's path with the package pre-picked, skips to "What's your name?", makes the form card glow, smooth-scrolls to it. The form then shows a "You picked Standard · $40" pill (`wiz.pick`) on every question; it updates if they change the package in the form and clears if they switch what they're after. "BOOK THIS →" shows on hover (always on touch).
 
 ---
 

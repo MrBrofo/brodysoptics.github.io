@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Brodysoptics | Photography</title>
-<meta name="description" content="Sports, portraits and more. See my work and book a shoot.">
+<meta name="description" content="Bay Area photography, video and graphics: sports, portraits, events and more. See my work and book a shoot.">
 <!-- link previews (texts, Instagram, Discord, etc.). To change the picture, replace preview.jpg (1200x630) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Brodysoptics">
 <meta property="og:title" content="Brodysoptics | Photography">
-<meta property="og:description" content="Sports, portraits and more. See my work and book a shoot.">
+<meta property="og:description" content="Bay Area photography, video and graphics: sports, portraits, events and more. See my work and book a shoot.">
 <meta property="og:url" content="https://www.brodysoptics.com/">
 <meta property="og:image" content="https://www.brodysoptics.com/preview.jpg">
 <meta property="og:image:width" content="1200">
@@ -31,7 +31,12 @@ const SITE = {
   name: "Brody Disick",
   look: "darkroom",        // color style: "darkroom", "kodak" or "nightgame"
   brand: "Brodysoptics.",   // top-left of the page
-  tagline: "",             // small line under your name; "" hides it
+  // the words over the big top photo
+  services: "Photography · Videography · Graphic design",   // small line above the headline
+  headline: "Moments worth keeping",                         // the big text
+  tagline: "Game days, portraits, events and graphics for athletes, teams and everyone in between.",  // "" hides it
+  location: "Based in the Bay Area",                         // "" hides it
+  delivery: "Edited photos in 3–5 business days, sent through Google Drive.",  // shown under the prices. "" hides it
   instagram: "brodysoptics",        // e.g. "brodyshoots" (no @). Leave "" to hide.
   mouseField: true,         // the little slashes in the background that react to your mouse (computers only). false = off
 
@@ -129,11 +134,29 @@ a{color:inherit}
 .nav a.nav-book{display:inline-block;background:#fff;color:#0E0D0C;font-weight:600;padding:7px 16px;border-radius:999px;margin:-7px 0;transition:background-color .2s ease,transform .2s ease}
 .nav a.nav-book:hover{text-decoration:none;background:#E9E5DF;transform:translateY(-1px)}
 .nav a{white-space:nowrap}
-/* small phones: shrink the logo and menu a touch so everything (incl. the Instagram icon) fits on one line */
-@media (max-width:480px){ .nav{font-size:.84rem} .nav ul{gap:9px} #navName{font-size:1.9rem} .nav a.nav-book{padding:6px 10px;margin:-6px 0} }
-/* the very narrowest phones: no room for the Instagram icon (it's still in the footer) */
-@media (max-width:370px){ .nav li:has(.nav-ig){display:none} }
 .nav a:hover{text-decoration:underline;text-underline-offset:4px}
+.burger,.ig-label{display:none}
+/* phones: the links go into a three-line "burger" menu that drops down */
+@media (max-width:600px){
+  #navName{font-size:2.3rem}
+  .burger{all:unset;display:flex;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;margin-right:-10px;cursor:pointer;position:relative;z-index:1}
+  .burger span{display:block;width:22px;height:2px;margin:0 auto;background:currentColor;border-radius:2px;transition:transform .3s ease,opacity .2s ease}
+  .burger:focus-visible{outline:2px solid var(--accent);outline-offset:-4px;border-radius:8px}
+  .nav.open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav.open .burger span:nth-child(2){opacity:0}
+  .nav.open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav ul{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;padding:6px var(--pad) 22px;
+    background:color-mix(in srgb,var(--paper) 94%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line);
+    visibility:hidden;opacity:0;transform:translateY(-8px);transition:opacity .25s ease,transform .25s ease,visibility 0s linear .25s}
+  .nav.open ul{visibility:visible;opacity:1;transform:none;transition:opacity .25s ease,transform .25s ease}
+  .nav.open{background:color-mix(in srgb,var(--paper) 94%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--ink)}
+  .nav ul a{display:flex;align-items:center;gap:10px;padding:14px 0;font-size:1.25rem;font-weight:600;border-bottom:1px solid var(--line)}
+  .nav ul li:last-child a{border-bottom:0}
+  .nav ul a:hover{text-decoration:none}
+  .nav ul a.nav-book{display:flex;justify-content:center;margin:8px 0 6px;padding:14px;border-bottom:0}
+  .nav-ig{margin:0;line-height:inherit}
+  .ig-label{display:inline}
+}
 
 /* hero */
 .hero{position:sticky;top:0;z-index:-3;height:100vh;height:100svh;min-height:320px;background:var(--frame);overflow:hidden}
@@ -145,26 +168,29 @@ a{color:inherit}
 .hero h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.06em;margin-bottom:-.06em}
 .hero h1 .w > span{display:inline-block;animation:rise 1.1s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(.3s + var(--i) * .12s)}
 @keyframes rise{from{transform:translateY(110%)}to{transform:none}}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6),rgba(0,0,0,0) 50%),linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,0) 18%)}
-.hero .wrap{position:absolute;left:0;right:0;bottom:calc(clamp(20px,4vw,48px) + env(safe-area-inset-bottom,0px));z-index:2;color:#fff}
-.hero h1{margin:0;font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.86;letter-spacing:-.01em;font-size:clamp(2.2rem,5vw,4rem)}
-.hero p{margin:.6em 0 0;font-size:clamp(1rem,1.6vw,1.25rem);opacity:.92}
+/* darker on the left and bottom so the white text is easy to read over any photo */
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.6),rgba(0,0,0,0) 70%),linear-gradient(to top,rgba(0,0,0,.65),rgba(0,0,0,0) 60%),linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,0) 18%)}
+.hero .wrap{position:absolute;left:0;right:0;bottom:calc(clamp(28px,6vw,72px) + env(safe-area-inset-bottom,0px));z-index:2;color:#fff}
+.hero h1{margin:0;max-width:9ch;font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.86;letter-spacing:-.01em;font-size:clamp(3.4rem,9vw,8rem)}
+.hero-kicker{margin:0 0 1.1em;font-family:var(--display);font-weight:600;font-size:clamp(.72rem,1.1vw,.9rem);letter-spacing:.22em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.hero-tag{margin:1.1em 0 0;max-width:34ch;font-size:clamp(1.05rem,1.7vw,1.35rem);line-height:1.45;color:rgba(255,255,255,.85)}
+.hero-loc{display:flex;align-items:center;gap:6px;margin:.8em 0 0;font-family:var(--display);font-weight:500;font-size:clamp(.9rem,1.2vw,1rem);letter-spacing:.04em;color:rgba(255,255,255,.85)}
+.hero-loc[hidden],.hero-tag[hidden],.hero-kicker[hidden]{display:none}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(22px,3vw,36px)}
+.hero-btns a{display:inline-block;font-family:var(--display);font-weight:600;font-size:1.05rem;text-decoration:none;padding:15px 30px;border-radius:999px;transition:background-color .2s ease,border-color .2s ease,transform .2s ease}
+.hero-btns a:hover{transform:translateY(-2px)}
+.btn-main{background:#fff;color:#0E0D0C;border:1.5px solid #fff}
+.btn-main:hover{background:#E9E5DF;border-color:#E9E5DF}
+.btn-line{color:#fff;border:1.5px solid rgba(255,255,255,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.btn-line:hover{border-color:#fff}
+/* the words slide up one after another when the page loads */
+.hero .wrap > :not(h1){animation:fadeUp .9s cubic-bezier(.2,.8,.2,1) both}
+.hero .wrap > .hero-kicker{animation-delay:.2s} .hero .wrap > .hero-tag{animation-delay:.75s} .hero .wrap > .hero-loc{animation-delay:.85s} .hero .wrap > .hero-btns{animation-delay:.95s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@media (max-width:600px){ .hero-btns a{padding:13px 22px;font-size:1rem} .hero-kicker{font-size:.66rem;letter-spacing:.12em} }
 .hero.empty{position:relative;z-index:auto;height:auto;min-height:0;padding:calc(96px + env(safe-area-inset-top,0px)) 0 24px}
 .hero.empty::after{display:none}
 .hero.empty .wrap{position:static;color:var(--ink)}
-/* the little down arrow that bounces and pulses at the bottom of the hero */
-.scroll-cue{position:absolute;z-index:2;left:50%;bottom:calc(clamp(20px,4vw,48px) + env(safe-area-inset-bottom,0px));translate:-50% 0;color:#fff;padding:8px;line-height:0;filter:drop-shadow(0 1px 6px rgba(0,0,0,.4));animation:cueIn .8s ease 1.6s both,cue 1.8s linear 2.4s infinite}
-.scroll-cue svg{display:block}
-@keyframes cueIn{from{opacity:0}to{opacity:.6}}
-/* drops down (getting brighter), then floats back up (getting a bit dimmer). Never fully disappears */
-@keyframes cue{
-  0%{opacity:.6;transform:translateY(0);animation-timing-function:cubic-bezier(.5,0,.75,.4)}
-  40%{opacity:1;transform:translateY(12px);animation-timing-function:cubic-bezier(.25,.6,.4,1)}
-  100%{opacity:.6;transform:translateY(0)}
-}
-.hero.empty .scroll-cue{display:none}
-/* phones: tuck it to the right so it doesn't bump into the name */
-@media (max-width:600px){ .scroll-cue{left:auto;right:calc(var(--pad) - 8px);translate:none} }
 
 /* sections: heading on the left, content on the right */
 section{padding-top:clamp(64px,9vw,120px)}
@@ -261,6 +287,8 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
   .prices .go{opacity:0;transform:translateX(-8px)}
   .pick:hover .go,.pick:focus-visible .go{opacity:1;transform:none}
 }
+.delivery{margin:22px 0 0;color:var(--muted);font-size:1rem}
+.delivery[hidden]{display:none}
 /* the package box glows when it gets filled in from pricing */
 @keyframes glow{0%,60%{border-color:var(--accent);box-shadow:0 2px 0 0 var(--accent)}100%{border-color:var(--line);box-shadow:none}}
 select.flash{animation:glow 1.6s ease}
@@ -292,6 +320,8 @@ form.wiz{display:block;border:1px solid var(--line);border-radius:18px;backgroun
 .wiz-step.back{animation-name:wizBack}
 @keyframes wizIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
 @keyframes wizBack{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+.wiz-pick{display:inline-block;margin:0 0 14px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-family:var(--display);font-size:.9rem;color:var(--muted)}
+.wiz-pick strong{color:var(--ink);font-weight:700}
 .wiz-count{margin:0;font-family:var(--display);font-size:.78rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
 .wiz-q{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(1.9rem,3.6vw,2.7rem);line-height:.95;letter-spacing:.005em;margin:.3em 0 .75em}
 .chips{display:flex;flex-wrap:wrap;gap:10px}
@@ -350,20 +380,26 @@ dialog[open]{animation:fade .3s ease}
 
 <nav class="nav" id="nav"><div class="wrap">
   <a href="#top" id="navName"></a>
-  <ul>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu"><span></span><span></span><span></span></button>
+  <ul id="navMenu">
     <li class="main-only"><a href="#book" class="nav-book">Book me</a></li>
     <li><a href="#work">My Work</a></li>
     <li class="main-only"><a href="#pricing">Pricing</a></li>
-    <li><a id="navIg" class="nav-ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a></li>
+    <li><a id="navIg" class="nav-ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg><span class="ig-label">Instagram</span></a></li>
   </ul>
 </div></nav>
 
 <header class="hero" id="top">
   <div class="wrap">
+    <p class="hero-kicker" id="heroKicker"></p>
     <h1 id="heroName"></h1>
-    <p id="heroTag"></p>
+    <p class="hero-tag" id="heroTag"></p>
+    <p class="hero-loc" id="heroLoc"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span></span></p>
+    <div class="hero-btns">
+      <a class="btn-main" href="#book">Book a shoot</a>
+      <a class="btn-line" href="#work">See the work</a>
+    </div>
   </div>
-  <a class="scroll-cue" href="#work" aria-label="Scroll down to my work"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v15M5 12l7 7 7-7"/></svg></a>
 </header>
 
 <main>
@@ -378,7 +414,7 @@ dialog[open]{animation:fade .3s ease}
 
   <section id="pricing"><div class="wrap split">
     <h2 class="rv">Pricing</h2>
-    <div><ul class="prices" id="prices"></ul></div>
+    <div><ul class="prices" id="prices"></ul><p class="delivery rv" id="delivery"></p></div>
   </div></section>
 
   <section id="book"><div class="wrap split">
@@ -427,9 +463,13 @@ document.documentElement.dataset.look = SITE.look || "darkroom";
 $("wordmark").innerHTML = esc(SITE.brand).replace(/optics\.?$/i, m=>`<span>${m}</span>`);
 function fitWordmark(){ const w=$("wordmark"); w.style.fontSize=""; const r=w.clientWidth/w.scrollWidth; if(r<1) w.style.fontSize=(parseFloat(getComputedStyle(w).fontSize)*r*0.98)+"px"; }
 fitWordmark(); addEventListener("resize", fitWordmark); document.fonts && document.fonts.ready.then(fitWordmark);
-$("heroName").innerHTML = SITE.name.split(" ").map((w,i)=>`<span class="w"><span style="--i:${i}">${esc(w)}</span></span>`).join(" ");
-$("heroName").setAttribute("aria-label", SITE.name);
-if (SITE.tagline) $("heroTag").textContent = SITE.tagline; else $("heroTag").remove();
+const headline = SITE.headline || SITE.name;
+$("heroName").innerHTML = headline.split(" ").map((w,i)=>`<span class="w"><span style="--i:${i}">${esc(w)}</span></span>`).join(" ");
+$("heroName").setAttribute("aria-label", headline);
+$("heroKicker").textContent = SITE.services || ""; $("heroKicker").hidden = !SITE.services;
+$("heroTag").textContent = SITE.tagline || ""; $("heroTag").hidden = !SITE.tagline;
+$("heroLoc").querySelector("span").textContent = SITE.location || ""; $("heroLoc").hidden = !SITE.location;
+$("delivery").textContent = SITE.delivery || ""; $("delivery").hidden = !SITE.delivery;
 $("copy").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
 document.title = SITE.brand.replace(/\.$/,"") + " | Photography";
 if (SITE.instagram){
@@ -543,7 +583,7 @@ function emptyState(kind){
   $("top").classList.add("empty"); heroless = true; navState();
   const msg = {
     setup: "Add your GitHub username and repo name at the top of <code>index.html</code>, then put photos in the <code>photos</code> folder. They'll show up here.",
-    none: "No photos yet. Make a folder inside <code>photos</code> for each album, like <code>photos/Mens Lacrosse 2024</code>, drag photos in, and refresh.",
+    none: "No photos yet. Make a folder inside <code>photos</code> for each album, like <code>photos/Men's Lacrosse 2024</code>, drag photos in, and refresh.",
     error: "The photos didn't load this time. Refresh the page in a minute and they should show up."
   }[kind];
   $("gallery").innerHTML = `<p class="notice">${msg}</p>`;
@@ -665,10 +705,12 @@ function showAlbum(a){
 let resizeT = 0;
 addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => { layoutAlbum(); $("gallery").querySelectorAll(".tiles").forEach(t => fitCols(t)); }, 120); });
 
-/* each album gets its own link, like yoursite/#album/Mens-Lacrosse-2024, and the back button works */
+/* each album gets its own link, like yoursite/#album/Men's-Lacrosse-2024, and the back button works.
+   Old links still work if only punctuation or capitals changed (Mens-Lacrosse-2024 finds Men's Lacrosse 2024) */
 function route(){
   const m = location.hash.match(/^#album\/(.+)$/);
-  const a = m && albums.find(x => slug(x.title)===decodeURIComponent(m[1]));
+  const loose = t => t.toLowerCase().replace(/[^a-z0-9]/g,"");
+  const a = m && (albums.find(x => slug(x.title)===decodeURIComponent(m[1])) || albums.find(x => loose(x.title)===loose(decodeURIComponent(m[1]))));
   albumEl = null; albumBtns = [];
   document.body.classList.toggle("in-album", !!a);
   if (a) showAlbum(a); else showGrid();
@@ -733,7 +775,7 @@ const QUESTIONS = [
 ];
 /* answers that aren't one of the Google Form's options go through its "Other" choice */
 const VIA_OTHER = {package:[SITE.customPackage, ...SITE.pricing.filter(p => p.other).map(p => p.form)], graphicKind:["Something else"]};
-const wiz = {a:{}, i:0, dir:1};
+const wiz = {a:{}, i:0, dir:1, pick:null};  // pick = the price-list row they chose, shown as a note on the form
 const steps = () => QUESTIONS.filter(s => !s.when || s.when(wiz.a.what ? wiz.a : {what:"Photo"}));
 const answered = s => s.pair ? s.pair.every(([k]) => (wiz.a[k]||"").trim()) : (wiz.a[s.k]||"").trim();
 
@@ -745,7 +787,7 @@ function renderStep(focus){
   else if (s.pair) body = s.pair.map(([k,ph]) => `<input class="wiz-in" data-k="${k}" placeholder="${esc(ph)}" value="${esc(wiz.a[k]||"")}">`).join("");
   else if (s.long) body = `<textarea class="wiz-in" data-k="${s.k}" placeholder="${esc(s.ph||"")}">${esc(wiz.a[s.k]||"")}</textarea>`;
   else body = `<input class="wiz-in" data-k="${s.k}" placeholder="${esc(s.ph||"")}" ${s.ac ? `autocomplete="${s.ac}"` : ""} value="${esc(wiz.a[s.k]||"")}">`;
-  $("wizStep").innerHTML = `<div class="wiz-step ${wiz.dir < 0 ? "back" : ""}"><p class="wiz-count">Question ${wiz.i+1} of ${n}</p><h3 class="wiz-q" id="wizQ">${esc(title)}</h3>${body}</div>`;
+  $("wizStep").innerHTML = `<div class="wiz-step ${wiz.dir < 0 ? "back" : ""}">${wiz.pick ? `<p class="wiz-pick">You picked <strong>${esc(wiz.pick.name)} · ${esc(wiz.pick.price)}</strong></p>` : ""}<p class="wiz-count">Question ${wiz.i+1} of ${n}</p><h3 class="wiz-q" id="wizQ">${esc(title)}</h3>${body}</div>`;
   $("wizBack").style.visibility = wiz.i ? "visible" : "hidden";
   $("wizNext").textContent = wiz.i === n-1 ? "Send inquiry" : "Next";
   $("status").textContent = "";
@@ -761,6 +803,9 @@ $("wizStep").addEventListener("input", e => { const k = e.target.dataset.k; if (
 $("wizStep").addEventListener("click", e => {
   const c = e.target.closest(".chip"); if (!c) return;
   const s = steps()[wiz.i]; wiz.a[s.k] = c.dataset.v;
+  /* changing the package (or what they're after) updates the "You picked" note */
+  if (s.k === "package") wiz.pick = SITE.pricing.find(p => p.form && p.form === c.dataset.v) || null;
+  if (s.k === "what" && (wiz.pick?.path || "Photo") !== c.dataset.v) wiz.pick = null;
   $("wizStep").querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", b === c));
   setTimeout(() => go(1), 220);  // picking an option moves on by itself
 });
@@ -781,7 +826,7 @@ async function send(){
     $("wizBar").style.width = "100%";
     $("wizStep").innerHTML = `<div class="wiz-step"><p class="wiz-count">All done</p><h3 class="wiz-q">Inquiry sent.</h3><p class="wiz-done">Thanks${wiz.a.name ? ", " + esc(wiz.a.name.split(" ")[0]) : ""}! I'll get back to you soon.</p><button type="button" class="wiz-back" id="wizAgain">Send another</button></div>`;
     $("wizBack").style.visibility = "hidden"; $("wizNext").style.display = "none"; $("status").textContent = "";
-    $("wizAgain").onclick = () => { wiz.a = {}; wiz.i = 0; wiz.dir = 1; $("wizNext").style.display = ""; renderStep(true); };
+    $("wizAgain").onclick = () => { wiz.a = {}; wiz.pick = null; wiz.i = 0; wiz.dir = 1; $("wizNext").style.display = ""; renderStep(true); };
   }catch(_){ $("status").innerHTML = `That didn't go through. <a href="${FORM_URL}/viewform" target="_blank">Use the form here instead.</a>`; }
   $("wizNext").disabled = false;
 }
@@ -810,6 +855,14 @@ function heroFade(){
 addEventListener("scroll", ()=>{
   navState(); heroFade();
 }, {passive:true});
+
+/* phone menu: the burger opens/closes it; tapping a link, outside it, or pressing Esc closes it */
+function menu(open){ $("nav").classList.toggle("open", open); $("burger").setAttribute("aria-expanded", open); }
+$("burger").onclick = () => menu(!$("nav").classList.contains("open"));
+$("navMenu").addEventListener("click", e => { if (e.target.closest("a")) menu(false); });
+document.addEventListener("click", e => { if (!e.target.closest("#nav")) menu(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") menu(false); });
+addEventListener("resize", () => { if (innerWidth > 600) menu(false); });
 navState(); heroFade();
 
 /* click a package -> starts the booking form on the right path (package already picked) and jumps down there */
@@ -819,7 +872,8 @@ $("prices").addEventListener("click", e=>{
   if (wiz.a.what !== what) wiz.a = {name: wiz.a.name, what};
   if (what === "Photo") wiz.a.package = p.form || SITE.customPackage;
   if (p.graphic) wiz.a.graphicKind = p.graphic;
-  if (p.subject && !(wiz.a.subject||"").trim()) wiz.a.subject = p.subject;  // e.g. "Event", without overwriting what they typed
+  if (p.subject && !(wiz.a.subject||"").trim()) wiz.a.subject = p.subject;
+  wiz.pick = p;  // e.g. "Event", without overwriting what they typed
   wiz.i = 1; wiz.dir = 1; $("wizNext").style.display = ""; renderStep(false);  // straight to "What's your name?"
   const f = $("form"); f.classList.remove("flash"); void f.offsetWidth; f.classList.add("flash");
   $("book").scrollIntoView({behavior: still ? "auto" : "smooth"});
