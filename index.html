@@ -32,7 +32,7 @@ const SITE = {
   look: "darkroom",        // color style: "darkroom", "kodak" or "nightgame"
   brand: "Brodysoptics.",   // top-left of the page
   // the words over the big top photo
-  services: "Photo · Video · Design",                       // small line above the headline
+  services: "Video – Photo – Design",                       // small line above the headline
   headline: "Keep the",                                 // the big text
   headlineScript: "moment.",                                // written in handwriting under it. "" hides it
   tagline: "Game days, portraits, events and graphics for athletes, teams and everyone in between.",  // "" hides it
@@ -184,8 +184,7 @@ a{color:inherit}
 .hero h1 .sig{display:block;font-family:var(--sig);font-weight:400;font-stretch:normal;text-transform:none;letter-spacing:0;line-height:.7;font-size:1.25em;margin:-.02em 0 0 .12em;transform:rotate(-4deg);transform-origin:left;text-shadow:0 2px 18px rgba(0,0,0,.35);animation:sign 1.3s cubic-bezier(.5,0,.2,1) .75s both}
 /* small "film label" lines in typewriter-style text, like the frame numbers on the photo tiles */
 .hero-kicker,.hero-loc{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:clamp(.72rem,1vw,.85rem);letter-spacing:.12em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.4)}
-.hero-kicker{display:flex;align-items:center;gap:12px;margin:0 0 1.4em}
-.hero-kicker::before{content:"";width:28px;height:1.5px;background:currentColor}
+.hero-kicker{margin:0 0 1.4em}
 .hero-tag{margin:1.3em 0 0;max-width:36ch;font-size:clamp(1.05rem,1.7vw,1.35rem);line-height:1.45;color:rgba(255,255,255,.85)}
 .hero-loc{display:flex;align-items:center;gap:7px;margin:1em 0 0;color:rgba(255,255,255,.8)}
 .hero-loc[hidden],.hero-tag[hidden],.hero-kicker[hidden]{display:none}
@@ -271,6 +270,10 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 .in-album #pricing,.in-album #book,.in-album .main-only{display:none}
 .home-btn{display:inline-block;margin-top:32px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;background:var(--sunset,var(--accent));color:var(--on-accent);padding:14px 28px;transition:background-color .25s ease,color .25s ease,transform .25s ease}
 .home-btn:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
+.work-group + .work-group{margin-top:clamp(48px,6vw,80px)}
+.work-sub{display:flex;align-items:center;gap:16px;margin:0 0 18px;font-family:var(--display);font-stretch:70%;font-size:clamp(1.3rem,2vw,1.6rem);font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.work-sub::after{content:"";flex:1;height:1px;background:var(--line)}
+.work-empty{margin:0;color:var(--muted)}
 .more h3{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(1.7rem,2.8vw,2.3rem);line-height:1;margin:0 0 20px;letter-spacing:.01em}
 .album button{position:relative}
 .album video,.tile video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease,transform .6s ease}
@@ -646,11 +649,15 @@ function fitCols(grid, ideal_w = +grid?.dataset.size || 300){
   grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0,1fr))`;
 }
 
+/* My Work is split into a Photos section and a Videos section.
+   An album goes under Videos if it has more videos than photos in it. Loose videos go under Videos too. */
+const isVideoAlbum = a => a.photos.filter(isVid).length > a.photos.length / 2;
 function showGrid(){
-  tiles = [...albums.map(a=>({type:"album",...a})), ...singles.map(s=>({type:"single",...s}))];
+  const group = vid => [...albums.filter(a => isVideoAlbum(a) === vid).map(a=>({type:"album",...a})), ...singles.filter(s => isVid(s.src) === vid).map(s=>({type:"single",...s}))];
+  const section = (title, list, empty) => `<div class="work-group"><h3 class="work-sub rv">${title}</h3>` + (list.length ? `<div class="tiles">${list.map(tileHTML).join("")}</div>` : `<p class="work-empty rv">${empty}</p>`) + `</div>`;
   $("workTitle").textContent = "My Work"; $("back").hidden = true; $("count").textContent = "";
-  $("gallery").innerHTML = `<div class="tiles">${tiles.map(tileHTML).join("")}</div>`;
-  fitCols($("gallery").querySelector(".tiles"));
+  $("gallery").innerHTML = section("Photos", group(false), "Photos coming soon.") + section("Videos", group(true), "Highlight videos coming soon.");
+  $("gallery").querySelectorAll(".tiles").forEach(t => fitCols(t));
 }
 
 /* album page */
@@ -742,7 +749,7 @@ $("gallery").addEventListener("click", e=>{
   const t = e.target.closest(".tile");
   if (t){
     if (t.dataset.album) location.hash = "album/" + encodeURIComponent(t.dataset.album);
-    else { viewing = singles.map(s=>s.src); open(Math.max(0, viewing.indexOf(t.dataset.single))); }
+    else { const vid = isVid(t.dataset.single); viewing = singles.map(s=>s.src).filter(s => isVid(s) === vid); open(Math.max(0, viewing.indexOf(t.dataset.single))); }
     return;
   }
   const p = e.target.closest("button[data-p]");
