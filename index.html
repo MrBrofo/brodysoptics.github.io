@@ -325,8 +325,10 @@ footer .wrap:last-child{flex-direction:column;align-items:center;text-align:cent
 dialog{border:0;padding:0;max-width:100vw;max-height:100vh;width:100vw;height:100vh;height:100dvh;background:rgba(10,12,13,.96);color:#fff}
 dialog::backdrop{background:rgba(10,12,13,.96)}
 .lb{position:relative;width:100%;height:100%;display:grid;place-items:center;padding:56px clamp(8px,6vw,80px)}
-.lb img{max-width:100%;max-height:100%;object-fit:contain;transition:opacity .3s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
-.lb video{max-width:100%;max-height:100%;background:#000}
+/* sized off the screen height (minus the 56px padding top + bottom), since % heights don't work inside the grid */
+.lb img,.lb video{max-width:100%;max-height:calc(100vh - 112px);max-height:calc(100dvh - 112px)}
+.lb img{object-fit:contain;transition:opacity .3s ease,transform .4s cubic-bezier(.2,.7,.2,1)}
+.lb video{background:#000}
 .lb img[hidden],.lb video[hidden]{display:none}
 .lb img.swap{opacity:0;transform:scale(.97)}
 dialog[open]{animation:fade .3s ease}
