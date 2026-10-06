@@ -32,8 +32,9 @@ const SITE = {
   look: "darkroom",        // color style: "darkroom", "kodak" or "nightgame"
   brand: "Brodysoptics.",   // top-left of the page
   // the words over the big top photo
-  services: "Photography · Videography · Graphic design",   // small line above the headline
-  headline: "Moments worth keeping",                         // the big text
+  services: "Photo · Video · Design",                       // small line above the headline
+  headline: "Moments worth",                                 // the big text
+  headlineScript: "keeping.",                                // written in handwriting under it. "" hides it
   tagline: "Game days, portraits, events and graphics for athletes, teams and everyone in between.",  // "" hides it
   location: "Based in the Bay Area",                         // "" hides it
   delivery: "Edited photos in 3–5 business days, sent through Google Drive.",  // shown under the prices. "" hides it
@@ -108,6 +109,10 @@ img{max-width:100%;display:block}
    The hero stays put and the rest of the page slides up over it */
 #field{position:fixed;inset:0;z-index:-1;pointer-events:none}
 main,footer{position:relative}
+/* the hero sits behind the page, so the page itself would catch every click on it (the hero buttons wouldn't work).
+   Let clicks pass through the page and only land on the actual things in it */
+html,body{pointer-events:none}
+body > *{pointer-events:auto}
 main::before,footer::before{content:"";position:absolute;inset:0;z-index:-2;background:var(--paper)}
 body::after{content:"";position:fixed;inset:0;z-index:6;pointer-events:none;opacity:var(--grain);
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -135,10 +140,13 @@ a{color:inherit}
 .nav a.nav-book:hover{text-decoration:none;background:#E9E5DF;transform:translateY(-1px)}
 .nav a{white-space:nowrap}
 .nav a:hover{text-decoration:underline;text-underline-offset:4px}
-.burger,.ig-label{display:none}
+.burger,.ig-label,.nav a.nav-book-m{display:none}
 /* phones: the links go into a three-line "burger" menu that drops down */
 @media (max-width:600px){
   #navName{font-size:2.3rem}
+  /* "Book me" stays out on the bar next to the burger; everything else goes inside */
+  .nav a.nav-book-m{display:inline-block;margin:0 6px 0 auto;padding:9px 18px;font-size:.95rem}
+  .in-album .nav a.nav-book-m,.nav ul li:has(> .nav-book){display:none}
   .burger{all:unset;display:flex;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;margin-right:-10px;cursor:pointer;position:relative;z-index:1}
   .burger span{display:block;width:22px;height:2px;margin:0 auto;background:currentColor;border-radius:2px;transition:transform .3s ease,opacity .2s ease}
   .burger:focus-visible{outline:2px solid var(--accent);outline-offset:-4px;border-radius:8px}
@@ -153,7 +161,6 @@ a{color:inherit}
   .nav ul a{display:flex;align-items:center;gap:10px;padding:14px 0;font-size:1.25rem;font-weight:600;border-bottom:1px solid var(--line)}
   .nav ul li:last-child a{border-bottom:0}
   .nav ul a:hover{text-decoration:none}
-  .nav ul a.nav-book{display:flex;justify-content:center;margin:8px 0 6px;padding:14px;border-bottom:0}
   .nav-ig{margin:0;line-height:inherit}
   .ig-label{display:inline}
 }
@@ -171,23 +178,31 @@ a{color:inherit}
 /* darker on the left and bottom so the white text is easy to read over any photo */
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.6),rgba(0,0,0,0) 70%),linear-gradient(to top,rgba(0,0,0,.65),rgba(0,0,0,0) 60%),linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,0) 18%)}
 .hero .wrap{position:absolute;left:0;right:0;bottom:calc(clamp(28px,6vw,72px) + env(safe-area-inset-bottom,0px));z-index:2;color:#fff}
-.hero h1{margin:0;max-width:9ch;font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.86;letter-spacing:-.01em;font-size:clamp(3.4rem,9vw,8rem)}
-.hero-kicker{margin:0 0 1.1em;font-family:var(--display);font-weight:600;font-size:clamp(.72rem,1.1vw,.9rem);letter-spacing:.22em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.4)}
-.hero-tag{margin:1.1em 0 0;max-width:34ch;font-size:clamp(1.05rem,1.7vw,1.35rem);line-height:1.45;color:rgba(255,255,255,.85)}
-.hero-loc{display:flex;align-items:center;gap:6px;margin:.8em 0 0;font-family:var(--display);font-weight:500;font-size:clamp(.9rem,1.2vw,1rem);letter-spacing:.04em;color:rgba(255,255,255,.85)}
+.hero h1{margin:0;font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.86;letter-spacing:-.01em;font-size:clamp(3.4rem,9vw,8rem)}
+.hero h1 .line{display:block}
+/* the last part of the headline is written in the same signature handwriting as the logo */
+.hero h1 .sig{display:block;font-family:var(--sig);font-weight:400;font-stretch:normal;text-transform:none;letter-spacing:0;line-height:.7;font-size:1.25em;margin:-.02em 0 0 .45em;transform:rotate(-4deg);transform-origin:left;text-shadow:0 2px 18px rgba(0,0,0,.35);animation:sign 1.3s cubic-bezier(.5,0,.2,1) .75s both}
+/* small "film label" lines in typewriter-style text, like the frame numbers on the photo tiles */
+.hero-kicker,.hero-loc{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:clamp(.72rem,1vw,.85rem);letter-spacing:.12em;text-transform:uppercase;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.hero-kicker{display:flex;align-items:center;gap:12px;margin:0 0 1.4em}
+.hero-kicker::before{content:"";width:28px;height:1.5px;background:currentColor}
+.hero-tag{margin:1.3em 0 0;max-width:36ch;font-size:clamp(1.05rem,1.7vw,1.35rem);line-height:1.45;color:rgba(255,255,255,.85)}
+.hero-loc{display:flex;align-items:center;gap:7px;margin:1em 0 0;color:rgba(255,255,255,.8)}
 .hero-loc[hidden],.hero-tag[hidden],.hero-kicker[hidden]{display:none}
 .hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(22px,3vw,36px)}
-.hero-btns a{display:inline-block;font-family:var(--display);font-weight:600;font-size:1.05rem;text-decoration:none;padding:15px 30px;border-radius:999px;transition:background-color .2s ease,border-color .2s ease,transform .2s ease}
+.hero-btns a{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:15px 26px;transition:background-color .2s ease,border-color .2s ease,transform .2s ease}
 .hero-btns a:hover{transform:translateY(-2px)}
 .btn-main{background:#fff;color:#0E0D0C;border:1.5px solid #fff}
 .btn-main:hover{background:#E9E5DF;border-color:#E9E5DF}
-.btn-line{color:#fff;border:1.5px solid rgba(255,255,255,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.btn-main span{transition:transform .2s ease}
+.btn-main:hover span{transform:translateX(4px)}
+.btn-line{color:#fff;border:1.5px solid rgba(255,255,255,.4);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .btn-line:hover{border-color:#fff}
 /* the words slide up one after another when the page loads */
 .hero .wrap > :not(h1){animation:fadeUp .9s cubic-bezier(.2,.8,.2,1) both}
-.hero .wrap > .hero-kicker{animation-delay:.2s} .hero .wrap > .hero-tag{animation-delay:.75s} .hero .wrap > .hero-loc{animation-delay:.85s} .hero .wrap > .hero-btns{animation-delay:.95s}
+.hero .wrap > .hero-kicker{animation-delay:.2s} .hero .wrap > .hero-tag{animation-delay:1s} .hero .wrap > .hero-loc{animation-delay:1.1s} .hero .wrap > .hero-btns{animation-delay:1.2s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-@media (max-width:600px){ .hero-btns a{padding:13px 22px;font-size:1rem} .hero-kicker{font-size:.66rem;letter-spacing:.12em} }
+@media (max-width:600px){ .hero-btns{gap:10px} .hero-btns a{padding:13px 15px;gap:8px;font-size:.84rem;letter-spacing:.04em} .hero-kicker,.hero-loc{font-size:.68rem;letter-spacing:.1em} }
 .hero.empty{position:relative;z-index:auto;height:auto;min-height:0;padding:calc(96px + env(safe-area-inset-top,0px)) 0 24px}
 .hero.empty::after{display:none}
 .hero.empty .wrap{position:static;color:var(--ink)}
@@ -380,6 +395,7 @@ dialog[open]{animation:fade .3s ease}
 
 <nav class="nav" id="nav"><div class="wrap">
   <a href="#top" id="navName"></a>
+  <a href="#book" class="nav-book nav-book-m">Book me</a>
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu"><span></span><span></span><span></span></button>
   <ul id="navMenu">
     <li class="main-only"><a href="#book" class="nav-book">Book me</a></li>
@@ -396,7 +412,7 @@ dialog[open]{animation:fade .3s ease}
     <p class="hero-tag" id="heroTag"></p>
     <p class="hero-loc" id="heroLoc"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span></span></p>
     <div class="hero-btns">
-      <a class="btn-main" href="#book">Book a shoot</a>
+      <a class="btn-main" href="#book">Book a shoot <span aria-hidden="true">→</span></a>
       <a class="btn-line" href="#work">See the work</a>
     </div>
   </div>
@@ -464,8 +480,9 @@ $("wordmark").innerHTML = esc(SITE.brand).replace(/optics\.?$/i, m=>`<span>${m}<
 function fitWordmark(){ const w=$("wordmark"); w.style.fontSize=""; const r=w.clientWidth/w.scrollWidth; if(r<1) w.style.fontSize=(parseFloat(getComputedStyle(w).fontSize)*r*0.98)+"px"; }
 fitWordmark(); addEventListener("resize", fitWordmark); document.fonts && document.fonts.ready.then(fitWordmark);
 const headline = SITE.headline || SITE.name;
-$("heroName").innerHTML = headline.split(" ").map((w,i)=>`<span class="w"><span style="--i:${i}">${esc(w)}</span></span>`).join(" ");
-$("heroName").setAttribute("aria-label", headline);
+$("heroName").innerHTML = `<span class="line">${headline.split(" ").map((w,i)=>`<span class="w"><span style="--i:${i}">${esc(w)}</span></span>`).join(" ")}</span>`
+  + (SITE.headlineScript ? `<span class="sig">${esc(SITE.headlineScript)}</span>` : "");
+$("heroName").setAttribute("aria-label", [headline, SITE.headlineScript].filter(Boolean).join(" "));
 $("heroKicker").textContent = SITE.services || ""; $("heroKicker").hidden = !SITE.services;
 $("heroTag").textContent = SITE.tagline || ""; $("heroTag").hidden = !SITE.tagline;
 $("heroLoc").querySelector("span").textContent = SITE.location || ""; $("heroLoc").hidden = !SITE.location;
