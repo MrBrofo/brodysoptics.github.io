@@ -24,7 +24,8 @@ This is Brody Disick's photography portfolio and booking site. Read this whole f
 ## Files
 
 ```
-index.html     ← the entire site (HTML + CSS + JS, no build step, no frameworks)
+index.html     ← the whole main site (HTML + CSS + JS, no build step, no frameworks)
+about.html     ← About page (template for now, see "About page")
 CNAME          ← keeps brodysoptics.com connected. NEVER delete or edit.
 CLAUDE.md      ← this file
 .github/workflows/deploy.yml ← builds photos.json + publishes the site on every push
@@ -83,7 +84,13 @@ jsDelivr can't be used as a source: the repo is over its 50 MB limit.
 5. **Book a shoot:** inquiry form.
 6. **Footer:** giant "BRODYSOPTICS." wordmark ("OPTICS." in sunset gradient, auto-fit to width), © line.
 
-**There is no About section.** He removed it on purpose. Don't add it back.
+**There is no About section on the home page.** He removed it on purpose. Don't add it back there.
+
+### About page (`about.html`)
+- Separate page, layout inspired by Sam Disick's site (SamDLens) but in Brodysoptics' style: photo top with "BRODY DISICK" + handwritten "behind the lens.", stats row, experience cards (film-frame numbers), Who & what (Hired by / Worked with / Covered), closing "LET'S KEEP the moment." with skill chips + Book/See the work buttons. Own copy of the nav + burger (links point to `index.html#...`).
+- All text is in the `ABOUT` object at the top. Empty lists hide their section. Currently a **template with [bracketed] placeholders** and `draft: true` (shows a "DRAFT" banner).
+- **Not linked from the menu yet**, on purpose, until real info is in. Then: fill `ABOUT`, set `draft:false`, add an "About" link to the nav in both `index.html` and `about.html`.
+- Never use Sam's stats, jobs or clients as Brody's. Only real info Brody gives. Hints: empty `photos/` folders "Camp Micah Internship" and "Portland Sea Dogs 2026" might be his experience (unconfirmed).
 
 ### My Work grid
 - Tiles are 4:5 with film-frame numbers (01, 02…). Album tiles show title + count ("10 photos · 2 videos") on hover (always visible on touch devices). Hover = slight zoom + viewfinder corner brackets.

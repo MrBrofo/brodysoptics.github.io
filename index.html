@@ -563,6 +563,8 @@ async function loadPhotos(){
     const stills = [...singles.map(x=>x.src), ...albums.map(a=>a.cover)].filter(x=>!isVid(x));
     if (hero || stills.length) setHero(hero ? url(hero) : stills[0]);
     route();
+    /* coming from another page (like about.html#photos): jump to that section once it's built */
+    if (["#photos","#videos","#graphics","#work"].includes(location.hash)) $(location.hash.slice(1)).scrollIntoView();
   }catch(e){ emptyState("error"); }
 }
 

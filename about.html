@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About | Brodysoptics</title>
+<meta name="description" content="About Brody Disick: Bay Area video, photo and graphic design.">
+<link rel="icon" type="image/png" href="favicon.png?v=2">
+<link rel="apple-touch-icon" href="favicon.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Herr+Von+Muellerhoff&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+
+<script>
+/* =====================================================================
+   EDIT THIS PART. Everything on the About page comes from here.
+   Anything in [brackets] is a placeholder to replace with your real info.
+   Leave a list empty ([]) and that whole section disappears.
+   ===================================================================== */
+const ABOUT = {
+  draft: true,   // true = shows a small "draft" banner at the top. Set to false once the real info is in.
+
+  photo: "photos/hero.jpg",          // the big photo at the top
+  location: "Bay Area",
+  name: "Brody Disick",
+  nameScript: "behind the lens.",    // written in handwriting under your name. "" hides it
+  intro: "[1–2 sentences about what you do and who you shoot for.]",
+  since: "[Year]",                   // "Shooting since ____". "" hides it
+
+  // Big numbers. Only real ones! Leave this as [] to hide the whole row.
+  stats: [
+    { number: "[00]", label: "[What the number is]", source: "[Where it's from]" },
+    { number: "[00]", label: "[What the number is]", source: "[Where it's from]" },
+    { number: "[00]", label: "[What the number is]", source: "[Where it's from]" }
+  ],
+
+  // Places you've shot or worked for. "stat" is optional.
+  experience: [
+    { name: "[Place name]", role: "[Your role]", about: "[One sentence about what you did there.]", stat: "[Optional stat]" },
+    { name: "[Place name]", role: "[Your role]", about: "[One sentence about what you did there.]" },
+    { name: "[Place name]", role: "[Your role]", about: "[One sentence about what you did there.]" }
+  ],
+
+  // Who & what. Each list is optional.
+  hiredBy:    ["[Who hires you, e.g. athletes]", "[Another]"],
+  workedWith: ["[Brand or team]", "[Another]"],
+  covered:    ["[Team or event]", "[Another]"],
+
+  skills: ["Videography", "Photography", "Editing", "Graphic design"]
+};
+</script>
+
+<style>
+:root{
+  --paper:#0E0D0C; --ink:#F2EEE8; --muted:#9A938A; --line:#2B2825; --frame:#1A1816;
+  --display:"Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --sig:"Herr Von Muellerhoff", "Brush Script MT", cursive;
+  --text:"Newsreader", Georgia, "Times New Roman", serif;
+  --mono:ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --pad: clamp(18px, 4vw, 48px);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::after{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.wrap{max-width:1320px;margin:0 auto;padding:0 var(--pad)}
+.draft{position:relative;z-index:6;background:#fff;color:#0E0D0C;text-align:center;font-family:var(--mono);font-size:.8rem;letter-spacing:.08em;padding:8px var(--pad)}
+.draft[hidden]{display:none}
+
+/* nav (same as the home page) */
+.nav{position:sticky;top:0;z-index:5;font-family:var(--display);font-size:.95rem;font-weight:500;background:color-mix(in srgb,var(--paper) 86%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:6px;padding-bottom:6px}
+.logo{font-family:var(--sig);font-size:clamp(2.5rem,4.2vw,3.3rem);line-height:1;padding:0 .25em 0 .05em;text-decoration:none}
+.nav ul{display:flex;align-items:center;gap:clamp(16px,3vw,32px);list-style:none;margin:0;padding:0}
+.nav ul a{text-decoration:none;white-space:nowrap}
+.nav ul a:hover{text-decoration:underline;text-underline-offset:4px}
+.nav a.book{display:inline-block;background:#fff;color:#0E0D0C;font-weight:600;padding:7px 16px;border-radius:999px;margin:-7px 0;text-decoration:none}
+.nav a.book:hover{background:#E9E5DF;text-decoration:none}
+.burger,.nav a.book-m{display:none}
+@media (max-width:600px){
+  .logo{font-size:2.3rem}
+  .nav a.book-m{display:inline-block;margin:0 6px 0 auto;padding:9px 18px}
+  .nav ul li:has(> .book){display:none}
+  .burger{all:unset;display:flex;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;margin-right:-10px;cursor:pointer}
+  .burger span{display:block;width:22px;height:2px;margin:0 auto;background:currentColor;border-radius:2px;transition:transform .3s ease,opacity .2s ease}
+  .nav.open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav.open .burger span:nth-child(2){opacity:0}
+  .nav.open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav ul{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;padding:6px var(--pad) 22px;background:var(--paper);box-shadow:0 1px 0 var(--line);visibility:hidden;opacity:0;transform:translateY(-8px);transition:opacity .25s ease,transform .25s ease,visibility 0s linear .25s}
+  .nav.open ul{visibility:visible;opacity:1;transform:none;transition:opacity .25s ease,transform .25s ease}
+  .nav ul a{display:block;padding:14px 0;font-size:1.25rem;font-weight:600;border-bottom:1px solid var(--line)}
+  .nav ul li:last-child a{border-bottom:0}
+}
+
+/* top: photo with name over it */
+.top{position:relative;min-height:min(86vh,820px);display:flex;align-items:flex-end;overflow:hidden;background:var(--frame)}
+.top img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:zoomIn 2.2s cubic-bezier(.2,.7,.2,1) both}
+.top::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.7),rgba(0,0,0,.1) 75%),linear-gradient(to top,rgba(14,13,12,1),rgba(0,0,0,0) 55%)}
+@keyframes zoomIn{from{opacity:0;transform:scale(1.1)}to{opacity:1;transform:none}}
+.top .wrap{position:relative;z-index:1;width:100%;padding-bottom:clamp(40px,7vw,90px);color:#fff}
+.label{margin:0;font-family:var(--mono);font-size:clamp(.72rem,1vw,.85rem);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.top h1{margin:.5em 0 0;font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.86;font-size:clamp(3.4rem,9vw,8rem);white-space:nowrap}
+.top h1 .sig{display:block;font-family:var(--sig);font-weight:400;font-stretch:normal;text-transform:none;line-height:.7;font-size:.7em;margin:.02em 0 0 .12em;transform:rotate(-4deg);transform-origin:left;white-space:normal;animation:sign 1.3s cubic-bezier(.5,0,.2,1) .5s both}
+@keyframes sign{from{clip-path:inset(-20% 100% -20% 0)}to{clip-path:inset(-20% -10% -20% 0)}}
+.intro{margin:1.6em 0 0;max-width:40ch;font-size:clamp(1.1rem,1.8vw,1.4rem);line-height:1.45;color:rgba(255,255,255,.88)}
+.since{margin-top:1.2em}
+
+/* sections */
+section{padding:clamp(64px,9vw,120px) 0 0}
+h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2.4rem,4.4vw,3.4rem);line-height:.95;margin:0 0 clamp(24px,3vw,40px);text-transform:uppercase}
+h3{font-family:var(--display);font-stretch:70%;font-weight:800;text-transform:uppercase;margin:0}
+
+/* stats row */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px clamp(20px,3vw,40px)}
+.stat{border-top:1px solid var(--line);padding-top:18px}
+.stat b{display:block;font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(3.6rem,7vw,6rem);line-height:.9}
+.stat span{display:block;margin-top:12px;font-family:var(--display);font-weight:500}
+.stat small{display:block;margin-top:4px;font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* experience cards: film-frame numbers like the photo tiles */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px}
+.card{position:relative;border:1px solid var(--line);border-radius:14px;background:var(--frame);padding:clamp(22px,3vw,34px);display:flex;flex-direction:column}
+.card .no{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--muted)}
+.card h3{font-size:clamp(1.6rem,2.6vw,2.1rem);line-height:1;margin-top:14px}
+.card .role{margin:8px 0 0;font-family:var(--mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
+.card p{margin:14px 0 0;color:var(--muted)}
+.card .big{margin-top:auto;padding-top:22px}
+.card .big div{border-top:1px solid var(--line);padding-top:16px;font-family:var(--display);font-stretch:70%;font-weight:800;font-size:1.3rem;text-transform:uppercase}
+
+/* who & what */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px clamp(24px,4vw,56px)}
+.cols h3{font-size:1.4rem;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.cols ul{list-style:none;margin:0;padding:0}
+.cols li{padding:12px 0;font-family:var(--display);font-size:1.05rem}
+
+/* closing */
+.end{text-align:center;padding-bottom:clamp(64px,9vw,120px)}
+.end h2{margin-bottom:.35em;font-size:clamp(2.8rem,7vw,5.5rem);line-height:.88}
+.end h2 .sig{display:block;font-family:var(--sig);font-weight:400;font-stretch:normal;text-transform:none;font-size:.85em;line-height:.8;transform:rotate(-4deg)}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:28px auto 0;max-width:720px;padding:0;list-style:none}
+.chips li{font-family:var(--display);font-weight:500;padding:11px 20px;border:1.5px solid var(--line);border-radius:999px}
+.btns{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:36px}
+.btns a{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:15px 26px;border-radius:999px;transition:background-color .2s ease,border-color .2s ease,transform .2s ease}
+.btns a:hover{transform:translateY(-2px)}
+.btns .main{background:#fff;color:#0E0D0C;border:1.5px solid #fff}
+.btns .line{color:#fff;border:1.5px solid rgba(255,255,255,.4)}
+.btns .line:hover{border-color:#fff}
+
+footer{border-top:1px solid var(--line)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:24px;padding-bottom:32px;color:var(--muted);font-size:.95rem}
+footer .logo{font-size:2.2rem;color:var(--ink)}
+
+/* things slide up into view as you scroll */
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){ .js .rv{opacity:1;transform:none} }
+@media (max-width:600px){ .btns a{padding:13px 18px;font-size:.88rem} .top h1{font-size:3rem} }
+</style>
+</head>
+<body>
+<script>document.body.classList.add("js")</script>
+<div class="draft" id="draft">DRAFT: placeholder info, real details coming soon</div>
+
+<nav class="nav" id="nav"><div class="wrap">
+  <a class="logo" href="index.html">Brodysoptics.</a>
+  <a href="index.html#book" class="book book-m">Book me</a>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu"><span></span><span></span><span></span></button>
+  <ul id="navMenu">
+    <li><a href="index.html#book" class="book">Book me</a></li>
+    <li><a href="index.html#photos">Photo</a></li>
+    <li><a href="index.html#videos">Video</a></li>
+    <li><a href="index.html#graphics">Graphics</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li><a href="https://instagram.com/brodysoptics" target="_blank" rel="noopener">Instagram</a></li>
+  </ul>
+</div></nav>
+
+<header class="top">
+  <img id="photo" alt="">
+  <div class="wrap">
+    <p class="label" id="location"></p>
+    <h1 id="name"></h1>
+    <p class="intro" id="intro"></p>
+    <p class="label since" id="since"></p>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<footer><div class="wrap">
+  <a class="logo" href="index.html">Brodysoptics.</a>
+  <span id="copy"></span>
+</div></footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const A = ABOUT;
+
+$("draft").hidden = !A.draft;
+$("photo").src = A.photo;
+$("location").textContent = A.location;
+$("name").innerHTML = esc(A.name) + (A.nameScript ? `<span class="sig">${esc(A.nameScript)}</span>` : "");
+$("intro").textContent = A.intro;
+if (A.since) $("since").textContent = "Shooting since " + A.since; else $("since").remove();
+$("copy").textContent = "© " + new Date().getFullYear() + " " + A.name;
+
+/* build each section, skipping any that are empty */
+let html = "";
+if (A.stats.length) html += `<section><div class="wrap stats">${A.stats.map((s,i) => `<div class="stat rv" style="--d:${i*.08}s"><b>${esc(s.number)}</b><span>${esc(s.label)}</span>${s.source ? `<small>${esc(s.source)}</small>` : ""}</div>`).join("")}</div></section>`;
+if (A.experience.length) html += `<section><div class="wrap"><h2 class="rv">Experience</h2><div class="cards">${A.experience.map((e,i) =>
+  `<div class="card rv" style="--d:${(i%3)*.08}s"><span class="no">${String(i+1).padStart(2,"0")}</span><h3>${esc(e.name)}</h3><p class="role">${esc(e.role)}</p><p>${esc(e.about)}</p>${e.stat ? `<div class="big"><div>${esc(e.stat)}</div></div>` : ""}</div>`).join("")}</div></div></section>`;
+const lists = [["Hired by", A.hiredBy], ["Worked with", A.workedWith], ["Covered", A.covered]].filter(([,l]) => l && l.length);
+if (lists.length) html += `<section><div class="wrap"><h2 class="rv">Who &amp; what</h2><div class="cols">${lists.map(([t,l]) => `<div class="rv"><h3>${t}</h3><ul>${l.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div></div></section>`;
+html += `<section class="end"><div class="wrap"><h2 class="rv">Let's keep<span class="sig">the moment.</span></h2>`
+  + (A.skills.length ? `<ul class="chips rv">${A.skills.map(s => `<li>${esc(s)}</li>`).join("")}</ul>` : "")
+  + `<div class="btns rv"><a class="main" href="index.html#book">Book a shoot <span aria-hidden="true">→</span></a><a class="line" href="index.html#photos">See the work</a></div></div></section>`;
+$("main").innerHTML = html;
+
+/* scroll reveal */
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }), {rootMargin:"0px 0px -8% 0px", threshold:.08}) : null;
+document.querySelectorAll(".rv").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+
+/* phone menu */
+function menu(open){ $("nav").classList.toggle("open", open); $("burger").setAttribute("aria-expanded", open); }
+$("burger").onclick = () => menu(!$("nav").classList.contains("open"));
+document.addEventListener("click", e => { if (!e.target.closest("#nav")) menu(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") menu(false); });
+</script>
+</body>
+</html>
