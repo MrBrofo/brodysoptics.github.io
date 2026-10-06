@@ -402,7 +402,9 @@ dialog[open]{animation:fade .3s ease}
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu"><span></span><span></span><span></span></button>
   <ul id="navMenu">
     <li class="main-only"><a href="#book" class="nav-book">Book me</a></li>
-    <li><a href="#work">My Work</a></li>
+    <li><a href="#photos">Photo</a></li>
+    <li><a href="#videos">Video</a></li>
+    <li><a href="#graphics">Graphics</a></li>
     <li class="main-only"><a href="#pricing">Pricing</a></li>
     <li><a id="navIg" class="nav-ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg><span class="ig-label">Instagram</span></a></li>
   </ul>
@@ -541,7 +543,8 @@ async function loadPhotos(){
         if (/^hero(?![a-z0-9])/i.test(file) && !isVid(file)) hero = path; else singles.push({src:url(path), name:file});
       } else {
         const key = parts[1];
-        if (!map.has(key)) map.set(key,{title:nice(key), photos:[], cover:null});
+        /* folders with "graphic" in the name go in the Graphics section. "Graphics - Gameday" shows as "Gameday" */
+        if (!map.has(key)) map.set(key,{title:nice(key.replace(/^graphics?\s*[-–:]\s*(?=\S)/i,"")), photos:[], cover:null, graphic:/graphic/i.test(key)});
         const a = map.get(key);
         if (isCover(file)) a.cover = url(path); else a.photos.push(url(path));
       }
@@ -611,9 +614,9 @@ function emptyState(kind){
 
 /* the Work grid: albums first, then single photos */
 const slug = t => t.replace(/\s+/g,"-");
-function countLabel(list){
+function countLabel(list, graphic){
   const v = list.filter(isVid).length, p = list.length - v, part = (n,w) => `${n} ${w}${n===1?"":"s"}`;
-  return [p && part(p,"photo"), v && part(v,"video")].filter(Boolean).join(" · ");
+  return [p && part(p, graphic ? "graphic" : "photo"), v && part(v,"video")].filter(Boolean).join(" · ");
 }
 /* videos quietly preview when you hover them */
 function hv(el, on){ const v = el.querySelector("video"); if (!v) return; if (on) v.play().catch(()=>{}); else { v.pause(); } }
@@ -623,7 +626,7 @@ function tileHTML(t, i){
     ? `<video src="${src}#t=0.1" muted loop playsinline preload="metadata" onloadeddata="this.classList.add('loaded')"></video><span class="play" aria-hidden="true"></span>`
     : `<img src="${src}" alt="" loading="${i<8?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')">`;
   return t.type==="album"
-    ? `<button class="tile rv" style="--d:${(i%4)*.07}s" data-album="${esc(slug(t.title))}" aria-label="Open album ${esc(t.title)}" onmouseenter="hv(this,1)" onmouseleave="hv(this,0)">${n}${img(t.cover)}<span class="cap"><strong>${esc(t.title)}</strong><span>${countLabel(t.photos)}</span></span></button>`
+    ? `<button class="tile rv" style="--d:${(i%4)*.07}s" data-album="${esc(slug(t.title))}" aria-label="Open album ${esc(t.title)}" onmouseenter="hv(this,1)" onmouseleave="hv(this,0)">${n}${img(t.cover)}<span class="cap"><strong>${esc(t.title)}</strong><span>${countLabel(t.photos, t.graphic)}</span></span></button>`
     : `<button class="tile rv" style="--d:${(i%4)*.07}s" data-single="${esc(t.src)}" aria-label="View ${isVid(t.src)?"video":"photo"}" onmouseenter="hv(this,1)" onmouseleave="hv(this,0)">${n}${img(t.src)}</button>`;
 }
 
@@ -649,14 +652,16 @@ function fitCols(grid, ideal_w = +grid?.dataset.size || 300){
   grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0,1fr))`;
 }
 
-/* My Work is split into a Photos section and a Videos section.
-   An album goes under Videos if it has more videos than photos in it. Loose videos go under Videos too. */
+/* My Work is split into Photos, Videos and Graphics sections.
+   Graphics = album folders with "graphic" in the name. Videos = albums that are mostly videos, plus loose videos.
+   Everything else is Photos. */
 const isVideoAlbum = a => a.photos.filter(isVid).length > a.photos.length / 2;
+const kindOf = a => a.graphic ? "graphics" : isVideoAlbum(a) ? "videos" : "photos";
 function showGrid(){
-  const group = vid => [...albums.filter(a => isVideoAlbum(a) === vid).map(a=>({type:"album",...a})), ...singles.filter(s => isVid(s.src) === vid).map(s=>({type:"single",...s}))];
-  const section = (title, list, empty) => `<div class="work-group"><h3 class="work-sub rv">${title}</h3>` + (list.length ? `<div class="tiles">${list.map(tileHTML).join("")}</div>` : `<p class="work-empty rv">${empty}</p>`) + `</div>`;
+  const group = kind => [...albums.filter(a => kindOf(a) === kind).map(a=>({type:"album",...a})), ...singles.filter(s => kind !== "graphics" && isVid(s.src) === (kind === "videos")).map(s=>({type:"single",...s}))];
+  const section = (id, title, empty) => { const list = group(id); return `<div class="work-group" id="${id}"><h3 class="work-sub rv">${title}</h3>` + (list.length ? `<div class="tiles">${list.map(tileHTML).join("")}</div>` : `<p class="work-empty rv">${empty}</p>`) + `</div>`; };
   $("workTitle").textContent = "My Work"; $("back").hidden = true; $("count").textContent = "";
-  $("gallery").innerHTML = section("Photos", group(false), "Photos coming soon.") + section("Videos", group(true), "Highlight videos coming soon.");
+  $("gallery").innerHTML = section("photos", "Photos", "Photos coming soon.") + section("videos", "Videos", "Highlight videos coming soon.") + section("graphics", "Graphics", "Graphics coming soon.");
   $("gallery").querySelectorAll(".tiles").forEach(t => fitCols(t));
 }
 
@@ -707,7 +712,7 @@ function layoutAlbum(){
 
 function showAlbum(a){
   $("workTitle").textContent = a.title; $("back").hidden = false;
-  $("count").textContent = countLabel(a.photos);
+  $("count").textContent = countLabel(a.photos, a.graphic);
   viewing = a.photos;
   const others = albums.filter(x => x !== a);
   $("gallery").innerHTML = `<div class="album"></div><div class="more">` + (others.length ? `<h3 class="rv">Check out my other work</h3><div class="tiles small" data-size="200">${others.map((o,i)=>tileHTML({type:"album",...o}, i)).join("")}</div>` : "") + `<a class="home-btn rv" href="#top">← Back to homepage</a></div>`;
@@ -741,6 +746,7 @@ function route(){
 }
 window.addEventListener("hashchange", ()=>{ const h = location.hash; route();
   if (h.startsWith("#album/") || h==="#work") $("work").scrollIntoView();
+  else if (["#photos","#videos","#graphics"].includes(h)) $(h.slice(1)).scrollIntoView();
   else if (h==="#pricing" || h==="#book") $(h.slice(1)).scrollIntoView();
   else if (h==="#top") scrollTo({top:0, behavior: still ? "auto" : "smooth"}); });
 $("back").onclick = ()=>{ location.hash = "work"; };
