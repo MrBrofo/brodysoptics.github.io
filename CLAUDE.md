@@ -90,6 +90,7 @@ jsDelivr can't be used as a source: the repo is over its 50 MB limit.
 - Separate page, layout inspired by Sam Disick's site (SamDLens) but in Brodysoptics' style: photo top with "BRODY DISICK" + handwritten "behind the optic." (a play on Brodysoptics), intro "High school media creative. Whatever you've got, I'll shoot it, edit it, and make it hit.", "Capturing since 2024" (he wanted a camera pun instead of "Shooting since"), stats row, experience cards (film-frame numbers), Who & what (Hired by / Worked with / Covered), closing "LET'S KEEP the moment." with skill chips + Book/See the work buttons. Own copy of the nav + burger (links point to `index.html#...`).
 - All text is in the `ABOUT` object at the top. Empty lists hide their section. Currently a **template with [bracketed] placeholders** and `draft: true` (shows a "DRAFT" banner).
 - **Not linked from the menu yet**, on purpose, until real info is in. Then: fill `ABOUT`, set `draft:false`, add an "About" link to the nav in both `index.html` and `about.html`.
+- **Rejected redesign:** a film-theme version (photo in a tilted film-negative frame, "spec sheet", experience on a sideways film strip, movie-style "credits", scrolling skills ticker). He hated it; keep the original layout.
 - Never use Sam's stats, jobs or clients as Brody's. Only real info Brody gives. Experience so far (confirmed by Brody): Brodysoptics (Founder) and Camp Micah (Communications & Media Intern). Unconfirmed: the empty "Portland Sea Dogs 2026" folder.
 
 ### My Work grid
