@@ -15,8 +15,8 @@ This is Brody Disick's photography portfolio and booking site. Read this whole f
 - **Make small, targeted changes.** He iterates one tweak at a time. Don't rewrite or restyle things he didn't ask about.
 - When a request is ambiguous (e.g. which "Work" text), change the most likely one and mention the other.
 - Give honest opinions when asked (e.g. pricing, design). Push back kindly if something will cause problems.
-- After changes, tell him briefly what changed. He deploys by committing + pushing (he uses GitHub Desktop; you can also commit/push for him if he asks).
-- **Every time you finish a change, end with a GitHub Desktop commit message** he can paste: a short **Summary** line (~50 characters) and a 1–2 sentence plain-English **Description**, each in its own code block.
+- After changes, tell him briefly what changed.
+- **Auto-deploy (he asked for this, standing permission):** every time you finish and test a change, commit it yourself with a short Summary line (~50 characters) and a 1–2 sentence plain-English Description, then `git push` to `main` so the site goes live. Don't wait for him to commit in GitHub Desktop. Tell him it's pushed and show the Summary/Description you used. Never commit temporary test files (e.g. a local `photos.json`). If a push fails, tell him and fall back to giving him the Summary/Description to paste into GitHub Desktop.
 - Test layout changes at desktop (~1300px) and phone (~390px) widths.
 
 ---
