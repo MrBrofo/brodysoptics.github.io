@@ -25,7 +25,7 @@ const ABOUT = {
   name: "Brody Disick",
   nameScript: "behind the optic.",    // written in handwriting under your name. "" hides it
   intro: "High school media creative. Whatever you've got, I'll shoot it, edit it, and make it hit.",
-  since: "2024",                   // "Shooting since ____". "" hides it
+  since: "In focus since 2024",     // small line under the intro. "" hides it
 
   // Big numbers. Only real ones! Leave this as [] to hide the whole row.
   stats: [
@@ -207,7 +207,7 @@ $("photo").src = A.photo;
 $("location").textContent = A.location;
 $("name").innerHTML = esc(A.name) + (A.nameScript ? `<span class="sig">${esc(A.nameScript)}</span>` : "");
 $("intro").textContent = A.intro;
-if (A.since) $("since").textContent = "Shooting since " + A.since; else $("since").remove();
+if (A.since) $("since").textContent = A.since; else $("since").remove();
 $("copy").textContent = "© " + new Date().getFullYear() + " " + A.name;
 
 /* build each section, skipping any that are empty */
