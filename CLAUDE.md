@@ -41,7 +41,7 @@ Everything Brody normally wants to change is in the `SITE` object at the top of 
 - `name`: `"Brody Disick"` (shown over the hero photo)
 - Hero text: `services` (small line above, "Video – Photo – Design", his preferred order, no dash in front), `headline` ("Keep the", big condensed, never wraps) + `headlineScript` ("moment.", in the signature handwriting font under it, on the left; he wanted a slogan that isn't sports-only and may still change it. "Moments worth keeping" was rejected because "WORTH" wrapped/poked out), `tagline` (sentence under it), `location` ("Based in the Bay Area"). Empty = hidden.
 - `delivery`: line under the price list ("Edited photos in 3–5 business days, sent through Google Drive.")
-- `deposit`: line under that ("A 50% non-refundable deposit locks in your date."). When set, the form's "Inquiry sent" message says he'll get back "with deposit details to lock in your date."
+- `deposit`: line under that (50% non-refundable deposit, rainout/cancel rule, "didn't play still counts" rule). When set, the form's "Inquiry sent" message says he'll get back "with deposit details to lock in your date."
 - `instagram`: `"brodysoptics"` (empty = hidden)
 - `githubUser`: `"MrBrofo"`, `githubRepo`: `"brodysoptics.github.io"`, `githubBranch`: `"main"`
 - `googleFormId` + `formEntries`: booking form wiring (see below)
@@ -194,7 +194,7 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
 
 ## Business notes (context, not code)
 
-- Deposit: **50% non-refundable** to lock in the date (his decision, on the site). Suggested but not decided: letting the deposit move to a new date if a game is canceled/rained out.
+- Deposit: **50% non-refundable** to lock in the date (his decision, on the site). If a game is rained out or canceled, the deposit moves to a new date. If the game happens but the athlete doesn't play, it still counts (he's there the whole game). All of this is in `SITE.deposit`.
 - Payments: suggested Venmo/Zelle, the rest before delivering the full gallery, delivery via Google Drive, tracking payments in the form's Google Sheet. Not on the site yet; he may ask to add a line like "A small deposit locks in your date. Venmo and Zelle accepted."
 
 ## Possible future requests
