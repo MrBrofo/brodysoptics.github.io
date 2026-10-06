@@ -16,6 +16,7 @@ This is Brody Disick's photography portfolio and booking site. Read this whole f
 - When a request is ambiguous (e.g. which "Work" text), change the most likely one and mention the other.
 - Give honest opinions when asked (e.g. pricing, design). Push back kindly if something will cause problems.
 - After changes, tell him briefly what changed. He deploys by committing + pushing (he uses GitHub Desktop; you can also commit/push for him if he asks).
+- **Every time you finish a change, end with a GitHub Desktop commit message** he can paste: a short **Summary** line (~50 characters) and a 1–2 sentence plain-English **Description**, each in its own code block.
 - Test layout changes at desktop (~1300px) and phone (~390px) widths.
 
 ---
