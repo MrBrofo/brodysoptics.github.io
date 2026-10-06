@@ -38,6 +38,7 @@ const SITE = {
   tagline: "Game days, portraits, events and graphics for athletes, teams and everyone in between.",  // "" hides it
   location: "Based in the Bay Area",                         // "" hides it
   delivery: "Edited photos in 3–5 business days, sent through Google Drive.",  // shown under the prices. "" hides it
+  deposit: "A 50% non-refundable deposit locks in your date.",               // shown under that. "" hides it
   instagram: "brodysoptics",        // e.g. "brodyshoots" (no @). Leave "" to hide.
   mouseField: true,         // the little slashes in the background that react to your mouse (computers only). false = off
 
@@ -306,6 +307,7 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
   .pick:hover .go,.pick:focus-visible .go{opacity:1;transform:none}
 }
 .delivery{margin:22px 0 0;color:var(--muted);font-size:1rem}
+.delivery + .delivery{margin-top:4px}
 .delivery[hidden]{display:none}
 /* the package box glows when it gets filled in from pricing */
 @keyframes glow{0%,60%{border-color:var(--accent);box-shadow:0 2px 0 0 var(--accent)}100%{border-color:var(--line);box-shadow:none}}
@@ -435,7 +437,7 @@ dialog[open]{animation:fade .3s ease}
 
   <section id="pricing"><div class="wrap split">
     <h2 class="rv">Pricing</h2>
-    <div><ul class="prices" id="prices"></ul><p class="delivery rv" id="delivery"></p></div>
+    <div><ul class="prices" id="prices"></ul><p class="delivery rv" id="delivery"></p><p class="delivery rv" id="deposit"></p></div>
   </div></section>
 
   <section id="book"><div class="wrap split">
@@ -492,6 +494,7 @@ $("heroKicker").textContent = SITE.services || ""; $("heroKicker").hidden = !SIT
 $("heroTag").textContent = SITE.tagline || ""; $("heroTag").hidden = !SITE.tagline;
 $("heroLoc").querySelector("span").textContent = SITE.location || ""; $("heroLoc").hidden = !SITE.location;
 $("delivery").textContent = SITE.delivery || ""; $("delivery").hidden = !SITE.delivery;
+$("deposit").textContent = SITE.deposit || ""; $("deposit").hidden = !SITE.deposit;
 $("copy").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
 document.title = SITE.brand.replace(/\.$/,"") + " | Photography";
 if (SITE.instagram){
@@ -854,7 +857,7 @@ async function send(){
   try{
     await fetch(FORM_URL + "/formResponse", {method:"POST", mode:"no-cors", body:fd});
     $("wizBar").style.width = "100%";
-    $("wizStep").innerHTML = `<div class="wiz-step"><p class="wiz-count">All done</p><h3 class="wiz-q">Inquiry sent.</h3><p class="wiz-done">Thanks${wiz.a.name ? ", " + esc(wiz.a.name.split(" ")[0]) : ""}! I'll get back to you soon.</p><button type="button" class="wiz-back" id="wizAgain">Send another</button></div>`;
+    $("wizStep").innerHTML = `<div class="wiz-step"><p class="wiz-count">All done</p><h3 class="wiz-q">Inquiry sent.</h3><p class="wiz-done">Thanks${wiz.a.name ? ", " + esc(wiz.a.name.split(" ")[0]) : ""}! I'll get back to you soon${SITE.deposit ? " with deposit details to lock in your date" : ""}.</p><button type="button" class="wiz-back" id="wizAgain">Send another</button></div>`;
     $("wizBack").style.visibility = "hidden"; $("wizNext").style.display = "none"; $("status").textContent = "";
     $("wizAgain").onclick = () => { wiz.a = {}; wiz.pick = null; wiz.i = 0; wiz.dir = 1; $("wizNext").style.display = ""; renderStep(true); };
   }catch(_){ $("status").innerHTML = `That didn't go through. <a href="${FORM_URL}/viewform" target="_blank">Use the form here instead.</a>`; }
