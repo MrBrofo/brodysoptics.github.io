@@ -252,6 +252,10 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 .album{display:flex;flex-direction:column;gap:var(--gap)}
 .jrow{display:flex;gap:var(--gap)}
 .album button{all:unset;box-sizing:border-box;display:block;cursor:zoom-in;background:var(--frame);min-width:0;height:100%;overflow:hidden}
+/* skeleton loaders: a soft shimmer on the empty frames until their photo/video has loaded */
+@keyframes shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
+.skel,.hero:not(.empty):not(:has(> img)),.tile:has(> img:not(.loaded)),.tile:has(> video:not(.loaded)),.album button:has(> img:not(.loaded)),.album button:has(> video:not(.loaded)){background:linear-gradient(100deg,var(--frame) 40%,#2A2622 50%,var(--frame) 60%) var(--frame);background-size:200% 100%;animation:shimmer 1.3s linear infinite}
+.skel{cursor:default}
 .album button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .more{margin-top:clamp(64px,8vw,104px)}
 .tiles.small .cap{padding:28px 12px 10px}
@@ -435,7 +439,7 @@ dialog[open]{animation:fade .3s ease}
       <button class="back" id="back" hidden>‹ All work</button>
       <span class="count" id="count"></span>
     </div>
-    <div id="gallery" aria-live="polite"></div>
+    <div id="gallery" aria-live="polite"><div class="tiles" aria-hidden="true"><span class="tile skel"></span><span class="tile skel"></span><span class="tile skel"></span></div></div>
   </div></section>
 
   <section id="pricing"><div class="wrap split">
@@ -633,8 +637,8 @@ function hv(el, on){ const v = el.querySelector("video"); if (!v) return; if (on
 function tileHTML(t, i){
   const n = `<span class="no">${String(i+1).padStart(2,"0")}</span>`;
   const img = src => isVid(src)
-    ? `<video src="${src}#t=0.1" muted loop playsinline preload="metadata" onloadeddata="this.classList.add('loaded')"></video><span class="play" aria-hidden="true"></span>`
-    : `<img src="${src}" alt="" loading="${i<8?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')">`;
+    ? `<video src="${src}#t=0.1" muted loop playsinline preload="metadata" onloadeddata="this.classList.add('loaded')" onerror="this.classList.add('loaded')"></video><span class="play" aria-hidden="true"></span>`
+    : `<img src="${src}" alt="" loading="${i<8?"eager":"lazy"}" decoding="async" onload="this.classList.add('loaded')" onerror="this.classList.add('loaded')">`;
   return t.type==="album"
     ? `<button class="tile rv" style="--d:${(i%4)*.07}s" data-album="${esc(slug(t.title))}" aria-label="Open album ${esc(t.title)}" onmouseenter="hv(this,1)" onmouseleave="hv(this,0)">${n}${img(t.cover)}<span class="cap"><strong>${esc(t.title)}</strong><span>${countLabel(t.photos, t.graphic)}</span></span></button>`
     : `<button class="tile rv" style="--d:${(i%4)*.07}s" data-single="${esc(t.src)}" aria-label="View ${isVid(t.src)?"video":"photo"}" onmouseenter="hv(this,1)" onmouseleave="hv(this,0)">${n}${img(t.src)}</button>`;
@@ -734,7 +738,7 @@ function showAlbum(a){
     if (isVid(src)){
       b.innerHTML = `<video src="${src}#t=0.1" muted loop playsinline preload="metadata" onloadedmetadata="sized(this)"></video><span class="play" aria-hidden="true"></span>`;
       b.onmouseenter = () => hv(b,1); b.onmouseleave = () => hv(b,0);
-    } else b.innerHTML = `<img src="${src}" alt="${esc(a.title)} photo ${i+1}" decoding="async" fetchpriority="${i<8?"high":"low"}" onload="sized(this)">`;
+    } else b.innerHTML = `<img src="${src}" alt="${esc(a.title)} photo ${i+1}" decoding="async" fetchpriority="${i<8?"high":"low"}" onload="sized(this)" onerror="this.classList.add('loaded')">`;
     return b;
   });
   layoutAlbum();

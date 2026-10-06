@@ -181,6 +181,7 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
   - **Newsreader** serif for body text
   - **Herr Von Muellerhoff** for the signature logo (write-on clip-path animation)
 - Subtle film-grain overlay over the page (`body::after`).
+- **Skeleton loaders** (he asked for them): empty frames shimmer (`@keyframes shimmer`) until their media loads: the hero before its photo is added, album tiles and album photos until `.loaded`, plus 3 `.skel` placeholder tiles in `#gallery` before the photo list arrives. Images get `.loaded` on error too so the shimmer never runs forever. The About page's top photo does the same.
 - Mouse field (`#field` canvas, `SITE.mouseField`): faint grid of "/" slashes behind the content; near the cursor they turn away, push out and glow **white** (he asked for white, not the accent). Computers only, off for reduced motion. The slashes scroll with the page (grid is in page coordinates, state kept per row/column). Layering is explained under Hero (it sits between the page background and the content). Stays calm over the hero, album photos, price list and form.
 - Animations: scroll reveal (`.rv` → `.in` via IntersectionObserver), hero zoom + word rise, parallax, frosted sticky nav, lightbox fades. All disabled under `prefers-reduced-motion`.
 - Rejected directions: the original gray/blue "corporate" palette felt boring/corporate. He wants it to feel personal, not like a company site.
