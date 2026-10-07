@@ -28,13 +28,10 @@ const ABOUT = {
   since: "Capturing since 2024",     // small line under the intro. "" hides it
 
   // Big numbers. Only real ones! Leave this as [] to hide the whole row.
-  stats: [
-    { number: "[00]", label: "[What the number is]", source: "[Where it's from]" },
-    { number: "[00]", label: "[What the number is]", source: "[Where it's from]" },
-    { number: "[00]", label: "[What the number is]", source: "[Where it's from]" }
-  ],
+  // e.g. { number: "50+", label: "Games shot", source: "Las Lomas" }
+  stats: [],
 
-  // Places you've shot or worked for. "stat" is optional.
+  // Places you've shot or worked for (the "Where I've shot." section). "stat" is optional.
   experience: [
     { name: "Brodysoptics", role: "Founder", about: "My personal photo and video brand, shooting media across the Bay Area." },
     { name: "Camp Micah", role: "Communications & Media Intern", about: "Photo and video for social media and for families, plus weekly recap videos." }
@@ -116,6 +113,8 @@ a{color:inherit}
 section{padding:clamp(64px,9vw,120px) 0 0}
 h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2.4rem,4.4vw,3.4rem);line-height:.95;margin:0 0 clamp(24px,3vw,40px);text-transform:uppercase}
 h3{font-family:var(--display);font-stretch:70%;font-weight:800;text-transform:uppercase;margin:0}
+/* headings end with a word in your handwriting, like "WHERE I'VE shot." */
+h2 .sig{display:inline-block;font-family:var(--sig);font-weight:400;font-stretch:normal;text-transform:none;font-size:1.25em;line-height:.6;margin-left:.12em;transform:rotate(-4deg)}
 
 /* stats row */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px clamp(20px,3vw,40px)}
@@ -135,7 +134,9 @@ h3{font-family:var(--display);font-stretch:70%;font-weight:800;text-transform:up
 .card .big div{border-top:1px solid var(--line);padding-top:16px;font-family:var(--display);font-stretch:70%;font-weight:800;font-size:1.3rem;text-transform:uppercase}
 
 /* who & what */
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px clamp(24px,4vw,56px)}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:700px){ .cols{grid-template-columns:1fr} }
+.cols > div{border:1px solid var(--line);border-radius:14px;background:var(--frame);padding:clamp(22px,3vw,30px)}
 .cols h3{font-size:1.4rem;padding-bottom:14px;border-bottom:1px solid var(--line)}
 .cols ul{list-style:none;margin:0;padding:0}
 .cols li{padding:12px 0;font-family:var(--display);font-size:1.05rem}
@@ -216,10 +217,10 @@ $("copy").textContent = "© " + new Date().getFullYear() + " " + A.name;
 /* build each section, skipping any that are empty */
 let html = "";
 if (A.stats.length) html += `<section><div class="wrap stats">${A.stats.map((s,i) => `<div class="stat rv" style="--d:${i*.08}s"><b>${esc(s.number)}</b><span>${esc(s.label)}</span>${s.source ? `<small>${esc(s.source)}</small>` : ""}</div>`).join("")}</div></section>`;
-if (A.experience.length) html += `<section><div class="wrap"><h2 class="rv">Experience</h2><div class="cards">${A.experience.map((e,i) =>
+if (A.experience.length) html += `<section><div class="wrap"><h2 class="rv">Where I've<span class="sig">shot.</span></h2><div class="cards">${A.experience.map((e,i) =>
   `<div class="card rv" style="--d:${(i%3)*.08}s"><span class="no">${String(i+1).padStart(2,"0")}</span><h3>${esc(e.name)}</h3><p class="role">${esc(e.role)}</p><p>${esc(e.about)}</p>${e.stat ? `<div class="big"><div>${esc(e.stat)}</div></div>` : ""}</div>`).join("")}</div></div></section>`;
 const lists = [["Hired by", A.hiredBy], ["Worked with", A.workedWith], ["Covered", A.covered]].filter(([,l]) => l && l.length);
-if (lists.length) html += `<section><div class="wrap"><h2 class="rv">Who &amp; what</h2><div class="cols">${lists.map(([t,l]) => `<div class="rv"><h3>${t}</h3><ul>${l.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div></div></section>`;
+if (lists.length) html += `<section><div class="wrap"><h2 class="rv">Who &amp;<span class="sig">what.</span></h2><div class="cols">${lists.map(([t,l]) => `<div class="rv"><h3>${t}</h3><ul>${l.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div></div></section>`;
 html += `<section class="end"><div class="wrap"><h2 class="rv">Let's keep<span class="sig">the moment.</span></h2>`
   + (A.skills.length ? `<ul class="chips rv">${A.skills.map(s => `<li>${esc(s)}</li>`).join("")}</ul>` : "")
   + `<div class="btns rv"><a class="main" href="index.html#book">Book a shoot <span aria-hidden="true">→</span></a><a class="line" href="index.html#photos">See my work</a></div></div></section>`;
