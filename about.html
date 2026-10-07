@@ -222,7 +222,7 @@ const lists = [["Hired by", A.hiredBy], ["Worked with", A.workedWith], ["Covered
 if (lists.length) html += `<section><div class="wrap"><h2 class="rv">Who &amp; what</h2><div class="cols">${lists.map(([t,l]) => `<div class="rv"><h3>${t}</h3><ul>${l.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div></div></section>`;
 html += `<section class="end"><div class="wrap"><h2 class="rv">Let's keep<span class="sig">the moment.</span></h2>`
   + (A.skills.length ? `<ul class="chips rv">${A.skills.map(s => `<li>${esc(s)}</li>`).join("")}</ul>` : "")
-  + `<div class="btns rv"><a class="main" href="index.html#book">Book a shoot <span aria-hidden="true">→</span></a><a class="line" href="index.html#photos">See the work</a></div></div></section>`;
+  + `<div class="btns rv"><a class="main" href="index.html#book">Book a shoot <span aria-hidden="true">→</span></a><a class="line" href="index.html#photos">See my work</a></div></div></section>`;
 $("main").innerHTML = html;
 
 /* scroll reveal */
