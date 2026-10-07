@@ -174,16 +174,16 @@ footer .logo{font-size:2.2rem;color:var(--ink)}
 <div class="draft" id="draft">DRAFT: placeholder info, real details coming soon</div>
 
 <nav class="nav" id="nav"><div class="wrap">
-  <a class="logo" href="index.html">Brodysoptics.</a>
-  <a href="index.html#book" class="book book-m">Book me</a>
+  <a class="logo" href="./">Brodysoptics.</a>
+  <a href="./#book" class="book book-m">Book me</a>
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu"><span></span><span></span><span></span></button>
   <ul id="navMenu">
-    <li><a href="index.html#book" class="book">Book me</a></li>
-    <li><a href="index.html#photos">Photo</a></li>
-    <li><a href="index.html#videos">Video</a></li>
-    <li><a href="index.html#graphics">Graphics</a></li>
-    <li><a href="index.html#pricing">Pricing</a></li>
-    <li><a href="about.html" aria-current="page">About</a></li>
+    <li><a href="./#book" class="book">Book me</a></li>
+    <li><a href="./#photos">Photo</a></li>
+    <li><a href="./#videos">Video</a></li>
+    <li><a href="./#graphics">Graphics</a></li>
+    <li><a href="./#pricing">Pricing</a></li>
+    <li><a href="about" aria-current="page">About</a></li>
     <li><a class="ig" href="https://instagram.com/brodysoptics" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg><span class="ig-label">Instagram</span></a></li>
   </ul>
 </div></nav>
@@ -201,7 +201,7 @@ footer .logo{font-size:2.2rem;color:var(--ink)}
 <main id="main"></main>
 
 <footer><div class="wrap">
-  <a class="logo" href="index.html">Brodysoptics.</a>
+  <a class="logo" href="./">Brodysoptics.</a>
   <span id="copy"></span>
 </div></footer>
 
@@ -228,7 +228,7 @@ const lists = [["Hired by", A.hiredBy], ["Worked with", A.workedWith], ["Covered
 if (lists.length) html += `<section><div class="wrap"><h2 class="rv">Who &amp;<span class="sig">what.</span></h2><div class="cols">${lists.map(([t,l]) => `<div class="rv"><h3>${t}</h3><ul>${l.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div></div></section>`;
 html += `<section class="end"><div class="wrap"><h2 class="rv">Let's keep<span class="sig">the moment.</span></h2>`
   + (A.skills.length ? `<ul class="chips rv">${A.skills.map(s => `<li>${esc(s)}</li>`).join("")}</ul>` : "")
-  + `<div class="btns rv"><a class="main" href="index.html#book">Book now <span aria-hidden="true">→</span></a><a class="line" href="index.html#photos">See my work</a></div></div></section>`;
+  + `<div class="btns rv"><a class="main" href="./#book">Book now <span aria-hidden="true">→</span></a><a class="line" href="./#photos">See my work</a></div></div></section>`;
 $("main").innerHTML = html;
 
 /* scroll reveal */

@@ -25,7 +25,7 @@ This is Brody Disick's photography portfolio and booking site. Read this whole f
 
 ```
 index.html     ← the whole main site (HTML + CSS + JS, no build step, no frameworks)
-about.html     ← About page (template for now, see "About page")
+about.html     ← About page, served at brodysoptics.com/about (GitHub Pages drops the .html). Link to it as href="about", never "about.html". Its links home use "./#section".
 CNAME          ← keeps brodysoptics.com connected. NEVER delete or edit.
 CLAUDE.md      ← this file
 .github/workflows/deploy.yml ← builds photos.json + publishes the site on every push (only works once Pages source = GitHub Actions)
