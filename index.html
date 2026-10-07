@@ -276,7 +276,7 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
   .tiles .tile::after{inset:10px}
 }
 .in-album #pricing,.in-album #book,.in-album .main-only{display:none}
-.home-btn{display:inline-block;margin-top:32px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;background:var(--sunset,var(--accent));color:var(--on-accent);padding:14px 28px;transition:background-color .25s ease,color .25s ease,transform .25s ease}
+.home-btn{display:inline-block;margin-top:32px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;background:var(--sunset,var(--accent));color:var(--on-accent);padding:14px 28px;border-radius:999px;transition:background-color .25s ease,color .25s ease,transform .25s ease}
 .home-btn:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
 .work-group + .work-group{margin-top:clamp(48px,6vw,80px)}
 .work-sub{display:flex;align-items:center;gap:16px;margin:0 0 18px;font-family:var(--display);font-stretch:70%;font-size:clamp(1.3rem,2vw,1.6rem);font-weight:800;letter-spacing:.04em;text-transform:uppercase}
@@ -331,28 +331,13 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 .more-link{display:inline-flex;align-items:center;gap:12px;margin-top:22px;padding-bottom:8px;border-bottom:2px solid var(--ink);font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
 .more-link span{transition:transform .2s ease}
 .more-link:hover span{transform:translateX(5px)}
-/* the package box glows when it gets filled in from pricing */
-@keyframes glow{0%,60%{border-color:var(--accent);box-shadow:0 2px 0 0 var(--accent)}100%{border-color:var(--line);box-shadow:none}}
-select.flash{animation:glow 1.6s ease}
 
 /* form */
-form{display:grid;grid-template-columns:1fr 1fr;gap:22px 24px}
-.field{display:flex;flex-direction:column;gap:4px}
-.field.full{grid-column:1/-1}
-label{font-family:var(--display);font-size:.95rem;font-weight:500}
-input,select,textarea{font:inherit;font-size:1rem;color:var(--ink);background:transparent;border:0;border-bottom:1.5px solid var(--line);padding:8px 0;border-radius:0;width:100%}
+input,textarea{font:inherit;font-size:1rem;color:var(--ink);background:transparent;border:0;border-bottom:1.5px solid var(--line);padding:8px 0;border-radius:0;width:100%}
 input::placeholder,textarea::placeholder{color:var(--muted);opacity:.8}
-select{appearance:none;cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 12px) 55%,calc(100% - 7px) 55%;background-size:5px 5px;background-repeat:no-repeat}
-select option{background:var(--paper);color:var(--ink)}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+input:focus,textarea:focus{outline:none;border-color:var(--accent)}
 textarea{resize:vertical;min-height:96px}
-.send{grid-column:1/-1;display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:6px}
-.send button{font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;background:var(--sunset,var(--accent));color:var(--on-accent);border:0;padding:14px 28px;cursor:pointer}
-.send button{transition:background-color .25s ease,transform .25s ease}
-.send button:hover{background:var(--ink);color:var(--paper);transform:translateY(-2px)}
-.send button:disabled{opacity:.5;cursor:wait;transform:none}
 #status{color:var(--muted);font-size:1rem}
-@media (max-width:600px){ form{grid-template-columns:1fr} }
 
 /* booking form: one question at a time */
 form.wiz{display:block;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--frame) 80%,transparent);padding:clamp(22px,4vw,40px);overflow:hidden}
@@ -429,8 +414,8 @@ dialog[open]{animation:fade .3s ease}
   <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu"><span></span><span></span><span></span></button>
   <ul id="navMenu">
     <li class="main-only"><a href="#book" class="nav-book">Book me</a></li>
-    <li><a href="#photos">Photo</a></li>
-    <li><a href="#videos">Video</a></li>
+    <li><a href="#photos">Photos</a></li>
+    <li><a href="#videos">Videos</a></li>
     <li><a href="#graphics">Graphics</a></li>
     <li class="main-only"><a href="#pricing">Pricing</a></li>
     <li><a href="about">About</a></li>
@@ -476,7 +461,7 @@ dialog[open]{animation:fade .3s ease}
   </div></div></section>
 
   <section id="book"><div class="wrap split">
-    <h2 class="rv">Book Me!</h2>
+    <h2 class="rv">Book Me</h2>
     <div>
       <p class="lede rv">Answer a few quick questions and I'll get back to you as soon as I can!</p>
       <!-- one-question-at-a-time booking form, built by the script below -->
@@ -860,11 +845,11 @@ function renderStep(focus){
   const list = steps(), s = list[wiz.i], n = list.length, title = typeof s.q === "function" ? s.q(wiz.a) : s.q;
   $("wizBar").style.width = (wiz.i / n * 100) + "%";
   let body;
-  if (s.opts) body = `<div class="chips">${s.opts.map(([v,label]) => `<button type="button" class="chip" data-v="${esc(v)}" aria-pressed="${wiz.a[s.k]===v}">${esc(label)}</button>`).join("")}</div>`;
-  else if (s.pair) body = s.pair.map(([k,ph]) => `<input class="wiz-in" data-k="${k}" placeholder="${esc(ph)}" value="${esc(wiz.a[k]||"")}">`).join("");
-  else if (s.long) body = `<textarea class="wiz-in" data-k="${s.k}" placeholder="${esc(s.ph||"")}">${esc(wiz.a[s.k]||"")}</textarea>`;
-  else body = `<input class="wiz-in" data-k="${s.k}" placeholder="${esc(s.ph||"")}" ${s.ac ? `autocomplete="${s.ac}"` : ""} value="${esc(wiz.a[s.k]||"")}">`;
-  $("wizStep").innerHTML = `<div class="wiz-step ${wiz.dir < 0 ? "back" : ""}">${wiz.pick ? `<p class="wiz-pick">You picked <strong>${esc(wiz.pick.name)} · ${esc(wiz.pick.price)}</strong></p>` : ""}<p class="wiz-count">Question ${wiz.i+1} of ${n}</p><h3 class="wiz-q" id="wizQ">${esc(title)}</h3>${body}</div>`;
+  if (s.opts) body = `<div class="chips" role="group" aria-labelledby="wizQ">${s.opts.map(([v,label]) => `<button type="button" class="chip" data-v="${esc(v)}" aria-pressed="${wiz.a[s.k]===v}">${esc(label)}</button>`).join("")}</div>`;
+  else if (s.pair) body = s.pair.map(([k,ph]) => `<input class="wiz-in" aria-labelledby="wizQ" data-k="${k}" placeholder="${esc(ph)}" value="${esc(wiz.a[k]||"")}">`).join("");
+  else if (s.long) body = `<textarea class="wiz-in" aria-labelledby="wizQ" data-k="${s.k}" placeholder="${esc(s.ph||"")}">${esc(wiz.a[s.k]||"")}</textarea>`;
+  else body = `<input class="wiz-in" aria-labelledby="wizQ" data-k="${s.k}" placeholder="${esc(s.ph||"")}" ${s.ac ? `autocomplete="${s.ac}"` : ""} value="${esc(wiz.a[s.k]||"")}">`;
+  $("wizStep").innerHTML = `<div class="wiz-step ${wiz.dir < 0 ? "back" : ""}">${wiz.pick ? `<p class="wiz-pick">You picked <strong>${esc(wiz.pick.name)} · ${esc(wiz.pick.price)}</strong></p>` : ""}<p class="wiz-count">Question ${wiz.i+1}</p><h3 class="wiz-q" id="wizQ">${esc(title)}</h3>${body}</div>`;
   $("wizBack").style.visibility = wiz.i ? "visible" : "hidden";
   $("wizNext").textContent = wiz.i === n-1 ? "Send inquiry" : "Next";
   $("status").textContent = "";
