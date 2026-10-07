@@ -1,0 +1,18 @@
+{
+  "extraKnownMarketplaces": {
+    "taste-skill": { "source": { "source": "github", "repo": "Leonxlnx/taste-skill" } },
+    "addy-agent-skills": { "source": { "source": "github", "repo": "addyosmani/agent-skills" } },
+    "ponytail": { "source": { "source": "github", "repo": "DietrichGebert/ponytail" } },
+    "superpowers-marketplace": { "source": { "source": "github", "repo": "obra/superpowers-marketplace" } },
+    "humanizer": { "source": { "source": "github", "repo": "blader/humanizer" } },
+    "obsidian-skills": { "source": { "source": "github", "repo": "kepano/obsidian-skills" } }
+  },
+  "enabledPlugins": {
+    "taste-skill@taste-skill": true,
+    "agent-skills@addy-agent-skills": true,
+    "ponytail@ponytail": true,
+    "superpowers@superpowers-marketplace": true,
+    "humanizer@humanizer": true,
+    "obsidian@obsidian-skills": true
+  }
+}

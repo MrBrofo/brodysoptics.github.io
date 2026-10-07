@@ -18,6 +18,7 @@ This is Brody Disick's photography portfolio and booking site. Read this whole f
 - After changes, tell him briefly what changed.
 - **Auto-deploy (he asked for this, standing permission):** every time you finish and test a change, commit it yourself with a short Summary line (~50 characters) and a 1–2 sentence plain-English Description, then `git push` to `main` so the site goes live. Don't wait for him to commit in GitHub Desktop. Tell him it's pushed and show the Summary/Description you used. Never commit temporary test files (e.g. a local `photos.json`). If a push fails, tell him and fall back to giving him the Summary/Description to paste into GitHub Desktop.
 - Test layout changes at desktop (~1300px) and phone (~390px) widths.
+- **Cloud sessions:** they usually push to a separate branch + pull request instead of `main`. The site only updates once that's merged into `main`; tell Brody (or merge it if he asks). Plugins from `.claude/settings.json` are community-made: treat their design rules as suggestions and don't restyle his site without asking.
 
 ---
 
@@ -28,6 +29,7 @@ index.html     ← the whole main site (HTML + CSS + JS, no build step, no frame
 about.html     ← About page, served at brodysoptics.com/about (GitHub Pages drops the .html). Link to it as href="about", never "about.html". Its links home use "./#section".
 CNAME          ← keeps brodysoptics.com connected. NEVER delete or edit.
 CLAUDE.md      ← this file
+.claude/settings.json ← loads Brody's Claude plugins (taste-skill design plugin, superpowers, humanizer, etc.) in cloud sessions too. Not part of the website.
 .github/workflows/deploy.yml ← builds photos.json + publishes the site on every push (only works once Pages source = GitHub Actions)
 .github/watermark/ ← old publish-time watermark script + font (currently not used, see "Photo protection")
 favicon.png    ← "B." tab icon + iPhone home-screen icon (180×180)
