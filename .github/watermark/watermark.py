@@ -1,4 +1,4 @@
-"""Stamps the cursive "Brodysoptics." watermark on the bottom of every photo.
+"""Stamps the cursive "Brodysoptics." watermark in the lower right corner of every photo.
 
 Runs on GitHub while the site is being published (see .github/workflows/deploy.yml),
 so only the copies on the website get the watermark. The photos in the repo stay clean.
@@ -15,9 +15,9 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 TEXT = "Brodysoptics."
 FONT = os.path.join(os.path.dirname(__file__), "HerrVonMuellerhoff-Regular.ttf")
 PHOTO = (".jpg", ".jpeg", ".png", ".webp")
-WIDTH = 0.30    # watermark width, as a share of the photo's shorter side
+WIDTH = 0.26    # watermark width, as a share of the photo's shorter side
 OPACITY = 175   # 0-255. White text, a little see-through
-MARGIN = 0.035  # gap from the bottom edge, as a share of the photo's height
+MARGIN = 0.03   # gap from the bottom and right edges, as a share of the photo's shorter side
 
 
 def stamp(path):
@@ -32,8 +32,9 @@ def stamp(path):
     size = max(12, int(size * WIDTH * min(w, h) / tw))
     font = ImageFont.truetype(FONT, size)
     left, top, right, bottom = font.getbbox(TEXT)
-    x = (w - (right - left)) / 2 - left
-    y = h - MARGIN * h - bottom
+    gap = MARGIN * min(w, h)
+    x = w - gap - right    # lower right corner
+    y = h - gap - bottom
 
     # soft dark shadow underneath so it still shows up on bright photos
     shadow = Image.new("RGBA", img.size, (0, 0, 0, 0))

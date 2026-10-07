@@ -175,7 +175,7 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
 
 ## Photo protection
 
-- **Watermark:** on every publish, `.github/watermark/watermark.py` stamps the cursive "Brodysoptics." (Herr Von Muellerhoff, white ~70% with a soft shadow, centered at the bottom, about 30% of the photo's shorter side wide) on every photo in `photos/` **in the published copy only**. The repo's photos stay clean, so Brody can still send clean files to clients. Skips `photos/hero*` (the banner) and videos. Tweak `WIDTH` / `OPACITY` / `MARGIN` at the top of the script. Preview locally: `python .github/watermark/watermark.py <copy-of-a-folder>` (it overwrites files, so only run it on copies).
+- **Watermark:** on every publish, `.github/watermark/watermark.py` stamps the cursive "Brodysoptics." (Herr Von Muellerhoff, white ~70% with a soft shadow, in the **lower right corner** (he asked for that, not centered), about 26% of the photo's shorter side wide) on every photo in `photos/` **in the published copy only**. The repo's photos stay clean, so Brody can still send clean files to clients. Skips `photos/hero*` (the banner) and videos. Tweak `WIDTH` / `OPACITY` / `MARGIN` at the top of the script. Preview locally: `python .github/watermark/watermark.py <copy-of-a-folder>` (it overwrites files, so only run it on copies).
 - **No right-click / saving:** `contextmenu` and `dragstart` are blocked on photos, videos, tiles, albums, the viewer and the hero (text stays right-clickable); CSS stops dragging and the iPhone long-press "Save image"; the viewer video has `controlslist="nodownload"`. Same on about.html. This only stops casual saving: screenshots still work, which is why the watermark matters.
 
 ## Design system
