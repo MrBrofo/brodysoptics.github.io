@@ -148,7 +148,7 @@ a{color:inherit}
 .nav a:hover{text-decoration:underline;text-underline-offset:4px}
 .burger,.ig-label,.nav a.nav-book-m{display:none}
 /* phones and small tablets: the links go into a three-line "burger" menu that drops down */
-@media (max-width:720px){
+@media (max-width:800px){
   #navName{font-size:2.3rem}
   /* "Book me" stays out on the bar next to the burger; everything else goes inside */
   .nav a.nav-book-m{display:inline-block;margin:0 6px 0 auto;padding:9px 18px;font-size:.95rem}
@@ -423,6 +423,7 @@ dialog[open]{animation:fade .3s ease}
     <li><a href="about">About</a></li>
     <li><a id="navIg" class="nav-ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg><span class="ig-label">Instagram</span></a></li>
     <li><a id="navTt" class="nav-ig" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg><span class="ig-label">TikTok</span></a></li>
+    <li><a id="navMail" class="nav-ig" aria-label="Email"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg><span class="ig-label">Email</span></a></li>
   </ul>
 </div></nav>
 
@@ -526,7 +527,8 @@ $("deposit").textContent = SITE.deposit || ""; $("deposit").hidden = !SITE.depos
 $("fine").textContent = SITE.depositNote || ""; $("fine").hidden = !SITE.depositNote;
 $("copy").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
 document.title = SITE.brand.replace(/\.$/,"") + " | Photography";
-if (SITE.email) $("mail").innerHTML = `Email <a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>`; else $("mail").remove();
+if (SITE.email){ $("mail").innerHTML = `Email <a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>`; $("navMail").href = "mailto:" + SITE.email; }
+else { $("mail").remove(); $("navMail").parentElement.remove(); }
 if (SITE.instagram){
   const igUrl = `https://instagram.com/${encodeURIComponent(SITE.instagram)}`;
   $("social").innerHTML = `Instagram <a href="${igUrl}" target="_blank" rel="noopener">@${esc(SITE.instagram)}</a>`;
@@ -940,7 +942,7 @@ $("burger").onclick = () => menu(!$("nav").classList.contains("open"));
 $("navMenu").addEventListener("click", e => { if (e.target.closest("a")) menu(false); });
 document.addEventListener("click", e => { if (!e.target.closest("#nav")) menu(false); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") menu(false); });
-addEventListener("resize", () => { if (innerWidth > 720) menu(false); });
+addEventListener("resize", () => { if (innerWidth > 800) menu(false); });
 navState(); heroFade();
 
 /* click a package -> starts the booking form on the right path (package already picked) and jumps down there */
