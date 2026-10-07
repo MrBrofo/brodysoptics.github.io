@@ -40,6 +40,7 @@ const SITE = {
   delivery: "Edited photos in 3–5 business days, sent through Google Drive.",  // shown under the prices. "" hides it
   deposit: "A 50% non-refundable deposit* locks in your date.",
   depositNote: "*Rained out or canceled? Your deposit moves to a new date. If the game happens but you don't play, it still counts as your shoot.",  // small print at the bottom of the page               // shown under that. "" hides it
+  email: "brody@brodysoptics.com",   // shown in the footer. "" hides it
   instagram: "brodysoptics",        // e.g. "brodyshoots" (no @). Leave "" to hide.
   mouseField: true,         // the little slashes in the background that react to your mouse (computers only). false = off
 
@@ -216,8 +217,8 @@ section{padding-top:clamp(64px,9vw,120px)}
 .split > div{max-width:760px}
 h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2.4rem,4.4vw,3.4rem);line-height:.95;margin:0;letter-spacing:.005em;text-transform:uppercase}
 .lede{color:var(--muted);margin:0 0 28px}
-#social a{color:var(--accent-text,var(--accent));text-decoration:none}
-#social a:hover{text-decoration:underline;text-underline-offset:3px}
+#social a,#mail a{color:var(--accent-text,var(--accent));text-decoration:none}
+#social a:hover,#mail a:hover{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:760px){ .split{grid-template-columns:1fr} }
 
 /* work grid: albums and single photos as even tiles */
@@ -481,6 +482,7 @@ dialog[open]{animation:fade .3s ease}
 <footer><div class="wrap"><p class="wordmark rv" id="wordmark" aria-hidden="true"></p></div><div class="wrap">
   <span class="fine main-only" id="fine"></span>
   <span id="copy"></span>
+  <span id="mail"></span>
   <span id="social"></span>
 </div></footer>
 
@@ -521,6 +523,7 @@ $("deposit").textContent = SITE.deposit || ""; $("deposit").hidden = !SITE.depos
 $("fine").textContent = SITE.depositNote || ""; $("fine").hidden = !SITE.depositNote;
 $("copy").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
 document.title = SITE.brand.replace(/\.$/,"") + " | Photography";
+if (SITE.email) $("mail").innerHTML = `Email <a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>`; else $("mail").remove();
 if (SITE.instagram){
   const igUrl = `https://instagram.com/${encodeURIComponent(SITE.instagram)}`;
   $("social").innerHTML = `Instagram <a href="${igUrl}" target="_blank" rel="noopener">@${esc(SITE.instagram)}</a>`;

@@ -46,6 +46,7 @@ Everything Brody normally wants to change is in the `SITE` object at the top of 
 - Hero text: `services` (small line above, "Video – Photo – Edit – Design", his preferred order because it rolls off the tongue, no dash in front), `headline` ("Keep the", big condensed, never wraps) + `headlineScript` ("moment.", in the signature handwriting font under it, on the left; he wanted a slogan that isn't sports-only and may still change it. "Moments worth keeping" was rejected because "WORTH" wrapped/poked out), `tagline` (sentence under it), `location` ("Based in the Bay Area"). Empty = hidden.
 - `delivery`: line under the price list ("Edited photos in 3–5 business days, sent through Google Drive.")
 - `deposit`: line under that ("A 50% non-refundable deposit* locks in your date."). `depositNote`: the * small print, shown at the very bottom of the page above the © line (`#fine`, hidden in albums): rainout/cancel moves the deposit, "didn't play still counts". He wanted the details as a footnote, not in the pricing line.. When set, the form's "Inquiry sent" message says he'll get back "with deposit details to lock in your date."
+- `email`: `"brody@brodysoptics.com"`, shown in the footer above the Instagram line as a mailto link (empty = hidden). It's a Cloudflare Email Routing address that forwards to his Gmail (receive only; replies still come from Gmail).
 - `instagram`: `"brodysoptics"` (empty = hidden)
 - `githubUser`: `"MrBrofo"`, `githubRepo`: `"brodysoptics.github.io"`, `githubBranch`: `"main"`
 - `googleFormId` + `formEntries`: booking form wiring (see below)
@@ -206,7 +207,7 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
 - Domain registered/DNS on **Cloudflare**. Records (all **DNS only / grey cloud**, TTL Auto; proxy must stay off or GitHub HTTPS breaks):
   - A `@` → 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153
   - CNAME `www` → `mrbrofo.github.io`
-- Cloudflare warns about no email/MX/SPF. Suggested fix: Cloudflare Email Routing (e.g. hello@brodysoptics.com → his Gmail). Not confirmed as done.
+- Cloudflare warns about no email/MX/SPF. Fixed Oct 6, 2026: Cloudflare Email Routing sends brody@brodysoptics.com → his Gmail.
 
 ## Deploying
 
