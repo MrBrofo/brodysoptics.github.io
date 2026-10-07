@@ -218,6 +218,11 @@ section{padding-top:clamp(64px,9vw,120px)}
 .split > div{max-width:760px}
 h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2.4rem,4.4vw,3.4rem);line-height:.95;margin:0;letter-spacing:.005em;text-transform:uppercase}
 .lede{color:var(--muted);margin:0 0 28px}
+/* email, Instagram and TikTok on one line, separated by dots (wraps neatly on small phones) */
+.contact{display:flex;flex-wrap:wrap;justify-content:center;max-width:100%}
+.contact > span{white-space:nowrap}
+.contact > span + span::before{content:"·";margin:0 .6em;color:var(--muted)}
+@media (max-width:560px){ .contact{flex-direction:column;align-items:center} .contact > span + span::before{content:none} }
 #social a,#mail a,#tiktok a{color:var(--accent-text,var(--accent));text-decoration:none}
 #social a:hover,#mail a:hover,#tiktok a:hover{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:760px){ .split{grid-template-columns:1fr} }
@@ -485,9 +490,7 @@ dialog[open]{animation:fade .3s ease}
 <footer><div class="wrap"><p class="wordmark rv" id="wordmark" aria-hidden="true"></p></div><div class="wrap">
   <span class="fine main-only" id="fine"></span>
   <span id="copy"></span>
-  <span id="mail"></span>
-  <span id="social"></span>
-  <span id="tiktok"></span>
+  <span class="contact"><span id="mail"></span><span id="social"></span><span id="tiktok"></span></span>
 </div></footer>
 
 <dialog id="lightbox" aria-label="Photo viewer">
