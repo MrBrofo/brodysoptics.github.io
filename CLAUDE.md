@@ -28,7 +28,8 @@ index.html     ← the whole main site (HTML + CSS + JS, no build step, no frame
 about.html     ← About page (template for now, see "About page")
 CNAME          ← keeps brodysoptics.com connected. NEVER delete or edit.
 CLAUDE.md      ← this file
-.github/workflows/deploy.yml ← builds photos.json + publishes the site on every push
+.github/workflows/deploy.yml ← watermarks photos, builds photos.json + publishes the site on every push
+.github/watermark/ ← watermark.py + the Herr Von Muellerhoff font file it uses
 favicon.png    ← "B." tab icon + iPhone home-screen icon (180×180)
 preview.jpg    ← link-preview picture for texts/socials (1200×630, og:image). Keep it OUT of photos/ or it shows as a single photo.
 photos/        ← all images and videos (see rules below)
@@ -171,6 +172,11 @@ Because it's `no-cors`, the site always shows "Inquiry sent" even if Google reje
 Intro line above the form: "Answer a few quick questions and I'll get back to you as soon as I can!"
 
 ---
+
+## Photo protection
+
+- **Watermark:** on every publish, `.github/watermark/watermark.py` stamps the cursive "Brodysoptics." (Herr Von Muellerhoff, white ~70% with a soft shadow, centered at the bottom, about 30% of the photo's shorter side wide) on every photo in `photos/` **in the published copy only**. The repo's photos stay clean, so Brody can still send clean files to clients. Skips `photos/hero*` (the banner) and videos. Tweak `WIDTH` / `OPACITY` / `MARGIN` at the top of the script. Preview locally: `python .github/watermark/watermark.py <copy-of-a-folder>` (it overwrites files, so only run it on copies).
+- **No right-click / saving:** `contextmenu` and `dragstart` are blocked on photos, videos, tiles, albums, the viewer and the hero (text stays right-clickable); CSS stops dragging and the iPhone long-press "Save image"; the viewer video has `controlslist="nodownload"`. Same on about.html. This only stops casual saving: screenshots still work, which is why the watermark matters.
 
 ## Design system
 

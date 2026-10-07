@@ -107,6 +107,8 @@ html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px)
 @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
+/* make photos harder to save: no dragging them out, no long-press "Save image" on iPhone */
+img,video{-webkit-user-drag:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 /* layers, back to front: pinned hero (-3) → page "sheet" (-2) → background slashes (-1) → page content.
    The hero stays put and the rest of the page slides up over it */
 #field{position:fixed;inset:0;z-index:-1;pointer-events:none}
@@ -474,7 +476,7 @@ dialog[open]{animation:fade .3s ease}
 <dialog id="lightbox" aria-label="Photo viewer">
   <div class="lb">
     <img id="lbImg" alt="">
-    <video id="lbVid" controls playsinline hidden></video>
+    <video id="lbVid" controls controlslist="nodownload" disablepictureinpicture playsinline hidden></video>
     <button class="close" id="lbClose">Close</button>
     <button class="prev" id="lbPrev" aria-label="Previous photo">‹</button>
     <button class="next" id="lbNext" aria-label="Next photo">›</button>
@@ -1002,6 +1004,10 @@ $("prices").addEventListener("click", e=>{
   let rt = 0; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(build, 150); });
   build();
 })();
+
+/* no right-click "Save image as" or dragging on photos and videos */
+document.addEventListener("contextmenu", e => { if (e.target.closest("img, video, .tile, .album, .lb, .hero")) e.preventDefault(); });
+document.addEventListener("dragstart", e => { if (e.target.closest("img, video")) e.preventDefault(); });
 
 loadPhotos();
 </script>
