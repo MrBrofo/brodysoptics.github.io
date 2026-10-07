@@ -414,7 +414,8 @@ dialog[open]{animation:fade .3s ease}
 .lb .num{position:absolute;bottom:max(14px,env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-family:var(--display);font-size:.9rem;opacity:.7}
 
 /* things slide up into view as you scroll */
-.js .rv{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+/* quick fade-up (about half a second), and staggered items never wait more than 0.2s */
+.js .rv{opacity:0;transform:translateY(20px);transition:opacity .45s ease,transform .55s cubic-bezier(.2,.7,.2,1);transition-delay:min(var(--d,0s),.2s)}
 .js .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){ .js .rv{opacity:1;transform:none} }
 </style>
@@ -909,10 +910,15 @@ async function send(){
 renderStep(false);
 
 /* animations: reveal on scroll, solid nav, gentle hero parallax */
+/* things start fading in a bit BEFORE they scroll into view, so they're already there when you get to them */
 const io = "IntersectionObserver" in window ? new IntersectionObserver(es=>es.forEach(e=>{
   if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); }
-}), {rootMargin:"0px 0px -8% 0px", threshold:.08}) : null;
+}), {rootMargin:"0px 0px 15% 0px", threshold:0}) : null;
 function reveal(){ document.querySelectorAll(".rv:not(.in)").forEach(el => io ? io.observe(el) : el.classList.add("in")); }
+/* scrolling fast can jump right past things; anything already above the bottom of the screen shows right away */
+let caughtUp = 0;
+addEventListener("scroll", () => { if (caughtUp) return; caughtUp = requestAnimationFrame(() => { caughtUp = 0;
+  document.querySelectorAll(".rv:not(.in)").forEach(el => { if (el.getBoundingClientRect().top < innerHeight) { el.classList.add("in"); io && io.unobserve(el); } }); }); }, {passive:true});
 new MutationObserver(reveal).observe($("gallery"), {childList:true});
 reveal();
 

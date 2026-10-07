@@ -163,7 +163,8 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 footer .logo{font-size:2.2rem;color:var(--ink)}
 
 /* things slide up into view as you scroll */
-.js .rv{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+/* quick fade-up (about half a second), and staggered items never wait more than 0.2s */
+.js .rv{opacity:0;transform:translateY(20px);transition:opacity .45s ease,transform .55s cubic-bezier(.2,.7,.2,1);transition-delay:min(var(--d,0s),.2s)}
 .js .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){ .js .rv{opacity:1;transform:none} }
 @media (max-width:600px){ .btns a{padding:13px 18px;font-size:.88rem} .top h1{font-size:3rem} }
@@ -232,8 +233,12 @@ html += `<section class="end"><div class="wrap"><h2 class="rv">Let's keep<span c
 $("main").innerHTML = html;
 
 /* scroll reveal */
-const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }), {rootMargin:"0px 0px -8% 0px", threshold:.08}) : null;
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }), {rootMargin:"0px 0px 15% 0px", threshold:0}) : null;
 document.querySelectorAll(".rv").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+/* scrolling fast can jump right past things; anything already above the bottom of the screen shows right away */
+let caughtUp = 0;
+addEventListener("scroll", () => { if (caughtUp) return; caughtUp = requestAnimationFrame(() => { caughtUp = 0;
+  document.querySelectorAll(".rv:not(.in)").forEach(el => { if (el.getBoundingClientRect().top < innerHeight) { el.classList.add("in"); io && io.unobserve(el); } }); }); }, {passive:true});
 
 /* no right-click "Save image as" or dragging on the photo */
 document.addEventListener("contextmenu", e => { if (e.target.closest("img, .top")) e.preventDefault(); });
