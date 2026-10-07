@@ -196,7 +196,7 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
 
 ## Hosting / domain setup (already done)
 
-- GitHub Pages: Settings → Pages → Source: **GitHub Actions** (workflow `.github/workflows/deploy.yml`; previously "Deploy from a branch → main / root"). Custom domain `www.brodysoptics.com`. Enforce HTTPS once the certificate is issued.
+- GitHub Pages: Settings → Pages → Source should be **GitHub Actions** (workflow `.github/workflows/deploy.yml`). As of Oct 6, 2026 it was **still "Deploy from a branch"**: GitHub's own "pages build and deployment" run publishes the raw repo right after ours, so photos.json and the watermark never reach the live site. Brody was asked to switch it. Check: `https://www.brodysoptics.com/photos.json` returns 200 once it's switched. Custom domain `www.brodysoptics.com`. Enforce HTTPS once the certificate is issued.
 - Domain registered/DNS on **Cloudflare**. Records (all **DNS only / grey cloud**, TTL Auto; proxy must stay off or GitHub HTTPS breaks):
   - A `@` → 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153
   - CNAME `www` → `mrbrofo.github.io`
