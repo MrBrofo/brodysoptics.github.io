@@ -48,6 +48,7 @@ Everything Brody normally wants to change is in the `SITE` object at the top of 
 - `deposit`: line under that ("A 50% non-refundable deposit* locks in your date."). `depositNote`: the * small print, shown at the very bottom of the page above the © line (`#fine`, hidden in albums): rainout/cancel moves the deposit, "didn't play still counts". He wanted the details as a footnote, not in the pricing line.. When set, the form's "Inquiry sent" message says he'll get back "with deposit details to lock in your date."
 - `email`: `"brody@brodysoptics.com"`, shown in the footer above the Instagram line as a mailto link (empty = hidden). It's a Cloudflare Email Routing address that forwards to his Gmail (receive only; replies still come from Gmail).
 - `instagram`: `"brodysoptics"` (empty = hidden)
+- `tiktok`: `"brodysoptics"` (empty = hidden). TikTok icon sits after the Instagram icon in the nav (and in the burger menu as "TikTok"), plus a "TikTok @brodysoptics" line in the footer. about.html has the nav icon hardcoded.
 - `githubUser`: `"MrBrofo"`, `githubRepo`: `"brodysoptics.github.io"`, `githubBranch`: `"main"`
 - `googleFormId` + `formEntries`: booking form wiring (see below)
 - `pricing`: array of packages (see below)

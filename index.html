@@ -41,7 +41,8 @@ const SITE = {
   deposit: "A 50% non-refundable deposit* locks in your date.",
   depositNote: "*Rained out or canceled? Your deposit moves to a new date. If the game happens but you don't play, it still counts as your shoot.",  // small print at the bottom of the page               // shown under that. "" hides it
   email: "brody@brodysoptics.com",   // shown in the footer. "" hides it
-  instagram: "brodysoptics",        // e.g. "brodyshoots" (no @). Leave "" to hide.
+  instagram: "brodysoptics",
+  tiktok: "brodysoptics",           // no @. Leave "" to hide.        // e.g. "brodyshoots" (no @). Leave "" to hide.
   mouseField: true,         // the little slashes in the background that react to your mouse (computers only). false = off
 
   // Your GitHub info, so the gallery can find your photos folder
@@ -217,8 +218,8 @@ section{padding-top:clamp(64px,9vw,120px)}
 .split > div{max-width:760px}
 h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2.4rem,4.4vw,3.4rem);line-height:.95;margin:0;letter-spacing:.005em;text-transform:uppercase}
 .lede{color:var(--muted);margin:0 0 28px}
-#social a,#mail a{color:var(--accent-text,var(--accent));text-decoration:none}
-#social a:hover,#mail a:hover{text-decoration:underline;text-underline-offset:3px}
+#social a,#mail a,#tiktok a{color:var(--accent-text,var(--accent));text-decoration:none}
+#social a:hover,#mail a:hover,#tiktok a:hover{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:760px){ .split{grid-template-columns:1fr} }
 
 /* work grid: albums and single photos as even tiles */
@@ -421,6 +422,7 @@ dialog[open]{animation:fade .3s ease}
     <li class="main-only"><a href="#pricing">Pricing</a></li>
     <li><a href="about">About</a></li>
     <li><a id="navIg" class="nav-ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg><span class="ig-label">Instagram</span></a></li>
+    <li><a id="navTt" class="nav-ig" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg><span class="ig-label">TikTok</span></a></li>
   </ul>
 </div></nav>
 
@@ -484,6 +486,7 @@ dialog[open]{animation:fade .3s ease}
   <span id="copy"></span>
   <span id="mail"></span>
   <span id="social"></span>
+  <span id="tiktok"></span>
 </div></footer>
 
 <dialog id="lightbox" aria-label="Photo viewer">
@@ -529,6 +532,11 @@ if (SITE.instagram){
   $("social").innerHTML = `Instagram <a href="${igUrl}" target="_blank" rel="noopener">@${esc(SITE.instagram)}</a>`;
   $("navIg").href = igUrl;
 } else $("navIg").parentElement.remove();
+if (SITE.tiktok){
+  const ttUrl = `https://www.tiktok.com/@${encodeURIComponent(SITE.tiktok)}`;
+  $("tiktok").innerHTML = `TikTok <a href="${ttUrl}" target="_blank" rel="noopener">@${esc(SITE.tiktok)}</a>`;
+  $("navTt").href = ttUrl;
+} else { $("tiktok").remove(); $("navTt").parentElement.remove(); }
 $("prices").innerHTML = SITE.pricing.map((p,i) => p.group
   ? `<li class="grp rv" style="--d:${i*.07}s">${esc(p.group)}</li>`
   : `<li class="rv" style="--d:${i*.07}s"><button class="pick" data-i="${i}" aria-label="Book ${esc(p.name)}, ${esc(p.price)}"><strong>${esc(p.name)}${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}</strong><span class="amt">${esc(p.price)}</span><span class="d">${esc(p.details)}</span><span class="go" aria-hidden="true">Book this →</span></button></li>`).join("");
