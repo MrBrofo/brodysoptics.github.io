@@ -237,6 +237,7 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 .count{font-family:var(--display);color:var(--muted);font-size:.95rem}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:var(--gap)}
 .tile{all:unset;position:relative;display:block;aspect-ratio:4/5;overflow:hidden;background:var(--frame);cursor:pointer}
+.tiles.landscape .tile{aspect-ratio:16/9}  /* video album covers are horizontal */
 .tile img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease,transform .6s ease}
 .tile img.loaded{opacity:1}
 .tile:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -530,16 +531,16 @@ $("deposit").textContent = SITE.deposit || ""; $("deposit").hidden = !SITE.depos
 $("fine").textContent = SITE.depositNote || ""; $("fine").hidden = !SITE.depositNote;
 $("copy").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
 document.title = SITE.brand.replace(/\.$/,"") + " | Photography";
-if (SITE.email){ $("mail").innerHTML = `Email <a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>`; $("navMail").href = "mailto:" + SITE.email; }
+if (SITE.email){ $("mail").innerHTML = `<a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>`; $("navMail").href = "mailto:" + SITE.email; }
 else { $("mail").remove(); $("navMail").parentElement.remove(); }
 if (SITE.instagram){
   const igUrl = `https://instagram.com/${encodeURIComponent(SITE.instagram)}`;
-  $("social").innerHTML = `Instagram <a href="${igUrl}" target="_blank" rel="noopener">@${esc(SITE.instagram)}</a>`;
+  $("social").innerHTML = `<a href="${igUrl}" target="_blank" rel="noopener">Instagram</a>`;
   $("navIg").href = igUrl;
 } else $("navIg").parentElement.remove();
 if (SITE.tiktok){
   const ttUrl = `https://www.tiktok.com/@${encodeURIComponent(SITE.tiktok)}`;
-  $("tiktok").innerHTML = `TikTok <a href="${ttUrl}" target="_blank" rel="noopener">@${esc(SITE.tiktok)}</a>`;
+  $("tiktok").innerHTML = `<a href="${ttUrl}" target="_blank" rel="noopener">TikTok</a>`;
   $("navTt").href = ttUrl;
 } else { $("tiktok").remove(); $("navTt").parentElement.remove(); }
 $("prices").innerHTML = SITE.pricing.map((p,i) => p.group
@@ -690,10 +691,10 @@ function fitCols(grid, ideal_w = +grid?.dataset.size || 300){
     }
     cols = best.c;
   }
-  /* phones: always 2 across. If that leaves one tile alone at the end, it stretches across the full row */
+  /* phones: 2 across (horizontal video covers: 1 across). If 2 across leaves one tile alone at the end, it stretches across the full row */
   const phone = innerWidth <= 600 && n > 1;
-  if (phone) cols = 2;
-  [...grid.children].forEach((t, i) => t.classList.toggle("wide", phone && n % 2 === 1 && i === n - 1));
+  if (phone) cols = grid.classList.contains("landscape") ? 1 : 2;
+  [...grid.children].forEach((t, i) => t.classList.toggle("wide", phone && cols === 2 && n % 2 === 1 && i === n - 1));
   grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0,1fr))`;
 }
 
@@ -704,7 +705,9 @@ const isVideoAlbum = a => a.photos.filter(isVid).length > a.photos.length / 2;
 const kindOf = a => a.graphic ? "graphics" : isVideoAlbum(a) ? "videos" : "photos";
 function showGrid(){
   const group = kind => [...albums.filter(a => kindOf(a) === kind).map(a=>({type:"album",...a})), ...singles.filter(s => kind !== "graphics" && isVid(s.src) === (kind === "videos")).map(s=>({type:"single",...s}))];
-  const section = (id, title, empty) => { const list = group(id); return `<div class="work-group" id="${id}"><h3 class="work-sub rv">${title}</h3>` + (list.length ? `<div class="tiles">${list.map(tileHTML).join("")}</div>` : `<p class="work-empty rv">${empty}</p>`) + `</div>`; };
+  /* photo covers are small enough to fit 4 across on a computer; video covers are horizontal and bigger */
+  const look = {photos:`class="tiles" data-size="240"`, videos:`class="tiles landscape" data-size="380"`, graphics:`class="tiles"`};
+  const section = (id, title, empty) => { const list = group(id); return `<div class="work-group" id="${id}"><h3 class="work-sub rv">${title}</h3>` + (list.length ? `<div ${look[id]}>${list.map(tileHTML).join("")}</div>` : `<p class="work-empty rv">${empty}</p>`) + `</div>`; };
   $("workTitle").textContent = "My Work"; $("back").hidden = true; $("count").textContent = "";
   $("gallery").innerHTML = section("photos", "Photos", "Photos coming soon.") + section("videos", "Videos", "Highlight videos coming soon.") + section("graphics", "Graphics", "Graphics coming soon.");
   $("gallery").querySelectorAll(".tiles").forEach(t => fitCols(t));
