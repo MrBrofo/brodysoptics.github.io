@@ -32,7 +32,7 @@ const SITE = {
   look: "darkroom",        // color style: "darkroom", "kodak" or "nightgame"
   brand: "Brodysoptics.",   // top-left of the page
   // the words over the big top photo
-  services: "Video – Photo – Design",                       // small line above the headline
+  services: "Video – Photo – Edit – Design",                // small line above the headline
   headline: "Keep the",                                 // the big text
   headlineScript: "moment.",                                // written in handwriting under it. "" hides it
   tagline: "Game days, portraits, events and graphics for athletes, teams and everyone in between.",  // "" hides it
@@ -145,8 +145,8 @@ a{color:inherit}
 .nav a{white-space:nowrap}
 .nav a:hover{text-decoration:underline;text-underline-offset:4px}
 .burger,.ig-label,.nav a.nav-book-m{display:none}
-/* phones: the links go into a three-line "burger" menu that drops down */
-@media (max-width:600px){
+/* phones and small tablets: the links go into a three-line "burger" menu that drops down */
+@media (max-width:720px){
   #navName{font-size:2.3rem}
   /* "Book me" stays out on the bar next to the burger; everything else goes inside */
   .nav a.nav-book-m{display:inline-block;margin:0 6px 0 auto;padding:9px 18px;font-size:.95rem}
@@ -323,6 +323,14 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 .delivery{margin:22px 0 0;color:var(--muted);font-size:1rem}
 .delivery + .delivery{margin-top:4px}
 .delivery[hidden]{display:none}
+/* "Behind the optic." teaser under the prices, linking to the About page */
+.teaser{background:var(--frame);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(48px,7vw,88px) 0}
+.teaser .split{align-items:center}
+.teaser h2 .sig{display:block;font-family:var(--sig);font-weight:400;font-stretch:normal;text-transform:none;font-size:1.15em;line-height:.75;margin:.02em 0 0 .1em;transform:rotate(-4deg);transform-origin:left}
+.teaser p{margin:0;color:var(--muted);font-size:clamp(1.05rem,1.5vw,1.2rem);max-width:52ch}
+.more-link{display:inline-flex;align-items:center;gap:12px;margin-top:22px;padding-bottom:8px;border-bottom:2px solid var(--ink);font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none}
+.more-link span{transition:transform .2s ease}
+.more-link:hover span{transform:translateX(5px)}
 /* the package box glows when it gets filled in from pricing */
 @keyframes glow{0%,60%{border-color:var(--accent);box-shadow:0 2px 0 0 var(--accent)}100%{border-color:var(--line);box-shadow:none}}
 select.flash{animation:glow 1.6s ease}
@@ -424,6 +432,7 @@ dialog[open]{animation:fade .3s ease}
     <li><a href="#videos">Video</a></li>
     <li><a href="#graphics">Graphics</a></li>
     <li class="main-only"><a href="#pricing">Pricing</a></li>
+    <li><a href="about.html">About</a></li>
     <li><a id="navIg" class="nav-ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg><span class="ig-label">Instagram</span></a></li>
   </ul>
 </div></nav>
@@ -455,6 +464,15 @@ dialog[open]{animation:fade .3s ease}
     <h2 class="rv">Pricing</h2>
     <div><ul class="prices" id="prices"></ul><p class="delivery rv" id="delivery"></p><p class="delivery rv" id="deposit"></p></div>
   </div></section>
+
+  <!-- a little "about me" teaser that links to about.html -->
+  <section class="main-only" id="teaser"><div class="teaser"><div class="wrap split">
+    <h2 class="rv">Behind the<span class="sig">optic.</span></h2>
+    <div class="rv">
+      <p>Founder of Brodysoptics and Communications &amp; Media Intern at Camp Micah. I've shot Las Lomas sports and the Portland Sea Dogs. Capturing since 2024.</p>
+      <a class="more-link" href="about.html">My experience <span aria-hidden="true">→</span></a>
+    </div>
+  </div></div></section>
 
   <section id="book"><div class="wrap split">
     <h2 class="rv">Book Me!</h2>
@@ -920,7 +938,7 @@ $("burger").onclick = () => menu(!$("nav").classList.contains("open"));
 $("navMenu").addEventListener("click", e => { if (e.target.closest("a")) menu(false); });
 document.addEventListener("click", e => { if (!e.target.closest("#nav")) menu(false); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") menu(false); });
-addEventListener("resize", () => { if (innerWidth > 600) menu(false); });
+addEventListener("resize", () => { if (innerWidth > 720) menu(false); });
 navState(); heroFade();
 
 /* click a package -> starts the booking form on the right path (package already picked) and jumps down there */
