@@ -284,6 +284,13 @@ h2{font-family:var(--display);font-stretch:62%;font-weight:800;font-size:clamp(2
 .work-empty{margin:0;color:var(--muted)}
 .more h3{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(1.7rem,2.8vw,2.3rem);line-height:1;margin:0 0 20px;letter-spacing:.01em}
 .album button{position:relative}
+/* watermark: the cursive "Brodysoptics." drawn in the lower right corner of every album photo and the full-size viewer,
+   so it shows up in screenshots too. Sized to the photo (about a quarter of its width). */
+.album button{container-type:inline-size}
+.album button:has(> img)::after,.lb-frame:has(> img:not([hidden]))::after{content:"Brodysoptics.";position:absolute;right:3%;bottom:2.5%;z-index:2;font-family:var(--sig);font-weight:400;color:rgba(255,255,255,.78);text-shadow:0 1px 6px rgba(0,0,0,.5);line-height:1;white-space:nowrap;pointer-events:none}
+.album button:has(> img)::after{font-size:clamp(.85rem,7.5cqw,3rem)}
+.lb-frame{position:relative;max-width:100%;line-height:0}
+.lb-frame::after{font-size:var(--wm,2rem)}
 .album video,.tile video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease,transform .6s ease}
 .album video.loaded,.tile video.loaded{opacity:1}
 .play{position:absolute;top:50%;left:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);pointer-events:none;transition:opacity .25s ease}
@@ -475,8 +482,10 @@ dialog[open]{animation:fade .3s ease}
 
 <dialog id="lightbox" aria-label="Photo viewer">
   <div class="lb">
-    <img id="lbImg" alt="">
-    <video id="lbVid" controls controlslist="nodownload" disablepictureinpicture playsinline hidden></video>
+    <div class="lb-frame" id="lbFrame">
+      <img id="lbImg" alt="">
+      <video id="lbVid" controls controlslist="nodownload" disablepictureinpicture playsinline hidden></video>
+    </div>
     <button class="close" id="lbClose">Close</button>
     <button class="prev" id="lbPrev" aria-label="Previous photo">‹</button>
     <button class="next" id="lbNext" aria-label="Next photo">›</button>
@@ -782,7 +791,10 @@ $("gallery").addEventListener("click", e=>{
 const lb = $("lightbox");
 function open(i){ idx=(i+viewing.length)%viewing.length; const im=$("lbImg"), vd=$("lbVid"), src=viewing[idx];
   if (isVid(src)){ im.hidden = true; vd.hidden = false; vd.src = src; vd.play().catch(()=>{}); }
-  else { vd.pause(); vd.removeAttribute("src"); vd.load(); vd.hidden = true; im.hidden = false; im.classList.add("swap"); im.onload=im.onerror=()=>im.classList.remove("swap"); im.src=src; } $("lbNum").textContent=`${idx+1} / ${viewing.length}`; if(!lb.open) lb.showModal(); }
+  else { vd.pause(); vd.removeAttribute("src"); vd.load(); vd.hidden = true; im.hidden = false; im.classList.add("swap"); im.onload=im.onerror=()=>{ im.classList.remove("swap"); wmSize(); }; im.src=src; } $("lbNum").textContent=`${idx+1} / ${viewing.length}`; if(!lb.open) lb.showModal(); }
+/* the viewer's watermark is about a quarter of the photo's shorter side */
+function wmSize(){ const im = $("lbImg"); if (im.clientWidth) $("lbFrame").style.setProperty("--wm", Math.min(im.clientWidth, im.clientHeight) * .26 / 3.5 + "px"); }
+addEventListener("resize", wmSize);
 $("lbClose").onclick = ()=>lb.close();
 lb.addEventListener("close", ()=>{ $("lbVid").pause(); });
 $("lbPrev").onclick = ()=>open(idx-1);

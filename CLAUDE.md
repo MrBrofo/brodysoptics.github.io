@@ -28,8 +28,8 @@ index.html     ← the whole main site (HTML + CSS + JS, no build step, no frame
 about.html     ← About page (template for now, see "About page")
 CNAME          ← keeps brodysoptics.com connected. NEVER delete or edit.
 CLAUDE.md      ← this file
-.github/workflows/deploy.yml ← watermarks photos, builds photos.json + publishes the site on every push
-.github/watermark/ ← watermark.py + the Herr Von Muellerhoff font file it uses
+.github/workflows/deploy.yml ← builds photos.json + publishes the site on every push (only works once Pages source = GitHub Actions)
+.github/watermark/ ← old publish-time watermark script + font (currently not used, see "Photo protection")
 favicon.png    ← "B." tab icon + iPhone home-screen icon (180×180)
 preview.jpg    ← link-preview picture for texts/socials (1200×630, og:image). Keep it OUT of photos/ or it shows as a single photo.
 photos/        ← all images and videos (see rules below)
@@ -175,7 +175,8 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
 
 ## Photo protection
 
-- **Watermark:** on every publish, `.github/watermark/watermark.py` stamps the cursive "Brodysoptics." (Herr Von Muellerhoff, white ~70% with a soft shadow, in the **lower right corner** (he asked for that, not centered), about 26% of the photo's shorter side wide) on every photo in `photos/` **in the published copy only**. The repo's photos stay clean, so Brody can still send clean files to clients. Skips `photos/hero*` (the banner) and videos. Tweak `WIDTH` / `OPACITY` / `MARGIN` at the top of the script. Preview locally: `python .github/watermark/watermark.py <copy-of-a-folder>` (it overwrites files, so only run it on copies).
+- **Watermark:** drawn **on screen** by CSS: the cursive "Brodysoptics." (Herr Von Muellerhoff, white ~78% with a soft shadow) in the **lower right corner** (he asked for that) of every album photo (`.album button::after`, sized with container units, ~a quarter of the photo's width) and the full-size viewer (`.lb-frame::after`, sized by `wmSize()` from the shown image). It shows up in screenshots. Not on the hero, album cover tiles (captions sit there) or the About page. The actual image files are NOT watermarked, so someone who opens a photo's direct URL gets a clean copy.
+- **Old approach, turned off:** `.github/watermark/watermark.py` stamps the watermark into the files at publish time (lower right). It was removed from `deploy.yml` because the Pages source is still "Deploy from a branch" (so it never reached the live site), and because album tiles crop photos so a corner stamp gets cut off. If it's ever turned back on, remove the CSS watermark first or photos get two.
 - **No right-click / saving:** `contextmenu` and `dragstart` are blocked on photos, videos, tiles, albums, the viewer and the hero (text stays right-clickable); CSS stops dragging and the iPhone long-press "Save image"; the viewer video has `controlslist="nodownload"`. Same on about.html. This only stops casual saving: screenshots still work, which is why the watermark matters.
 
 ## Design system
