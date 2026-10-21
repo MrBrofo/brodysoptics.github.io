@@ -969,7 +969,7 @@ $("prices").addEventListener("click", e=>{
 /* background slashes that move out of the way of your mouse (computers only) */
 (function(){
   const cv = document.getElementById("field");
-  if (SITE.mouseField === false || still || !matchMedia("(hover:hover) and (pointer:fine)").matches){ cv.remove(); return; }
+  if (SITE.mouseField === false || !matchMedia("(hover:hover) and (pointer:fine)").matches){ cv.remove(); return; }
   const ctx = cv.getContext("2d");
   const css = getComputedStyle(document.documentElement);
   const rgb = v => { v = v.trim().replace("#",""); if (v.length===3) v=[...v].map(c=>c+c).join(""); const n=parseInt(v,16); return [n>>16&255, n>>8&255, n&255]; };
