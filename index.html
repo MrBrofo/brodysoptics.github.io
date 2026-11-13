@@ -3,13 +3,52 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Brodysoptics | Photography</title>
-<meta name="description" content="Bay Area photography, video and graphics: sports, portraits, events and more. See my work and lock in a date.">
+<title>Brody Disick | Brodysoptics Photography &amp; Video</title>
+<meta name="description" content="Brody Disick (Brodysoptics) is a Bay Area photographer and videographer: sports, portraits, events, highlight videos and graphics. See my work and lock in a date.">
+<link rel="canonical" href="https://www.brodysoptics.com/">
+<!-- tells Google who Brody is and which accounts are his, so searches for his name find this site -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://www.brodysoptics.com/#brody",
+      "name": "Brody Disick",
+      "url": "https://www.brodysoptics.com/",
+      "image": "https://www.brodysoptics.com/preview.jpg",
+      "jobTitle": "Photographer and videographer",
+      "worksFor": { "@id": "https://www.brodysoptics.com/#business" },
+      "sameAs": ["https://www.instagram.com/brodysoptics", "https://www.tiktok.com/@brodysoptics"]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://www.brodysoptics.com/#business",
+      "name": "Brodysoptics",
+      "url": "https://www.brodysoptics.com/",
+      "image": "https://www.brodysoptics.com/preview.jpg",
+      "email": "brody@brodysoptics.com",
+      "founder": { "@id": "https://www.brodysoptics.com/#brody" },
+      "description": "Sports, portrait and event photography, highlight videos and graphics in the San Francisco Bay Area.",
+      "areaServed": "San Francisco Bay Area",
+      "priceRange": "$10-$100",
+      "sameAs": ["https://www.instagram.com/brodysoptics", "https://www.tiktok.com/@brodysoptics"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.brodysoptics.com/#site",
+      "url": "https://www.brodysoptics.com/",
+      "name": "Brodysoptics",
+      "alternateName": ["Brody Disick", "Brodys Optics"]
+    }
+  ]
+}
+</script>
 <!-- link previews (texts, Instagram, Discord, etc.). To change the picture, replace preview.jpg (1200x630) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Brodysoptics">
-<meta property="og:title" content="Brodysoptics | Photography">
-<meta property="og:description" content="Bay Area photography, video and graphics: sports, portraits, events and more. See my work and lock in a date.">
+<meta property="og:title" content="Brody Disick | Brodysoptics Photography &amp; Video">
+<meta property="og:description" content="Brody Disick (Brodysoptics) is a Bay Area photographer and videographer: sports, portraits, events, highlight videos and graphics. See my work and lock in a date.">
 <meta property="og:url" content="https://www.brodysoptics.com/">
 <meta property="og:image" content="https://www.brodysoptics.com/preview.jpg">
 <meta property="og:image:width" content="1200">
@@ -530,7 +569,6 @@ $("delivery").textContent = SITE.delivery || ""; $("delivery").hidden = !SITE.de
 $("deposit").textContent = SITE.deposit || ""; $("deposit").hidden = !SITE.deposit;
 $("fine").textContent = SITE.depositNote || ""; $("fine").hidden = !SITE.depositNote;
 $("copy").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
-document.title = SITE.brand.replace(/\.$/,"") + " | Photography";
 if (SITE.email){ $("mail").innerHTML = `<a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>`; $("navMail").href = "mailto:" + SITE.email; }
 else { $("mail").remove(); $("navMail").parentElement.remove(); }
 if (SITE.instagram){

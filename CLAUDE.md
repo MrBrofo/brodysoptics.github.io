@@ -202,6 +202,14 @@ Intro line above the form: "Answer a few quick questions and I'll get back to yo
 
 ---
 
+## SEO (set up Nov 2026)
+
+Goal: brodysoptics.com is the top Google result for "Brody Disick" (and "Brodysoptics").
+- Home `<title>` is "Brody Disick | Brodysoptics Photography & Video" (static in the HTML; the script no longer overwrites `document.title`). About is "About Brody Disick | Brodysoptics". Both have `rel=canonical` on the www URL.
+- Home has JSON-LD structured data (Person "Brody Disick" + ProfessionalService "Brodysoptics" + WebSite) with `sameAs` = his Instagram and TikTok. If he adds new social accounts, add them to `sameAs`.
+- `robots.txt` + `sitemap.xml` at the root (lists / and /about). Add new pages to the sitemap.
+- Off-site steps (Brody does these): Google Search Console (verify domain via Cloudflare DNS TXT, submit sitemap, request indexing), put brodysoptics.com in his Instagram/TikTok bios.
+
 ## Hosting / domain setup (already done)
 
 - GitHub Pages: Settings → Pages → Source should be **GitHub Actions** (workflow `.github/workflows/deploy.yml`). As of Oct 6, 2026 it was **still "Deploy from a branch"**: GitHub's own "pages build and deployment" run publishes the raw repo right after ours, so photos.json and the watermark never reach the live site. Brody was asked to switch it. Check: `https://www.brodysoptics.com/photos.json` returns 200 once it's switched. Custom domain `www.brodysoptics.com`. Enforce HTTPS once the certificate is issued.
