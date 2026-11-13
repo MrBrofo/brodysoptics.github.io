@@ -942,10 +942,10 @@ async function send(){
   $("wizNext").disabled = true; $("status").textContent = "Sending…";
   try{
     await fetch(FORM_URL + "/formResponse", {method:"POST", mode:"no-cors", body:fd});
-    $("wizBar").style.width = "100%";
-    $("wizStep").innerHTML = `<div class="wiz-step"><p class="wiz-count">All done</p><h3 class="wiz-q">Inquiry sent.</h3><p class="wiz-done">Thanks${wiz.a.name ? ", " + esc(wiz.a.name.split(" ")[0]) : ""}! I'll get back to you soon${SITE.deposit ? " with deposit details to lock in your date" : ""}.</p><button type="button" class="wiz-back" id="wizAgain">Send another</button></div>`;
-    $("wizBack").style.visibility = "hidden"; $("wizNext").style.display = "none"; $("status").textContent = "";
-    $("wizAgain").onclick = () => { wiz.a = {}; wiz.pick = null; wiz.i = 0; wiz.dir = 1; $("wizNext").style.display = ""; renderStep(true); };
+    /* go to the thank-you page (thanks.html). Their first name rides along in this tab only, never in the link */
+    try{ sessionStorage.setItem("bookName", (wiz.a.name||"").trim().split(" ")[0]); }catch(_){}
+    location.href = "thanks";
+    return;
   }catch(_){ $("status").innerHTML = `That didn't go through. <a href="${FORM_URL}/viewform" target="_blank">Use the form here instead.</a>`; }
   $("wizNext").disabled = false;
 }

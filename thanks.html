@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thanks | Brodysoptics</title>
+<!-- the page people land on after sending the booking form. Kept out of Google on purpose -->
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="favicon.png?v=2">
+<link rel="apple-touch-icon" href="favicon.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Herr+Von+Muellerhoff&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+
+
+<style>
+:root{
+  --paper:#0E0D0C; --ink:#F2EEE8; --muted:#9A938A; --line:#2B2825; --frame:#1A1816;
+  --display:"Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --sig:"Herr Von Muellerhoff", "Brush Script MT", cursive;
+  --text:"Newsreader", Georgia, "Times New Roman", serif;
+  --mono:ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --pad: clamp(18px, 4vw, 48px);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::after{content:"";position:fixed;inset:0;z-index:20;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.wrap{max-width:1320px;margin:0 auto;padding:0 var(--pad)}
+
+/* nav (same as the home page) */
+.nav{position:sticky;top:0;z-index:5;font-family:var(--display);font-size:.95rem;font-weight:500;background:color-mix(in srgb,var(--paper) 86%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:6px;padding-bottom:6px}
+.logo{font-family:var(--sig);font-size:clamp(2.5rem,4.2vw,3.3rem);line-height:1;padding:0 .25em 0 .05em;text-decoration:none}
+.nav ul{display:flex;align-items:center;gap:clamp(16px,3vw,32px);list-style:none;margin:0;padding:0}
+.nav ul a{text-decoration:none;white-space:nowrap}
+.nav ul a:hover{text-decoration:underline;text-underline-offset:4px}
+.nav a.book{display:inline-block;background:#fff;color:#0E0D0C;font-weight:600;padding:7px 16px;border-radius:999px;margin:-7px 0;text-decoration:none}
+.nav a.book:hover{background:#E9E5DF;text-decoration:none}
+.burger,.nav a.book-m,.ig-label{display:none}
+.nav a.ig{display:flex;align-items:center;gap:10px;line-height:0}
+.nav a.ig:hover{opacity:.7;text-decoration:none}
+@media (max-width:800px){
+  .logo{font-size:2.3rem}
+  .nav a.book-m{display:inline-block;margin:0 6px 0 auto;padding:9px 18px}
+  .nav ul li:has(> .book){display:none}
+  .burger{all:unset;display:flex;flex-direction:column;justify-content:center;gap:5px;width:44px;height:44px;margin-right:-10px;cursor:pointer}
+  .burger span{display:block;width:22px;height:2px;margin:0 auto;background:currentColor;border-radius:2px;transition:transform .3s ease,opacity .2s ease}
+  .nav.open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav.open .burger span:nth-child(2){opacity:0}
+  .nav.open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav ul{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;padding:6px var(--pad) 22px;background:var(--paper);box-shadow:0 1px 0 var(--line);visibility:hidden;opacity:0;transform:translateY(-8px);transition:opacity .25s ease,transform .25s ease,visibility 0s linear .25s}
+  .nav.open ul{visibility:visible;opacity:1;transform:none;transition:opacity .25s ease,transform .25s ease}
+  .nav ul a{display:block;padding:14px 0;font-size:1.25rem;font-weight:600;border-bottom:1px solid var(--line)}
+  .nav ul li:last-child a{border-bottom:0}
+  .nav a.ig{line-height:inherit}
+  .ig-label{display:inline}
+}
+
+
+/* thank-you message */
+.done{min-height:calc(100svh - 160px);display:flex;align-items:center;text-align:center;padding:clamp(56px,9vw,120px) 0}
+.done .wrap{width:100%}
+.label{margin:0;font-family:var(--mono);font-size:clamp(.72rem,1vw,.85rem);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{margin:.5em 0 0;font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;line-height:.88;font-size:clamp(3.2rem,9vw,7rem)}
+h1 .sig{display:block;font-family:var(--sig);font-weight:400;font-stretch:normal;text-transform:none;line-height:.8;font-size:.8em;transform:rotate(-4deg);animation:sign 1.3s cubic-bezier(.5,0,.2,1) .3s both}
+@keyframes sign{from{clip-path:inset(-20% 100% -20% 0)}to{clip-path:inset(-20% -10% -20% 0)}}
+.msg{margin:1.4em auto 0;max-width:44ch;font-size:clamp(1.1rem,1.8vw,1.35rem);line-height:1.5;color:var(--muted)}
+.social{margin:28px 0 0;color:var(--muted)}
+.social a{color:var(--ink);text-underline-offset:3px}
+.btns{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:36px}
+.btns a{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:15px 26px;border-radius:999px;transition:background-color .2s ease,border-color .2s ease,transform .2s ease}
+.btns a:hover{transform:translateY(-2px)}
+.btns .main{background:#fff;color:#0E0D0C;border:1.5px solid #fff}
+.btns .line{color:#fff;border:1.5px solid rgba(255,255,255,.4)}
+.btns .line:hover{border-color:#fff}
+
+footer{border-top:1px solid var(--line)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:24px;padding-bottom:32px;color:var(--muted);font-size:.95rem}
+footer .logo{font-size:2.2rem;color:var(--ink)}
+
+@media (max-width:600px){ .btns a{padding:13px 18px;font-size:.88rem} }
+</style>
+</head>
+<body>
+<nav class="nav" id="nav"><div class="wrap">
+  <a class="logo" href="./">Brodysoptics.</a>
+  <a href="./#book" class="book book-m">Book me</a>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navMenu"><span></span><span></span><span></span></button>
+  <ul id="navMenu">
+    <li><a href="./#book" class="book">Book me</a></li>
+    <li><a href="./#photos">Photos</a></li>
+    <li><a href="./#videos">Videos</a></li>
+    <li><a href="./#graphics">Graphics</a></li>
+    <li><a href="./#pricing">Pricing</a></li>
+    <li><a href="about">About</a></li>
+    <li><a class="ig" href="https://instagram.com/brodysoptics" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg><span class="ig-label">Instagram</span></a></li>
+    <li><a class="ig" href="https://www.tiktok.com/@brodysoptics" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg><span class="ig-label">TikTok</span></a></li>
+    <li><a class="ig" href="mailto:brody@brodysoptics.com" aria-label="Email"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg><span class="ig-label">Email</span></a></li>
+  </ul>
+</div></nav>
+
+<main class="done"><div class="wrap">
+  <p class="label">Inquiry sent</p>
+  <h1 id="title">Thanks<span class="sig">talk soon.</span></h1>
+  <p class="msg">I got your request and I'll get back to you soon with deposit details to lock in your date.</p>
+  <div class="btns"><a class="main" href="./#photos">See my work</a><a class="line" href="./">Back home</a></div>
+  <p class="social">Follow along on <a href="https://instagram.com/brodysoptics" target="_blank" rel="noopener">Instagram</a> and <a href="https://www.tiktok.com/@brodysoptics" target="_blank" rel="noopener">TikTok</a></p>
+</div></main>
+
+<footer><div class="wrap">
+  <a class="logo" href="./">Brodysoptics.</a>
+  <span id="copy"></span>
+</div></footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+$("copy").textContent = "© " + new Date().getFullYear() + " Brody Disick";
+/* the booking form saves their first name here (in this browser tab only) so the page can say "Thanks, Sam" */
+try{ const n = sessionStorage.getItem("bookName"); if (n) $("title").innerHTML = `Thanks, ${esc(n)}<span class="sig">talk soon.</span>`; }catch(_){}
+
+/* phone menu */
+function menu(open){ $("nav").classList.toggle("open", open); $("burger").setAttribute("aria-expanded", open); }
+$("burger").onclick = () => menu(!$("nav").classList.contains("open"));
+document.addEventListener("click", e => { if (!e.target.closest("#nav")) menu(false); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") menu(false); });
+</script>
+</body>
+</html>

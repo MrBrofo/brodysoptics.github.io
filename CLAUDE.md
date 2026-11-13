@@ -26,6 +26,7 @@ This is Brody Disick's photography portfolio and booking site. Read this whole f
 
 ```
 index.html     ← the whole main site (HTML + CSS + JS, no build step, no frameworks)
+thanks.html    ← thank-you page the booking form sends people to after they submit (brodysoptics.com/thanks). Same nav/footer as about.html. "Inquiry sent" label, "THANKS, <first name>" + handwritten "talk soon.", deposit line, See my work / Back home buttons, Instagram/TikTok links. `noindex` and NOT in sitemap.xml on purpose. The first name comes from `sessionStorage.bookName` (set by the form; never put it in the URL).
 about.html     ← About page, served at brodysoptics.com/about (GitHub Pages drops the .html). Link to it as href="about", never "about.html". Its links home use "./#section".
 CNAME          ← keeps brodysoptics.com connected. NEVER delete or edit.
 CLAUDE.md      ← this file
@@ -174,7 +175,7 @@ Entry IDs (`SITE.formEntries`):
 
 If Brody renames anything in the Google Form, update the site to match. To get new entry IDs: Google Form → ⋮ → Get pre-filled link → fill every question → Get link; the `entry.NNN` params are in question order.
 
-Because it's `no-cors`, the site always shows "Inquiry sent" even if Google rejects it. The real test is checking the Google Form's Responses tab / Sheet.
+After sending, the form redirects to `thanks` (thanks.html). Because it's `no-cors`, the site always goes to the thank-you page even if Google rejects it. The real test is checking the Google Form's Responses tab / Sheet.
 
 Intro line above the form: "Answer a few quick questions and I'll get back to you as soon as I can!"
 
